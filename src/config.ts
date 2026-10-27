@@ -1,6 +1,8 @@
 // Single place for values that change: the demo domain will move.
 export const DEMO_URL = 'https://abm.icclab.site/';
-export const demoPage = (hash: string) => new URL(`dashboard.html?s=baseline#${hash}`, DEMO_URL).href;
+// The demo reads ?lang=vi|en|ru, so every link follows the site's language.
+export const demoHome = (lang: string) => `${DEMO_URL}?lang=${lang}`;
+export const demoPage = (hash: string, lang: string) => new URL(`dashboard.html?s=baseline&lang=${lang}#${hash}`, DEMO_URL).href;
 
 export const CONTACT_EMAIL = 'greenx@vinuni.edu.vn';
 export const GREENX_URL = { en: 'https://greenx.vinuni.edu.vn/', vi: 'https://greenx.vinuni.edu.vn/vi/trang-chu/' } as const;
@@ -27,8 +29,6 @@ export const PHOTOS = [
 
 export const ASSETS = {
   logo: asset('assets/greenx-logo-white.png'),
-  demoMap: asset('assets/demo-map.webp'),
-  demoEnergy: asset('assets/demo-energy.webp'),
-  demoCompare: asset('assets/demo-compare.webp'),
-  demoRooms: asset('assets/demo-rooms.webp'),
 };
+// Demo screenshots exist per language (captured with ?lang=en and ?lang=vi).
+export const demoShot = (name: 'map' | 'energy' | 'compare' | 'rooms', lang: string) => asset(`assets/demo-${name}-${lang === 'vi' ? 'vi' : 'en'}.webp`);

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useI18n } from '../i18n/I18nProvider';
-import { ASSETS, CONTACT_EMAIL, DEMO_URL, GREENX_KHANHHOA_URL, GREENX_URL, PHOTOS, demoPage } from '../config';
+import { ASSETS, CONTACT_EMAIL, GREENX_KHANHHOA_URL, GREENX_URL, PHOTOS, demoHome, demoPage } from '../config';
 
 export function Research() {
   const { t } = useI18n();
@@ -86,9 +86,9 @@ export function Footer() {
           <div>
             <h4>{t('f.sim')}</h4>
             <ul>
-              <li><a href={DEMO_URL} target="_blank" rel="noopener">{t('tab.map')}</a></li>
-              <li><a href={demoPage('energy')} target="_blank" rel="noopener">{t('tab.energy')}</a></li>
-              <li><a href={demoPage('compare')} target="_blank" rel="noopener">{t('tab.compare')}</a></li>
+              <li><a href={demoHome(lang)} target="_blank" rel="noopener">{t('tab.map')}</a></li>
+              <li><a href={demoPage('energy', lang)} target="_blank" rel="noopener">{t('tab.energy')}</a></li>
+              <li><a href={demoPage('compare', lang)} target="_blank" rel="noopener">{t('tab.compare')}</a></li>
             </ul>
           </div>
           <div>

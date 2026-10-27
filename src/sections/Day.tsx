@@ -11,10 +11,13 @@ const X0 = 44, X1 = 712, Y0 = 18, Y1 = 262, KMAX = 1400;
 const xOf = (min: number) => X0 + (min / 1440) * (X1 - X0);
 const yOf = (kw: number) => Y1 - (kw / KMAX) * (Y1 - Y0);
 const pad = (n: number) => String(n).padStart(2, '0');
-const hhmm = (min: number) => `${pad(Math.floor(min / 60) % 24)}:${pad(Math.floor(min % 60))}`;
+const hhmm = (min: number) => (min >= 1440 ? '24:00' : `${pad(Math.floor(min / 60))}:${pad(Math.floor(min % 60))}`);
 const tri = (h: number, a: number, p: number, b: number) => (h <= a || h >= b ? 0 : h < p ? (h - a) / (p - a) : (b - h) / (b - p));
 const CHAPTERS: [number, number][] = [[360, 1], [540, 2], [750, 3], [1080, 4], [1290, 5]];
-const START = 360, END = 1425, STATIC_AT = 1305;
+// The day advances in 3-hour stops: 06, 09, 12, 15, 18, 21, 24. One stop per short scroll, snapped.
+const START = 360, END = 1440, STEP = 180, STATIC_AT = 1305;
+const STOPS = (END - START) / STEP;
+const PX_PER_STOP = 260;
 
 export function Day() {
   const { t, nf } = useI18n();
@@ -35,7 +38,12 @@ export function Day() {
     const state = { min: START };
     const mm = gsap.matchMedia();
     const make = (vars: ScrollTrigger.Vars) => gsap.to(state, { min: END, ease: 'none', scrollTrigger: vars, onUpdate: () => setMin(state.min) });
-    mm.add('(min-width: 60.01rem)', () => { make({ trigger: pinRef.current, start: 'top top', end: '+=2600', pin: true, scrub: 0.6, anticipatePin: 1 }); });
+    mm.add('(min-width: 60.01rem)', () => {
+      make({
+        trigger: pinRef.current, start: 'top top', end: `+=${STOPS * PX_PER_STOP}`, pin: true, scrub: 0.5, anticipatePin: 1,
+        snap: { snapTo: 1 / STOPS, directional: true, inertia: false, duration: { min: 0.25, max: 0.6 }, delay: 0.08, ease: 'power2.inOut' },
+      });
+    });
     mm.add('(max-width: 60rem)', () => { make({ trigger: pinRef.current, start: 'top 70%', end: 'bottom 30%', scrub: 0.6 }); });
     return () => mm.revert();
   }, [reduced]);
@@ -60,7 +68,7 @@ export function Day() {
           <div>
             <h2 className="day-head" id="day-title">{t('day.title')}</h2>
             <p className="day-tag">{t('day.sub')}</p>
-            <p className="clock mono">{hhmm(min)}</p>
+            <p className="clock mono">{hhmm(Math.round(min))}</p>
             <div className="chapter" aria-live="polite">
               <h3>{t(`day.ch${chapter}.t`)}</h3>
               <p>{t(`day.ch${chapter}.p`)}</p>

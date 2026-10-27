@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useI18n } from '../i18n/I18nProvider';
 import DepthCarousel from '../components/reactbits/DepthCarousel';
-import { ASSETS, DEMO_URL, PHOTOS, demoPage } from '../config';
+import { PHOTOS, demoHome, demoPage, demoShot } from '../config';
 
 const IslandModel = lazy(() => import('../components/IslandModel'));
 
@@ -77,17 +77,18 @@ function Photos() {
 }
 
 function DemoEmbed() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const url = demoHome(lang);
   const [state, setState] = useState<'idle' | 'loading' | 'ready'>('idle');
   const play = () => {
-    if (window.matchMedia('(max-width: 40rem)').matches) { window.open(DEMO_URL, '_blank', 'noopener'); return; }
+    if (window.matchMedia('(max-width: 40rem)').matches) { window.open(url, '_blank', 'noopener'); return; }
     setState('loading');
   };
   return (
     <>
       <div className={`demo-frame${state === 'loading' ? ' is-loading' : ''}${state === 'ready' ? ' is-ready' : ''}`}>
-        <img className="poster" src={ASSETS.demoMap} alt={t('demo.posterAlt')} width={1600} height={1000} loading="lazy" />
-        {state !== 'idle' && <iframe src={DEMO_URL} title={t('demo.iframe')} allow="fullscreen" onLoad={() => setState('ready')} />}
+        <img className="poster" src={demoShot('map', lang)} alt={t('demo.posterAlt')} width={1600} height={1000} loading="lazy" />
+        {state !== 'idle' && <iframe src={url} title={t('demo.iframe')} allow="fullscreen" onLoad={() => setState('ready')} />}
         <button className="play" type="button" aria-label={t('demo.playAria')} onClick={play}>
           <span className="play-dot"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.8v12.4L14 8z" fill="currentColor" /></svg></span>
           <span>{t('demo.play')}</span>
@@ -95,20 +96,20 @@ function DemoEmbed() {
       </div>
       <div className="demo-meta">
         <span>{t('demo.meta')}</span>
-        <a href={DEMO_URL} target="_blank" rel="noopener">{t('demo.full')} <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2h6v6M10 2 2 10" fill="none" stroke="currentColor" strokeWidth="1.4" /></svg></a>
+        <a href={url} target="_blank" rel="noopener">{t('demo.full')} <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2h6v6M10 2 2 10" fill="none" stroke="currentColor" strokeWidth="1.4" /></svg></a>
       </div>
     </>
   );
 }
 
 const TABS = [
-  { id: 'energy', img: ASSETS.demoEnergy, w: 1440, h: 900 },
-  { id: 'compare', img: ASSETS.demoCompare, w: 1440, h: 900 },
-  { id: 'rooms', img: ASSETS.demoRooms, w: 1440, h: 900 },
+  { id: 'energy', w: 1440, h: 900 },
+  { id: 'compare', w: 1440, h: 900 },
+  { id: 'rooms', w: 1440, h: 900 },
 ] as const;
 
 function Screens() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [sel, setSel] = useState(0);
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
   const onKey = (e: React.KeyboardEvent, i: number) => {
@@ -130,9 +131,9 @@ function Screens() {
         <div key={tab.id} className={`panel${sel === i ? ' is-in' : ''}`} role="tabpanel" id={`p-${tab.id}`} aria-labelledby={`t-${tab.id}`} hidden={sel !== i}>
           <div className="panel-copy">
             <div><h3>{t(`p.${tab.id}.t`)}</h3><p>{t(`p.${tab.id}.p`)}</p></div>
-            <a href={demoPage(tab.id)} target="_blank" rel="noopener">{t(`p.${tab.id}.a`)}</a>
+            <a href={demoPage(tab.id, lang)} target="_blank" rel="noopener">{t(`p.${tab.id}.a`)}</a>
           </div>
-          <div className="panel-shot"><img src={tab.img} alt={t(`p.${tab.id}.alt`)} loading="lazy" width={tab.w} height={tab.h} /></div>
+          <div className="panel-shot"><img src={demoShot(tab.id, lang)} alt={t(`p.${tab.id}.alt`)} loading="lazy" width={tab.w} height={tab.h} /></div>
         </div>
       ))}
     </>

@@ -100,7 +100,8 @@ Lưu ý: tham số trong mô phỏng (giờ cáp treo 09:00–22:00, công suấ
 - `src/config.ts`: URL demo (một chỗ duy nhất, domain sẽ đổi), email, link GREEN-X, danh sách ảnh + credit, màu hex cho WebGL (mirror của `src/styles/tokens.css`).
 - `src/sections/*`: từng section của trang. `src/components/IslandModel.tsx`: mô hình 3D (react-three-fiber, lazy-load khi gần viewport, chỉ render liên tục khi đang hiển thị).
 - `src/components/reactbits/*`: component lấy nguyên từ React Bits (TS + CSS): Topography (nền hero), SplitText (tiêu đề), SpotlightCard (thẻ đòn bẩy), AnimatedContent (hiện dần), DepthCarousel (slider ảnh). Giữ `LICENSE.md` (MIT + Commons Clause) đi kèm.
-- `public/models/hontre.glb`: mô hình Hòn Tre xuất từ scene three.js của demo (bỏ người/tác tử, nhãn, vòng trạng thái; nước thay bằng vật liệu chuẩn), nén meshopt + instancing (~1,3 MB).
+- `public/models/hontre.glb`: mô hình Hòn Tre xuất từ scene three.js của demo, **giữ đủ chi tiết** (texture mặt tiền, nền, thành nước, dây cáp, ánh sáng, bóng đổ); chỉ bỏ nội dung động (khách/tác tử, vòng trạng thái khu). `userData` của node `HonTrePilot` chứa đèn, đường cáp (điểm mẫu), shader mặt nước; node `gondola` là mẫu cabin — `IslandModel.tsx` cho 24 cabin chạy dọc 2 dây cáp. Màu trong demo đã là linear (ColorManagement bật) — không chuyển đổi lại khi xuất. Đèn r147 → r170 nhân π. (~1,7 MB, meshopt + instancing + webp)
+- Ảnh chụp demo có bản theo ngôn ngữ: `public/assets/demo-<map|energy|compare|rooms>-<en|vi>.webp` (chụp bằng `?lang=en|vi`); link sang demo luôn kèm `?lang=` theo ngôn ngữ trang (`demoHome`, `demoPage`, `demoShot` trong `config.ts`).
 - `public/assets/photos/*`: 4 ảnh Wikimedia Commons đã nén WebP; credit hiển thị dưới slider và ở footer — bắt buộc giữ khi thay đổi.
 - Lệnh: `npm run dev`, `npm run build`, `npm run preview`.
 
@@ -108,7 +109,7 @@ Lưu ý: tham số trong mô phỏng (giờ cáp treo 09:00–22:00, công suấ
 
 - Định hướng và phân tích trang tham khảo: `design/DESIGN-DIRECTION.md`.
 - Token màu/font nằm trong `src/styles/tokens.css`; mọi màu và font phải đi qua token. Font: Be Vietnam Pro (chữ), JetBrains Mono (chỉ số liệu).
-- Section "Một ngày" vẽ từ dữ liệu của demo (`src/data/day.ts`, kịch bản cơ sở seed 42). Dữ liệu này là **minh họa** — luôn gắn nhãn, không trích số trong phần chữ.
+- Section "Một ngày" vẽ từ dữ liệu của demo (`src/data/day.ts`, kịch bản cơ sở seed 42); cuộn theo từng mốc 3 giờ (06→24), snap mỗi lần cuộn một mốc. Dữ liệu này là **minh họa** — luôn gắn nhãn, không trích số trong phần chữ.
 - Song ngữ: **mặc định tiếng Anh**, có tiếng Việt. Từ điển ở `src/i18n/dict.ts`, chọn ngôn ngữ qua `?lang=vi` hoặc nút EN/VI (lưu localStorage). Mọi chuỗi mới phải có đủ hai ngôn ngữ.
 - Hiệu ứng: **không sao chép nguyên hiệu ứng của trang tham khảo** (chỉ học style, cách sắp xếp). Khi cần hiệu ứng, lấy từ **React Bits** (https://reactbits.dev, giấy phép MIT + Commons Clause).
 - GREEN-X: logo trắng (chỉ có bản trắng) đặt trên nền `#134D8B`; trích nguyên văn thông điệp chính thức.
