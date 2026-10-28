@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useI18n } from '../i18n/I18nProvider';
@@ -33,7 +33,7 @@ export function Day() {
     return { d, pts, peakI, q15, qmax: Math.max(...q15, 1) };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (reduced) { setMin(STATIC_AT); return; }
     const state = { min: START };
     const mm = gsap.matchMedia();

@@ -1,13 +1,21 @@
-/* Hallmark · shape: The Day (a scroll-scrubbed simulated day between a demo hero and a collaboration band) · genre: editorial · theme: custom · job: join · idea: "The page is one simulated day on Hon Tre: scrolling moves the clock, and the load curve draws itself from the model's own output" · vibe: "calm research lab, island light, green transition"
- * paper: oklch(97.4% 0.007 125) · accent: oklch(51% 0.14 156) · display: Be Vietnam Pro 500 · body: Be Vietnam Pro · hero: headline and one sentence on a fine grid, four levers as a ruled row below; the pilot demo lives in its own section as a click-to-play poster · nav: wordmark left, four anchors, one green pill · footer: ink, three columns and the GREEN-X mark · imagery: the product (screenshots of abm.icclab.site) · signature: the pinned resort day, 06:00 to 24:00, clock and sky scrubbed by scroll, labelled as illustrative prototype data
- * axes: light/grotesk-sans/chromatic-green · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
-/* Hallmark · pre-emit critique: P4 H4 E4 S5 R4 V4 · weakest: E, the problem rows are words only, so they sit beside the sticky answer card instead of standing alone */
+/* Hallmark · shape: The Island Day (one full screen per story beat, pinned and scrubbed) · genre: editorial · theme: brand (GREEN-X blue, transition green, Be Vietnam Pro) · job: join · redesign: full · idea: "One resort day, told screen by screen: the evening peak, why it is hard to test, how agents drive the system, the levers, the pilot island, the questions, the invitation" · vibe: "island light, research lab, green transition"
+ * paper: oklch(97.4% 0.007 125) · accent: oklch(51% 0.14 156) · display: Be Vietnam Pro 500 · body: Be Vietnam Pro · hero: full-bleed cable-car photograph, headline lifts away on scroll as the four themes rise · nav: wordmark, four anchors, language, one green pill · footer: ink, three columns, credits link · imagery: Commons photographs of the pilot site, demo screenshots, the 3D island · signature: the pinned day and the full-screen 3D island with running cable cars
+ * axes: light/grotesk-sans/chromatic-green · posture: cinematic · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H5 E4 S5 R4 V5 · weakest: E, the gains list is text, so it sits under a full-screen photograph statement */
 /* waive 42: the nav is four anchors and one action because the page is one long scroll; its shape is the sticky glass bar over the grid
  * waive 49: the research-question buttons are accordion headers, so the full question is the label by design
  * waive 58: the contributions screen carries four levers plus their measures by the owner's request (contributions are the page's core); Vietnamese copy is monosyllabic and counts about twice the English
  * waive 39b: the play control is the hero picture's one action, sized as a target over a 16:10 poster, not a form button
- * waive 79: the space under the hero copy is the demo poster, which begins inside the fold at every size
+ * waive 79: the hero is a full-bleed photograph; the copy sits low over it by design
+ * waive 83: the owner asked for a photo-led showcase; every photograph is a credited view of the pilot site or the product
+ * waive 59: each story beat is a full-screen scene, so scenes meet edge to edge without a gap
  * waive 44b-words: Vietnamese is monosyllabic, so the hero head runs 9 tokens at 36 characters; the 50-character cap holds */
+
+/* Hallmark · dropped onChange={(n) => setI(n)} · the photo carousel became the pinned horizontal photo strip */
+/* Hallmark · reworded "What the research delivers" to "Four levers to test before anything changes on site", "Hon Tre and Nha Trang Bay" to "The pilot site in photographs" · story beats, owner's request
+ * Hallmark · moved "A virtual test bed for hotel and tourism operations" into the approach scene ("Every guest group is an agent.") · dropped the satellite caption date (photo now a background, date kept on the credits page) */
+
+@media (prefers-reduced-motion: reduce) { .btn, .tab, .play, .panel.is-in { transition: none; animation: none; } }
 
 /* ---------- shared ---------- */
 body { font-weight: 400; }

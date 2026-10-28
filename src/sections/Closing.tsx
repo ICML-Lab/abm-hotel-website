@@ -1,17 +1,33 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import gsap from 'gsap';
+import { useScene, stepSnap } from '../hooks/useScene';
+import { PhotoImg } from '../components/PhotoImg';
 import { useI18n } from '../i18n/I18nProvider';
-import { ASSETS, CONTACT_EMAIL, GREENX_KHANHHOA_URL, GREENX_URL, PHOTOS, demoHome, demoPage } from '../config';
+import { ASSETS, CONTACT_EMAIL, GREENX_KHANHHOA_URL, GREENX_URL, PHOTO, demoHome, demoPage } from '../config';
 
 export function Research() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const root = useRef<HTMLElement>(null);
   const [open, setOpen] = useState<number[]>([1]);
   const toggle = (n: number) => setOpen((o) => (o.includes(n) ? o.filter((x) => x !== n) : [...o, n]));
+  // On wide screens each question takes the whole stage in turn.
+  useScene(root, (el) => {
+    const qs = gsap.utils.toArray<HTMLElement>('.rq', el);
+    qs.forEach((q, i) => gsap.set(q, i ? { autoAlpha: 0, y: 80 } : { autoAlpha: 1, y: 0 }));
+    const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top top', end: `+=${qs.length * 70}%`, pin: true, scrub: 0.5, snap: stepSnap(qs.length - 1) } });
+    qs.forEach((q, i) => {
+      if (!i) return;
+      tl.to(qs[i - 1], { autoAlpha: 0, y: -80, duration: 0.3 }, i - 0.6).to(q, { autoAlpha: 1, y: 0, duration: 0.35 }, i - 0.3)
+        .to('.rq-progress i', { scaleY: (i + 1) / qs.length, duration: 0.45 }, i - 0.35);
+    });
+  }, [lang]);
   return (
-    <section className="section" id="research" aria-labelledby="rq-title" style={{ paddingTop: 0 }}>
+    <section className="scene rq-scene" id="research" ref={root} aria-labelledby="rq-title">
       <div className="container rq-grid">
-        <div>
+        <div className="rq-side">
           <h2 className="head-section" id="rq-title">{t('rq.title')}</h2>
-          <p className="lead" style={{ marginTop: 'var(--space-md)' }}>{t('rq.lead')}</p>
+          <p className="lead">{t('rq.lead')}</p>
+          <div className="rq-progress" aria-hidden="true"><i /></div>
         </div>
         <div className="rq-list">
           {[1, 2, 3, 4, 5].map((n) => {
@@ -37,8 +53,10 @@ export function Collaborate() {
   const { t } = useI18n();
   const mail = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(t('mail.subject'))}`;
   return (
-    <section className="section collab" id="collaborate" aria-labelledby="collab-title">
-      <div className="container">
+    <section className="scene collab" id="collaborate" aria-labelledby="collab-title">
+      <PhotoImg photo={PHOTO.satellite} className="collab-photo" />
+      <div className="collab-shade" aria-hidden="true" />
+      <div className="container collab-stage">
         <h2 className="head-section" id="collab-title">{t('collab.title')}</h2>
         <p className="lead collab-lead">{t('collab.lead')}</p>
         <ol className="path">
@@ -100,15 +118,9 @@ export function Footer() {
             </ul>
           </div>
         </div>
-        <div className="footer-credits">
-          <span>{t('photos.credits')}:</span>
-          {PHOTOS.map((p) => (
-            <span key={p.src}>{t(p.caption)}, <a href={p.source} target="_blank" rel="noopener">{t(p.credit)}</a></span>
-          ))}
-        </div>
         <div className="footer-base">
           <span>{t('f.copy')}</span>
-          <a href="#top">{t('f.top')}</a>
+          <span className="footer-links"><a href="#credits">{t('credits.link')}</a><a href="#top">{t('f.top')}</a></span>
         </div>
       </div>
     </footer>

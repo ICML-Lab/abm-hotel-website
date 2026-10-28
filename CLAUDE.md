@@ -99,17 +99,31 @@ Lưu ý: tham số trong mô phỏng (giờ cáp treo 09:00–22:00, công suấ
 - `src/i18n/dict.ts`: toàn bộ chữ EN/VI (cùng bộ key, EN mặc định). `src/i18n/I18nProvider.tsx`: `useI18n()` → `t`, `list`, `nf`, `lang`, `setLang` (đọc `?lang=`, lưu localStorage, cập nhật `<html lang>`, title, meta).
 - `src/config.ts`: URL demo (một chỗ duy nhất, domain sẽ đổi), email, link GREEN-X, danh sách ảnh + credit, màu hex cho WebGL (mirror của `src/styles/tokens.css`).
 - `src/sections/*`: từng section của trang. `src/components/IslandModel.tsx`: mô hình 3D (react-three-fiber, lazy-load khi gần viewport, chỉ render liên tục khi đang hiển thị).
-- `src/components/reactbits/*`: component lấy nguyên từ React Bits (TS + CSS): Topography (nền hero), SplitText (tiêu đề), SpotlightCard (thẻ đòn bẩy), AnimatedContent (hiện dần), DepthCarousel (slider ảnh). Giữ `LICENSE.md` (MIT + Commons Clause) đi kèm.
+- `src/components/reactbits/*`: component lấy nguyên từ React Bits (TS + CSS): Topography (nền phần Cách tiếp cận), SplitText (tiêu đề hero), ScrollStack (thẻ đòn bẩy), ScrollReveal (câu lợi ích), ScrollVelocity (marquee, cần gói `motion`). Giữ `LICENSE.md` (MIT + Commons Clause) đi kèm.
 - `public/models/hontre.glb`: mô hình Hòn Tre xuất từ scene three.js của demo, **giữ đủ chi tiết** (texture mặt tiền, nền, thành nước, dây cáp, ánh sáng, bóng đổ); chỉ bỏ nội dung động (khách/tác tử, vòng trạng thái khu). `userData` của node `HonTrePilot` chứa đèn, đường cáp (điểm mẫu), shader mặt nước; node `gondola` là mẫu cabin — `IslandModel.tsx` cho 24 cabin chạy dọc 2 dây cáp. Màu trong demo đã là linear (ColorManagement bật) — không chuyển đổi lại khi xuất. Đèn r147 → r170 nhân π. (~1,7 MB, meshopt + instancing + webp)
 - Ảnh chụp demo có bản theo ngôn ngữ: `public/assets/demo-<map|energy|compare|rooms>-<en|vi>.webp` (chụp bằng `?lang=en|vi`); link sang demo luôn kèm `?lang=` theo ngôn ngữ trang (`demoHome`, `demoPage`, `demoShot` trong `config.ts`).
-- `public/assets/photos/*`: 4 ảnh Wikimedia Commons đã nén WebP; credit hiển thị dưới slider và ở footer — bắt buộc giữ khi thay đổi.
+- `public/assets/photos/*`: ảnh Wikimedia Commons đã nén WebP; credit bắt buộc (nhãn trên ảnh + trang `#credits`).
 - Lệnh: `npm run dev`, `npm run build`, `npm run preview`.
 
 ## Thiết kế
 
+- **Redesign Hallmark (28/10/2026), mỗi nhịp kể là một màn hình:**
+  1. Hero (ảnh cáp treo toàn khổ)
+  2. Một ngày (mốc 3 giờ)
+  3. Vì sao (3 câu thay nhau)
+  4. Cách tiếp cận (chuỗi tác tử → điện → phát thải)
+  5. Marquee
+  6. Đòn bẩy (ScrollStack)
+  7. Lợi ích (ScrollReveal trên ảnh)
+  8. Hòn Tre: 3D toàn màn hình, dải ảnh ngang, demo
+  9. Câu hỏi (mỗi câu một nhịp)
+  10. Hợp tác (nền ảnh vệ tinh)
+- Cảnh ghim/tua theo cuộn dùng `src/hooks/useScene.ts` (GSAP ScrollTrigger, chỉ chạy trên màn rộng khi không bật giảm chuyển động; mặc định CSS là bố cục tĩnh xếp chồng). `App.tsx` gọi `ScrollTrigger.sort()/refresh()` sau khi mount — mọi pin phải tạo trong layout effect.
+- Ảnh: registry `PHOTO` trong `config.ts` (tác giả, giấy phép, link Commons). Mỗi ảnh có nhãn credit nhỏ ở góc (`PhotoImg`), danh sách đầy đủ ở trang `#credits` (link ở footer). Người dùng đã loại các ảnh: hồ bơi, bãi cỏ dù lá, lối gỗ, du khách đi dạo, Vũng Ngán — không dùng lại.
+
 - Định hướng và phân tích trang tham khảo: `design/DESIGN-DIRECTION.md`.
 - Token màu/font nằm trong `src/styles/tokens.css`; mọi màu và font phải đi qua token. Font: Be Vietnam Pro (chữ), JetBrains Mono (chỉ số liệu).
-- Section "Một ngày" vẽ từ dữ liệu của demo (`src/data/day.ts`, kịch bản cơ sở seed 42); cuộn theo từng mốc 3 giờ (06→24), snap mỗi lần cuộn một mốc. Dữ liệu này là **minh họa** — luôn gắn nhãn, không trích số trong phần chữ.
+- Section "Một ngày" vẽ từ dữ liệu của demo (`src/data/day.ts`, kịch bản cơ sở seed 42); cuộn theo từng mốc 3 giờ (06→24), snap mỗi lần cuộn một mốc (snap tắt quán tính). Dữ liệu này là **minh họa** — luôn gắn nhãn, không trích số trong phần chữ.
 - Song ngữ: **mặc định tiếng Anh**, có tiếng Việt. Từ điển ở `src/i18n/dict.ts`, chọn ngôn ngữ qua `?lang=vi` hoặc nút EN/VI (lưu localStorage). Mọi chuỗi mới phải có đủ hai ngôn ngữ.
 - Hiệu ứng: **không sao chép nguyên hiệu ứng của trang tham khảo** (chỉ học style, cách sắp xếp). Khi cần hiệu ứng, lấy từ **React Bits** (https://reactbits.dev, giấy phép MIT + Commons Clause).
 - GREEN-X: logo trắng (chỉ có bản trắng) đặt trên nền `#134D8B`; trích nguyên văn thông điệp chính thức.

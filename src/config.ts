@@ -20,12 +20,27 @@ export const HEX = {
 const asset = (p: string) => `${import.meta.env.BASE_URL}${p}`;
 export const MODEL_URL = asset('models/hontre.glb');
 
-export const PHOTOS = [
-  { src: asset('assets/photos/cablecar-lewison.webp'), caption: 'photo1', credit: 'credit1', source: 'https://commons.wikimedia.org/wiki/File:Vinpearl_Cable_Car_to_Hon_Tre,_Nha_Trang,_Khanh_Hoa.jpg' },
-  { src: asset('assets/photos/cablecar-hughes.webp'), caption: 'photo2', credit: 'credit2', source: 'https://commons.wikimedia.org/wiki/File:Nha_Trang_-_Vinpearl_Cable_Car.jpg' },
-  { src: asset('assets/photos/bay-bvi4092.webp'), caption: 'photo3', credit: 'credit3', source: 'https://commons.wikimedia.org/wiki/File:Arriving_in_Nha_Trang_-_Vietnam.jpg' },
-  { src: asset('assets/photos/bay-sentinel2.webp'), caption: 'photo4', credit: 'credit4', source: 'https://commons.wikimedia.org/wiki/File:Satellite_pictures_of_Nha_Trang_Bay_2022-03-18.png' },
-] as const;
+// Photographs (Wikimedia Commons). Every photo shows a short credit label and is listed on the credits page.
+export type Photo = { id: string; src: string; alt: string; author: string; license: string; source: string };
+const commons = (file: string) => `https://commons.wikimedia.org/wiki/File:${file}`;
+const photo = (id: string, file: string, alt: string, author: string, license: string, source: string): Photo => ({ id, src: asset(`assets/photos/${file}`), alt, author, license, source });
+
+export const PHOTO = {
+  cable1: photo('cable1', 'cable-christophe95-1.webp', 'photoAlt.cable1', 'Christophe95', 'CC BY-SA 4.0', commons('Vinpearl_Cable_Car_1.jpg')),
+  cable2: photo('cable2', 'cable-christophe95-2.webp', 'photoAlt.cable2', 'Christophe95', 'CC BY-SA 4.0', commons('Vinpearl_Cable_Car_2.jpg')),
+  cable3: photo('cable3', 'cable-bobrovsky.webp', 'photoAlt.cable3', 'Андрей Бобровский', 'CC BY 3.0', commons('Vinpearl_Nha_Trang_cable_car_-_panoramio_(118).jpg')),
+  cableLewison: photo('cableLewison', 'cablecar-lewison.webp', 'photo1', 'Martin Lewison', 'CC BY 2.0', commons('Vinpearl_Cable_Car_to_Hon_Tre,_Nha_Trang,_Khanh_Hoa.jpg')),
+  cableHughes: photo('cableHughes', 'cablecar-hughes.webp', 'photo2', 'P. Hughes', 'CC BY 4.0', commons('Nha_Trang_-_Vinpearl_Cable_Car.jpg')),
+  island: photo('island', 'island-calflier.webp', 'photoAlt.island', 'calflier001', 'CC BY-SA 2.0', commons('VIN_PEARL_ISLAND(HON_TRE)NHA_TRANG_BAY_VIETNAM_JAN_2012_(7034559675).jpg')),
+  honnoi: photo('honnoi', 'honnoi-minhducly.webp', 'photoAlt.honnoi', 'Minh Duc Ly', 'Public domain', commons('Hòn_Nội,_Nha_Trang_Bay,_Vietnam.jpg')),
+  city: photo('city', 'city-leonid.webp', 'photoAlt.city', 'Leonid', 'CC BY-SA 2.0', commons('Nha_Trang,_Vietnam_-_53119835087.jpg')),
+  bay: photo('bay', 'bay-bvi4092.webp', 'photo3', 'bvi4092', 'CC BY 2.0', commons('Arriving_in_Nha_Trang_-_Vietnam.jpg')),
+  satellite: photo('satellite', 'bay-sentinel2.webp', 'photo4', 'ESA Sentinel-2', 'Attribution', commons('Satellite_pictures_of_Nha_Trang_Bay_2022-03-18.png')),
+} satisfies Record<string, Photo>;
+
+// The horizontal strip in the pilot section, in viewing order.
+export const STRIP: Photo[] = [PHOTO.island, PHOTO.cable1, PHOTO.cableLewison, PHOTO.cable3, PHOTO.city, PHOTO.bay];
+export const ALL_PHOTOS: Photo[] = Object.values(PHOTO);
 
 export const ASSETS = {
   logo: asset('assets/greenx-logo-white.png'),

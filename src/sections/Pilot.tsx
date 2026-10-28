@@ -1,78 +1,64 @@
+import type React from 'react';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
 import { useI18n } from '../i18n/I18nProvider';
-import DepthCarousel from '../components/reactbits/DepthCarousel';
-import { PHOTOS, demoHome, demoPage, demoShot } from '../config';
+import { PhotoImg } from '../components/PhotoImg';
+import { STRIP, demoHome, demoPage, demoShot } from '../config';
+import { useScene } from '../hooks/useScene';
 
 const IslandModel = lazy(() => import('../components/IslandModel'));
 
-function ModelSlot() {
+// The 3D island fills the screen; it loads once the visitor is near.
+function ModelStage() {
   const { t } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const [near, setNear] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setNear(true); io.disconnect(); } }, { rootMargin: '600px' });
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setNear(true); io.disconnect(); } }, { rootMargin: '800px' });
     io.observe(el);
     return () => io.disconnect();
   }, []);
   return (
-    <figure>
-      <div className="model-frame" ref={ref}>
-        {near ? (
-          <Suspense fallback={<span className="model-loading">{t('pilot.modelLoad')}</span>}>
-            <IslandModel label={t('pilot.modelAlt')} />
-          </Suspense>
-        ) : (
-          <span className="model-loading">{t('pilot.modelLoad')}</span>
-        )}
-      </div>
-      <figcaption className="model-cap">{t('pilot.modelCap')}</figcaption>
-    </figure>
+    <div className="model-stage" ref={ref}>
+      {near ? (
+        <Suspense fallback={<span className="model-loading">{t('pilot.modelLoad')}</span>}>
+          <IslandModel label={t('pilot.modelAlt')} />
+        </Suspense>
+      ) : (
+        <span className="model-loading">{t('pilot.modelLoad')}</span>
+      )}
+    </div>
   );
 }
 
-function useCardSize() {
-  const calc = () => { const w = Math.min(720, Math.round(window.innerWidth * 0.78)); return { w, h: Math.round(w * 0.64) }; };
-  const [size, setSize] = useState(calc);
-  useEffect(() => {
-    const on = () => setSize(calc());
-    window.addEventListener('resize', on);
-    return () => window.removeEventListener('resize', on);
-  }, []);
-  return size;
-}
-
-function Photos() {
-  const { t } = useI18n();
-  const [i, setI] = useState(0);
-  const card = useCardSize();
-  const p = PHOTOS[i];
+// Photographs of the pilot site travel sideways while the section is pinned.
+function PhotoStrip() {
+  const { t, lang } = useI18n();
+  const root = useRef<HTMLElement>(null);
+  useScene(root, (el) => {
+    const track = el.querySelector<HTMLElement>('.strip-track')!;
+    const dist = () => track.scrollWidth - window.innerWidth + 64;
+    gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: el, start: 'top top', end: () => `+=${dist()}`, pin: true, scrub: 0.6, invalidateOnRefresh: true } });
+    gsap.utils.toArray<HTMLElement>('.strip-item img', el).forEach((img) => {
+      gsap.fromTo(img, { scale: 1.18 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: el, start: 'top top', end: () => `+=${dist()}`, scrub: true } });
+    });
+  }, [lang]);
   return (
-    <div className="photos">
-      <div className="photos-head">
-        <h3 className="demo-title">{t('photos.title')}</h3>
-        <p className="lead">{t('photos.lead')}</p>
+    <section className="scene strip-scene" ref={root} aria-labelledby="strip-title">
+      <div className="container strip-head">
+        <h3 className="head-section" id="strip-title">{t('pilot.photosTitle')}</h3>
       </div>
-      <div className="photos-stage" style={{ height: card.h + 64 }}>
-      <DepthCarousel
-        items={PHOTOS.map((ph) => ({ image: ph.src, alt: t(ph.caption) }))}
-        cardWidth={card.w}
-        cardHeight={card.h}
-        radius={12}
-        autoplay
-        autoplayDelay={5200}
-        loop
-        showControls
-        showIndicators
-        onChange={(n) => setI(n)}
-      />
+      <div className="strip-track">
+        {STRIP.map((p, i) => (
+          <div key={p.id} className={`strip-item strip-item--${i % 3}`}>
+            <PhotoImg photo={p} />
+            <p className="strip-cap">{t(p.alt)}</p>
+          </div>
+        ))}
       </div>
-      <p className="photos-cap" aria-live="polite">
-        <span>{t(p.caption)}</span>
-        <small><a href={p.source} target="_blank" rel="noopener">{t(p.credit)}</a></small>
-      </p>
-    </div>
+    </section>
   );
 }
 
@@ -143,29 +129,32 @@ function Screens() {
 export function Pilot() {
   const { t } = useI18n();
   return (
-    <section className="section" id="pilot" aria-labelledby="pilot-title">
-      <div className="container">
-        <div className="island-grid">
-          <div className="island-copy">
+    <>
+      <section className="scene pilot-scene" id="pilot" aria-labelledby="pilot-title">
+        <ModelStage />
+        <div className="container pilot-overlay">
+          <div className="pilot-card">
             <h2 className="head-section" id="pilot-title">{t('pilot.title')}</h2>
             <p>{t('pilot.p1')}</p>
             <p>{t('pilot.p2')}</p>
             <p className="pilot-next">{t('pilot.next')}</p>
           </div>
-          <ModelSlot />
+          <p className="model-cap">{t('pilot.modelCap')}</p>
         </div>
+      </section>
 
-        <Photos />
+      <PhotoStrip />
 
-        <div className="demo" id="simulation">
+      <section className="section demo-scene" id="simulation" aria-labelledby="demo-title">
+        <div className="container">
           <div className="demo-head">
-            <h3 className="demo-title">{t('demo.title')}</h3>
+            <h2 className="head-section" id="demo-title">{t('demo.title')}</h2>
             <p className="lead">{t('demo.lead')}</p>
           </div>
           <DemoEmbed />
           <Screens />
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
