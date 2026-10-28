@@ -108,14 +108,14 @@ Lưu ý: tham số trong mô phỏng (giờ cáp treo 09:00–22:00, công suấ
 ## Thiết kế
 
 - **Redesign Hallmark (28/10/2026), mỗi nhịp kể là một màn hình:**
-  1. Hero (ảnh cáp treo toàn khổ)
+  1. Hero (ảnh cáp treo toàn khổ; không ghim, không còn khối bốn chủ đề — người dùng bỏ vì trùng lặp và gây lỗi chồng lớp khi cuộn ngược)
   2. Một ngày (mốc 3 giờ)
-  3. Vì sao (3 câu thay nhau)
+  3. Vì sao (3 câu thay nhau; chỉ hiện xem trước mục kế tiếp bên dưới, không hiện mục trước — `peekSteps` trong `useScene.ts`)
   4. Cách tiếp cận (chuỗi tác tử → điện → phát thải)
-  4b. Năm câu hỏi nghiên cứu (mỗi câu một nhịp) — đặt sớm, ngay sau Cách tiếp cận
+  4b. Năm câu hỏi nghiên cứu (mỗi câu một nhịp, xem trước câu kế tiếp như phần Vì sao) — đặt sớm, ngay sau Cách tiếp cận
   5. Marquee
   6. Đòn bẩy (ScrollStack)
-  7. Lợi ích (ScrollReveal trên ảnh)
+  7. Lợi ích (ScrollReveal trên ảnh), rồi "Ai được hưởng lợi": bốn lợi ích cho đơn vị vận hành xếp ngang dưới vạch xanh + đóng góp khoa học dạng hàng kẻ mảnh (không dùng thẻ hộp — người dùng chê bản thẻ)
   8. Hòn Tre: 3D toàn màn hình (thẻ chữ cột trái, đảo bên phải), rồi demo click-to-load (không còn dải ảnh, không còn tab ảnh màn hình)
   10. Hợp tác (nền ảnh thành phố và vịnh Nha Trang của Leonid; ảnh vệ tinh đã bỏ vì độ phân giải thấp)
 - Header (`SiteHeader`) cố định, không chiếm chỗ trong bố cục: dải GREEN-X trên cùng (thu lên khi cuộn) + thanh nav nổi nền kính đục. Mọi cảnh bắt đầu từ mép trên cửa sổ; nội dung trong cảnh phải chừa khoảng cho thanh nav (~110px).
@@ -124,6 +124,8 @@ Lưu ý: tham số trong mô phỏng (giờ cáp treo 09:00–22:00, công suấ
 
 - Định hướng và phân tích trang tham khảo: `design/DESIGN-DIRECTION.md`.
 - Token màu/font nằm trong `src/styles/tokens.css`; mọi màu và font phải đi qua token. Font: Be Vietnam Pro (chữ), JetBrains Mono (chỉ số liệu).
+- Chuỗi Cách tiếp cận thể hiện nhân quả: động từ trên mỗi mắt xích (make/drive/use/shapes), mũi tên vào từng bước, và một câu ghi chú.
+- Nhãn "Một ngày" theo định nghĩa của demo: điện toàn khu (khách sạn, công viên, cáp treo), khách đang xếp hàng (trò chơi, cáp treo, tàu, xe nội khu), khách đang di chuyển; có câu dẫn dưới tiêu đề.
 - Section "Một ngày" vẽ từ dữ liệu của demo (`src/data/day.ts`, kịch bản cơ sở seed 42); cuộn theo từng mốc 3 giờ (06→24), snap mỗi lần cuộn một mốc (snap tắt quán tính). Dữ liệu này là **minh họa** — luôn gắn nhãn, không trích số trong phần chữ.
 - Song ngữ: **mặc định tiếng Anh**, có tiếng Việt. Từ điển ở `src/i18n/dict.ts`, chọn ngôn ngữ qua `?lang=vi` hoặc nút EN/VI (lưu localStorage). Mọi chuỗi mới phải có đủ hai ngôn ngữ.
 - Hiệu ứng: **không sao chép nguyên hiệu ứng của trang tham khảo** (chỉ học style, cách sắp xếp). Khi cần hiệu ứng, lấy từ **React Bits** (https://reactbits.dev, giấy phép MIT + Commons Clause).

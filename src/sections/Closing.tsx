@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import gsap from 'gsap';
-import { useScene, stepSnap } from '../hooks/useScene';
+import { useScene, stepSnap, peekSteps } from '../hooks/useScene';
 import { PhotoImg } from '../components/PhotoImg';
 import { LazyBackground } from '../components/LazyBackground';
 import Threads from '../components/reactbits/Threads';
@@ -15,13 +15,9 @@ export function Research() {
   // On wide screens each question takes the whole stage in turn.
   useScene(root, (el) => {
     const qs = gsap.utils.toArray<HTMLElement>('.rq', el);
-    qs.forEach((q, i) => gsap.set(q, i ? { autoAlpha: 0, y: 80 } : { autoAlpha: 1, y: 0 }));
-    const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top top', end: `+=${qs.length * 70}%`, pin: true, scrub: 0.5, snap: stepSnap(qs.length - 1) } });
-    qs.forEach((q, i) => {
-      if (!i) return;
-      tl.to(qs[i - 1], { autoAlpha: 0, y: -80, duration: 0.3 }, i - 0.6).to(q, { autoAlpha: 1, y: 0, duration: 0.35 }, i - 0.3)
-        .to('.rq-progress i', { scaleY: (i + 1) / qs.length, duration: 0.45 }, i - 0.35);
-    });
+    const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top top', end: `+=${qs.length * 70}%`, pin: true, scrub: 0.5, snap: stepSnap(qs.length - 1), invalidateOnRefresh: true } });
+    peekSteps(tl, el.querySelector('.rq-list') as HTMLElement, qs, '.rq-body');
+    qs.forEach((_, i) => { if (i) tl.to('.rq-progress i', { scaleY: (i + 1) / qs.length, duration: 0.45 }, i - 0.35); });
   }, [lang]);
   return (
     <section className="scene rq-scene" id="research" ref={root} aria-labelledby="rq-title">

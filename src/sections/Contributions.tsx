@@ -9,7 +9,7 @@ import DotField from '../components/reactbits/DotField';
 import { PhotoImg } from '../components/PhotoImg';
 import { LazyBackground } from '../components/LazyBackground';
 import { HEX, PHOTO, demoShot } from '../config';
-import { useScene, stepSnap } from '../hooks/useScene';
+import { useScene, stepSnap, peekSteps } from '../hooks/useScene';
 
 // Why: three statements replace each other over a slow push into the resort photograph.
 export function Why() {
@@ -17,16 +17,10 @@ export function Why() {
   const root = useRef<HTMLElement>(null);
   useScene(root, (el) => {
     const items = gsap.utils.toArray<HTMLElement>('.why-item', el);
-    const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top top', end: `+=${items.length * 90}%`, pin: true, scrub: 0.5, snap: stepSnap(items.length - 1) } });
+    const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top top', end: `+=${items.length * 90}%`, pin: true, scrub: 0.5, snap: stepSnap(items.length - 1), invalidateOnRefresh: true } });
     tl.fromTo('.why-photo img', { scale: 1.02 }, { scale: 1.2, ease: 'none', duration: items.length - 1 }, 0);
-    items.forEach((it, i) => {
-      if (i === 0) gsap.set(it, { autoAlpha: 1, y: 0 }); else gsap.set(it, { autoAlpha: 0, y: 70 });
-      if (i > 0) {
-        tl.to(items[i - 1], { autoAlpha: 0, y: -70, duration: 0.3 }, i - 0.6)
-          .to(it, { autoAlpha: 1, y: 0, duration: 0.35 }, i - 0.3)
-          .to(`.why-dots i:nth-child(${i + 1})`, { scaleX: 1, duration: 0.3 }, i - 0.35);
-      }
-    });
+    peekSteps(tl, el.querySelector('.why-list') as HTMLElement, items, 'p');
+    items.forEach((_, i) => { if (i) tl.to(`.why-dots i:nth-child(${i + 1})`, { scaleX: 1, duration: 0.3 }, i - 0.35); });
   }, [lang]);
   return (
     <section className="scene why-scene" ref={root} aria-labelledby="why-title">
@@ -78,11 +72,13 @@ export function Approach() {
             {[1, 2, 3, 4, 5].map((n) => (
               <li key={n} className="chain-node">
                 <span className="chain-dot mono">{n}</span>
+                {n < 5 && <span className="chain-verb">{t(`approach.v${n}`)}</span>}
                 <h3>{t(`approach.n${n}`)}</h3>
                 <p>{t(`approach.n${n}p`)}</p>
               </li>
             ))}
           </ol>
+          <p className="chain-note">{t('approach.note')}</p>
         </div>
       </div>
     </section>
@@ -123,11 +119,11 @@ export function Contributions() {
   );
 }
 
-// Gains: one statement brightens word by word over a resort photograph, then the two audiences.
+// Gains: one statement brightens word by word over a resort photograph, then what each audience gets.
 export function Gains() {
   const { t } = useI18n();
   return (
-    <section className="gains-scene" aria-label={t('gains.aria')}>
+    <section className="gains-scene" aria-labelledby="gains-title">
       <div className="gains-hero">
         <PhotoImg photo={PHOTO.honnoi} className="gains-photo" load="eager" />
         <div className="scene-shade" aria-hidden="true" />
@@ -142,18 +138,19 @@ export function Gains() {
         <DotField dotRadius={1.7} dotSpacing={22} gradientFrom={HEX.accent} gradientTo={HEX.leaf} glowColor={HEX.accent} holdToZoom={false} lightMode />
       </LazyBackground>
       <div className="container gains">
-        <div>
-          <h3 className="gains-head">{t('out.title')}</h3>
-          <dl className="outcomes">
+        <h2 className="head-section gains-title" id="gains-title">{t('gains.aria')}</h2>
+        <section className="gains-ops" aria-labelledby="gains-ops-head">
+          <h3 className="gains-sub" id="gains-ops-head">{t('out.title')}</h3>
+          <ol className="gains-grid">
             {[1, 2, 3, 4].map((n) => (
-              <div key={n}><dt><span className="mono">0{n}</span>{t(`out${n}.t`)}</dt><dd>{t(`out${n}.p`)}</dd></div>
+              <li key={n}><h4>{t(`out${n}.t`)}</h4><p>{t(`out${n}.p`)}</p></li>
             ))}
-          </dl>
-        </div>
-        <div>
-          <h3 className="gains-head">{t('sci.title')}</h3>
-          <ol className="science">{[1, 2, 3, 4].map((n) => <li key={n}>{t(`sci${n}`)}</li>)}</ol>
-        </div>
+          </ol>
+        </section>
+        <section className="gains-sci" aria-labelledby="gains-sci-head">
+          <h3 className="gains-sub" id="gains-sci-head">{t('sci.title')}</h3>
+          <ol className="gains-rows">{[1, 2, 3, 4].map((n) => <li key={n}>{t(`sci${n}`)}</li>)}</ol>
+        </section>
       </div>
       </div>
     </section>

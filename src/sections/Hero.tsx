@@ -6,19 +6,16 @@ import { PhotoImg } from '../components/PhotoImg';
 import { PHOTO } from '../config';
 import { useScene } from '../hooks/useScene';
 
-// Full-screen photograph. Scrolling pins the hero: the photo settles, the headline lifts away
-// and the four research themes rise in its place.
+// Full-screen photograph. As the hero scrolls away the photo settles and the headline lifts off.
 export function Hero() {
   const { t, lang } = useI18n();
   const root = useRef<HTMLElement>(null);
 
   useScene(root, () => {
-    gsap.timeline({ scrollTrigger: { trigger: root.current, start: 'top top', end: '+=110%', pin: true, scrub: 0.6 } })
+    gsap.timeline({ scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: 0.6 } })
       .fromTo('.hero-photo img', { scale: 1.16 }, { scale: 1, ease: 'none' }, 0)
       .to('.hero-shade', { opacity: 0.92, ease: 'none' }, 0)
-      .to('.hero-intro', { yPercent: -30, opacity: 0, ease: 'power2.in', duration: 0.35 }, 0)
-      .fromTo('.hero-keys-title', { y: 60, opacity: 0 }, { y: 0, opacity: 1, ease: 'power3.out', duration: 0.3 }, 0.42)
-      .fromTo('.hero-keys li', { y: 80, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.06, ease: 'power3.out', duration: 0.3 }, 0.5)
+      .to('.hero-intro', { yPercent: -30, opacity: 0, ease: 'power2.in' }, 0)
       .fromTo('.hero-scroll', { opacity: 1 }, { opacity: 0, duration: 0.2 }, 0);
   }, [lang]);
 
@@ -37,18 +34,6 @@ export function Hero() {
             <a className="btn btn-primary" href="#contributions">{t('hero.cta1')}</a>
             <a className="btn btn-glass" href="#collaborate">{t('hero.cta2')}</a>
           </div>
-        </div>
-        <div className="hero-keys-block">
-          <p className="hero-keys-title">{t('hero.keysTitle')}</p>
-          <ul className="hero-keys">
-            {[1, 2, 3, 4].map((n) => (
-              <li key={n}>
-                <span className="mono">0{n}</span>
-                <strong>{t(`hero.k${n}`)}</strong>
-                <span className="hero-key-desc">{t(`hero.k${n}d`)}</span>
-              </li>
-            ))}
-          </ul>
         </div>
         <p className="hero-scroll" aria-hidden="true">{t('hero.scroll')}</p>
       </div>

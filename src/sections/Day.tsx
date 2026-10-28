@@ -68,15 +68,16 @@ export function Day() {
           <div>
             <h2 className="day-head" id="day-title">{t('day.title')}</h2>
             <p className="day-tag">{t('day.sub')}</p>
+            <p className="day-lead">{t('day.lead')}</p>
             <p className="clock mono">{hhmm(Math.round(min))}</p>
             <div className="chapter" aria-live="polite">
               <h3>{t(`day.ch${chapter}.t`)}</h3>
               <p>{t(`day.ch${chapter}.p`)}</p>
             </div>
             <dl className="readouts">
-              <div><dt>{t('day.kw')}</dt><dd className="mono">{nf(Math.floor(kwNow))}<small>kW</small></dd></div>
-              <div><dt>{t('day.queue')}</dt><dd className="mono">{nf(frame[2])}<small>{t('day.people')}</small></dd></div>
-              <div><dt>{t('day.trav')}</dt><dd className="mono">{nf(frame[3])}<small>{t('day.people')}</small></dd></div>
+              <div><dt>{t('day.kw')}<span>{t('day.kwN')}</span></dt><dd className="mono">{nf(Math.floor(kwNow))}<small>kW</small></dd></div>
+              <div><dt>{t('day.queue')}<span>{t('day.queueN')}</span></dt><dd className="mono">{nf(frame[2])}<small>{t('day.people')}</small></dd></div>
+              <div><dt>{t('day.trav')}<span>{t('day.travN')}</span></dt><dd className="mono">{nf(frame[3])}<small>{t('day.people')}</small></dd></div>
             </dl>
           </div>
           <figure>
