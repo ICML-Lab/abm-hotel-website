@@ -5,6 +5,9 @@ export const demoHome = (lang: string) => `${DEMO_URL}?lang=${lang}`;
 export const demoPage = (hash: string, lang: string) => new URL(`dashboard.html?s=baseline&lang=${lang}#${hash}`, DEMO_URL).href;
 
 export const CONTACT_EMAIL = 'greenx@vinuni.edu.vn';
+// The project's pitch deck (details live there, the site stays short). Empty until the link exists:
+// the hero's Details button then scrolls to the contributions instead.
+export const DECK_URL = '';
 export const GREENX_URL = { en: 'https://greenx.vinuni.edu.vn/', vi: 'https://greenx.vinuni.edu.vn/vi/trang-chu/' } as const;
 export const GREENX_KHANHHOA_URL = 'https://greenx.vinuni.edu.vn/innovation/khanh-hoa/';
 
@@ -41,3 +44,13 @@ export const ASSETS = {
 };
 // Demo screenshots exist per language (captured with ?lang=en and ?lang=vi).
 export const demoShot = (name: 'map' | 'energy' | 'compare' | 'rooms', lang: string) => asset(`assets/demo-${name}-${lang === 'vi' ? 'vi' : 'en'}.webp`);
+
+// Principal investigators: names and positions as on their VinUni profile pages (28/10/2026).
+// Portraits come from those pages in their original colour, set on one template (square, same face
+// size and eye line, one studio-grey backdrop) so the three read as a set; credited on #credits.
+export type Person = { id: string; img: string; profile: { en: string; vi: string } };
+export const TEAM: Person[] = [
+  { id: 'p1', img: asset('assets/team/thuc-anh.webp'), profile: { en: 'https://vinuni.edu.vn/people/phan-thi-thuc-anh/', vi: 'https://vinuni.edu.vn/vi/people/ts-phan-thi-thuc-anh/' } },
+  { id: 'p2', img: asset('assets/team/qin.webp'), profile: { en: 'https://vinuni.edu.vn/people/zengchang-qin/', vi: 'https://vinuni.edu.vn/vi/people/zengchang-qin-2/' } },
+  { id: 'p3', img: asset('assets/team/yin.webp'), profile: { en: 'https://vinuni.edu.vn/people/chun-yang-yin/', vi: 'https://vinuni.edu.vn/vi/people/chun-yang-yin-2/' } },
+];

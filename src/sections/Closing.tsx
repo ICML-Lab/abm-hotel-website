@@ -1,50 +1,59 @@
-import { useRef, useState } from 'react';
-import gsap from 'gsap';
-import { useScene, stepSnap, peekSteps } from '../hooks/useScene';
+import { useState } from 'react';
 import { PhotoImg } from '../components/PhotoImg';
 import { LazyBackground } from '../components/LazyBackground';
 import Threads from '../components/reactbits/Threads';
 import { useI18n } from '../i18n/I18nProvider';
 import { ASSETS, HEX, CONTACT_EMAIL, GREENX_KHANHHOA_URL, GREENX_URL, PHOTO, demoHome, demoPage } from '../config';
 
+// Research: all five questions at once. Hovering (or focusing, or tapping) one sets it large and
+// shows what it asks in the left column; the others step back.
 export function Research() {
-  const { t, lang } = useI18n();
-  const root = useRef<HTMLElement>(null);
-  const [open, setOpen] = useState<number[]>([1]);
-  const toggle = (n: number) => setOpen((o) => (o.includes(n) ? o.filter((x) => x !== n) : [...o, n]));
-  // On wide screens each question takes the whole stage in turn.
-  useScene(root, (el) => {
-    const qs = gsap.utils.toArray<HTMLElement>('.rq', el);
-    const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top top', end: `+=${qs.length * 55}%`, pin: true, scrub: 0.3, snap: stepSnap(qs.length - 1), invalidateOnRefresh: true } });
-    peekSteps(tl, el.querySelector('.rq-list') as HTMLElement, qs, '.rq-body');
-    qs.forEach((_, i) => { if (i) tl.to('.rq-progress i', { scaleY: (i + 1) / qs.length, duration: 0.45 }, i - 0.35); });
-  }, [lang]);
+  const { t } = useI18n();
+  const [active, setActive] = useState<number | null>(null);
   return (
-    <section className="scene rq-scene" id="research" ref={root} aria-labelledby="rq-title">
+    <section className="scene rq-scene" id="research" aria-labelledby="rq-title">
       <LazyBackground className="rq-bg">
         <Threads maxDpr={1} color={HEX.leaf} accentColor={HEX.accent} lineCount={60} amplitude={1.2} speed={0.35} brightness={1} enableMouseInteraction />
       </LazyBackground>
       <div className="container rq-grid">
         <div className="rq-side">
           <h2 className="head-section" id="rq-title">{t('rq.title')}</h2>
-          <p className="lead">{t('rq.lead')}</p>
-          <div className="rq-progress" aria-hidden="true"><i /></div>
+          <p className="lead rq-detail" aria-live="polite">{active ? t(`rq${active}.a`) : t('rq.lead')}</p>
+          <p className="rq-hint">{t('rq.hint')}</p>
         </div>
-        <div className="rq-list">
-          {[1, 2, 3, 4, 5].map((n) => {
-            const isOpen = open.includes(n);
-            return (
-              <div key={n} className={`rq${isOpen ? ' is-open' : ''}`}>
-                <button type="button" aria-expanded={isOpen} aria-controls={`rq${n}`} onClick={() => toggle(n)}>
-                  <span className="rq-id mono">RQ{n}</span>
-                  <span className="rq-q">{t(`rq${n}.q`)}</span>
-                  <span className="rq-icon" aria-hidden="true" />
-                </button>
-                <div className="rq-body" id={`rq${n}`}><div><p>{t(`rq${n}.a`)}</p></div></div>
-              </div>
-            );
-          })}
-        </div>
+        <ol className={`rq-list${active ? ' has-active' : ''}`} onMouseLeave={() => setActive(null)}>
+          {[1, 2, 3, 4, 5].map((n) => (
+            <li key={n}>
+              <button type="button" className={`rq-item${active === n ? ' is-active' : ''}`} aria-pressed={active === n}
+                onMouseEnter={() => setActive(n)} onFocus={() => setActive(n)} onClick={() => setActive(n)}>
+                <span className="rq-id">RQ{n}</span>
+                <span className="rq-q">{t(`rq${n}.q`)}</span>
+              </button>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+// Progress: the four stages of the project on one line, with the current one marked.
+export function Progress() {
+  const { t } = useI18n();
+  return (
+    <section className="progress-scene" id="progress" aria-labelledby="progress-title">
+      <div className="container">
+        <h2 className="head-section" id="progress-title">{t('progress.title')}</h2>
+        <ol className="timeline">
+          {[1, 2, 3, 4].map((n) => (
+            <li key={n} className={n === 1 ? 'is-now' : undefined} aria-current={n === 1 ? 'step' : undefined}>
+              <span className="timeline-dot" aria-hidden="true" />
+              <span className="when">{t(`path${n}.w`)}</span>
+              <h3>{t(`path${n}.t`)}</h3>
+              <p>{t(`path${n}.p`)}</p>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );
@@ -60,15 +69,6 @@ export function Collaborate() {
       <div className="container collab-stage">
         <h2 className="head-section" id="collab-title">{t('collab.title')}</h2>
         <p className="lead collab-lead">{t('collab.lead')}</p>
-        <ol className="path">
-          {[1, 2, 3, 4].map((n) => (
-            <li key={n} className={n === 1 ? 'is-now' : undefined}>
-              <span className="when">{t(`path${n}.w`)}</span>
-              <h3>{t(`path${n}.t`)}</h3>
-              <p>{t(`path${n}.p`)}</p>
-            </li>
-          ))}
-        </ol>
         <div className="collab-foot">
           <figure className="greenx-quote">
             <img src={ASSETS.logo} alt={t('strip.logoAlt')} width={900} height={135} loading="lazy" />

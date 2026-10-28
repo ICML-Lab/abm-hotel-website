@@ -5,9 +5,9 @@ import { Hero } from './sections/Hero';
 import { Why, Approach, Contributions, Gains } from './sections/Contributions';
 import { Day } from './sections/Day';
 import { Pilot } from './sections/Pilot';
-import { Research, Collaborate, Footer } from './sections/Closing';
+import { Research, Progress, Collaborate, Footer } from './sections/Closing';
 import { Credits } from './sections/Credits';
-import { Marquee } from './sections/Marquee';
+import { Team } from './sections/Team';
 import { ScrollProgress } from './components/ScrollProgress';
 import { useSmoothScroll } from './hooks/useSmoothScroll';
 
@@ -45,10 +45,12 @@ export default function App() {
         <Why />
         <Approach />
         <Research />
-        <Marquee />
+        
         <Contributions />
         <Gains />
         <Pilot />
+        <Progress />
+        <Team />
         <Collaborate />
       </main>
       <Footer />

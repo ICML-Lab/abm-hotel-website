@@ -1,10 +1,7 @@
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useI18n } from '../i18n/I18nProvider';
 import { DAY } from '../data/day';
-
-gsap.registerPlugin(ScrollTrigger);
 
 // Chart geometry (SVG units)
 const X0 = 44, X1 = 712, Y0 = 18, Y1 = 262, KMAX = 1400;
@@ -14,13 +11,12 @@ const pad = (n: number) => String(n).padStart(2, '0');
 const hhmm = (min: number) => (min >= 1440 ? '24:00' : `${pad(Math.floor(min / 60))}:${pad(Math.floor(min % 60))}`);
 const tri = (h: number, a: number, p: number, b: number) => (h <= a || h >= b ? 0 : h < p ? (h - a) / (p - a) : (b - h) / (b - p));
 const CHAPTERS: [number, number][] = [[360, 1], [540, 2], [750, 3], [1080, 4], [1290, 5]];
-// The day advances in 3-hour stops: 06, 09, 12, 15, 18, 21, 24. One stop per short scroll, snapped.
-const START = 360, END = 1440, STEP = 180, STATIC_AT = 1305;
-const STOPS = (END - START) / STEP;
-const PX_PER_STOP = 200;
+// The visitor sets the time by moving across the chart (06:00 to 24:00). On first view the line
+// draws itself from morning to the evening peak, so the whole day is seen before anyone touches it.
+const START = 360, END = 1440, STATIC_AT = 1305, INTRO_TO = 1290;
 
-// The scroll drives the time of day. React renders the section once per chapter; within a chapter
-// the clock, readouts, sky and chart are written straight to the DOM on each frame (no re-render).
+// Pointer, touch or the slider drives the time of day. React renders the section once per chapter;
+// within a chapter the clock, readouts, sky and chart are written straight to the DOM (no re-render).
 export function Day() {
   const { t, nf } = useI18n();
   const pinRef = useRef<HTMLDivElement>(null);
@@ -67,6 +63,7 @@ export function Day() {
     e.nowDot?.setAttribute('cx', String(x)); e.nowDot?.setAttribute('cy', String(yOf(kwNow)));
     const peak = min >= peakI * 15 ? 1 : 0;
     if (peak !== L.peak && e.peak) { (e.peak as HTMLElement).style.opacity = String(peak); L.peak = peak; }
+    if (e.range && (e.range as HTMLInputElement).valueAsNumber !== Math.round(min)) (e.range as HTMLInputElement).value = String(Math.round(min));
     if (idx !== L.idx && e.strip) {
       const bars = e.strip.children;
       for (let i = 0; i < bars.length; i++) bars[i].classList.toggle('past', i <= idx);
@@ -74,21 +71,35 @@ export function Day() {
     }
   }, [peakI]);
 
+  // Intro: once the section is half in view, draw the day from morning to the evening peak,
+  // unless the visitor has already taken over. With reduced motion the day simply shows the peak.
+  const intro = useRef<gsap.core.Tween | null>(null);
+  const touched = useRef(false);
   useLayoutEffect(() => {
     if (reduced) { apply(STATIC_AT); return; }
-    const state = { min: START };
     apply(START);
-    const mm = gsap.matchMedia();
-    const make = (vars: ScrollTrigger.Vars) => gsap.to(state, { min: END, ease: 'none', scrollTrigger: vars, onUpdate: () => apply(state.min) });
-    mm.add('(min-width: 60.01rem)', () => {
-      make({
-        trigger: pinRef.current, start: 'top top', end: `+=${STOPS * PX_PER_STOP}`, pin: true, scrub: 0.3, anticipatePin: 1,
-        snap: { snapTo: 1 / STOPS, directional: true, inertia: false, duration: { min: 0.2, max: 0.45 }, delay: 0.05, ease: 'power2.inOut' },
-      });
-    });
-    mm.add('(max-width: 60rem)', () => { make({ trigger: pinRef.current, start: 'top 70%', end: 'bottom 30%', scrub: 0.6 }); });
-    return () => mm.revert();
+    const el = pinRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      io.disconnect();
+      if (touched.current) return;
+      const state = { min: cur.current };
+      intro.current = gsap.to(state, { min: INTRO_TO, duration: 2.6, ease: 'power1.inOut', onUpdate: () => apply(state.min) });
+    }, { threshold: 0.5 });
+    io.observe(el);
+    return () => { io.disconnect(); intro.current?.kill(); };
   }, [reduced, apply]);
+
+  const take = () => { touched.current = true; intro.current?.kill(); };
+  const fromPointer = (ev: React.PointerEvent<HTMLDivElement>) => {
+    const svg = els.current.svg as SVGSVGElement | null;
+    if (!svg || (ev.pointerType !== 'mouse' && ev.buttons === 0 && ev.type === 'pointermove')) return;
+    const r = svg.getBoundingClientRect();
+    const xv = ((ev.clientX - r.left) / r.width) * 720;
+    take();
+    apply(Math.min(END, Math.max(START, ((xv - X0) / (X1 - X0)) * 1440)));
+  };
 
   // A language switch re-renders the numbers with the new format: redraw the current values.
   useLayoutEffect(() => { last.current = { clock: '', kw: -1, q: -1, tr: -1, idx: -1, peak: -1 }; apply(cur.current); }, [nf, apply]);
@@ -123,7 +134,8 @@ export function Day() {
             </dl>
           </div>
           <figure>
-            <svg className="chart" viewBox="0 0 720 300" role="img" aria-labelledby="chart-desc">
+            <div className="day-scrub" onPointerMove={fromPointer} onPointerDown={fromPointer}>
+            <svg className="chart" ref={reg('svg')} viewBox="0 0 720 300" role="img" aria-labelledby="chart-desc">
               <desc id="chart-desc">{t('chart.desc')}</desc>
               <defs><clipPath id="day-clip"><rect ref={reg('clip')} x={X0} y={0} width={Math.max(0, x0 - X0)} height={300} /></clipPath></defs>
               <g className="axis">
@@ -146,6 +158,12 @@ export function Day() {
             <div className="queue-strip" aria-hidden="true" ref={reg('strip')}>
               {q15.map((q, i) => <i key={i} className={i <= Math.floor(init / 15) ? 'past' : undefined} style={{ height: `${Math.max(2, (q / qmax) * 100)}%` }} />)}
             </div>
+            </div>
+            <label className="day-slider">
+              <span className="day-hint">{t('day.hint')}</span>
+              <input type="range" ref={reg('range')} min={START} max={END} step={5} defaultValue={init} aria-label={t('day.slider')}
+                onInput={(e) => { take(); apply((e.target as HTMLInputElement).valueAsNumber); }} />
+            </label>
             <figcaption className="chart-caption">{t('chart.caption')}</figcaption>
           </figure>
         </div>

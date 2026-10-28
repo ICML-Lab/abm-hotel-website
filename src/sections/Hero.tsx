@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { useI18n } from '../i18n/I18nProvider';
 import SplitText from '../components/reactbits/SplitText';
 import { PhotoImg } from '../components/PhotoImg';
-import { PHOTO } from '../config';
+import { DECK_URL, PHOTO } from '../config';
 import { useScene } from '../hooks/useScene';
 
 // Full-screen photograph. As the hero scrolls away the photo settles and the headline lifts off.
@@ -31,7 +31,9 @@ export function Hero() {
           </h1>
           <p className="lead">{t('hero.lead')}</p>
           <div className="hero-actions">
-            <a className="btn btn-primary" href="#contributions">{t('hero.cta1')}</a>
+            {DECK_URL
+              ? <a className="btn btn-primary" href={DECK_URL} target="_blank" rel="noopener">{t('hero.cta1')}</a>
+              : <a className="btn btn-primary" href="#contributions">{t('hero.cta1')}</a>}
             <a className="btn btn-glass" href="#collaborate">{t('hero.cta2')}</a>
           </div>
         </div>

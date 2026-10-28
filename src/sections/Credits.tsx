@@ -20,6 +20,7 @@ export function Credits() {
           </li>
         ))}
       </ol>
+      <p className="credits-note">{t('credits.portraits')}</p>
       <a className="btn btn-primary" href="#">{t('credits.back')}</a>
     </main>
   );

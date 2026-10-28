@@ -109,26 +109,28 @@ Lưu ý: tham số trong mô phỏng (giờ cáp treo 09:00–22:00, công suấ
 
 ## Thiết kế
 
-- **Redesign Hallmark (28/10/2026), mỗi nhịp kể là một màn hình:**
-  1. Hero (ảnh cáp treo toàn khổ; không ghim, không còn khối bốn chủ đề — người dùng bỏ vì trùng lặp và gây lỗi chồng lớp khi cuộn ngược)
-  2. Một ngày (mốc 3 giờ)
-  3. Vì sao (3 câu thay nhau; chỉ hiện xem trước mục kế tiếp bên dưới, không hiện mục trước — `peekSteps` trong `useScene.ts`)
-  4. Cách tiếp cận (chuỗi tác tử → điện → phát thải; hiện đủ 5 bước ngay, không ghim cuộn — người dùng yêu cầu)
-  4b. Năm câu hỏi nghiên cứu (mỗi câu một nhịp, xem trước câu kế tiếp như phần Vì sao) — đặt sớm, ngay sau Cách tiếp cận
-  5. Marquee
-  6. Đòn bẩy (ScrollStack)
-  7. Lợi ích (ScrollReveal trên ảnh), rồi "Ai được hưởng lợi": bốn lợi ích cho đơn vị vận hành xếp ngang dưới vạch xanh + đóng góp khoa học dạng hàng kẻ mảnh (không dùng thẻ hộp — người dùng chê bản thẻ)
-  8. Hòn Tre: 3D toàn màn hình (thẻ chữ cột trái, đảo bên phải), rồi demo click-to-load (không còn dải ảnh, không còn tab ảnh màn hình)
-  10. Hợp tác (nền ảnh thành phố và vịnh Nha Trang của Leonid; ảnh vệ tinh đã bỏ vì độ phân giải thấp)
+- **Bố cục sau review của leader (28/10/2026): trang ngắn, ít cuộn, chủ yếu ảnh + tiến độ + đội ngũ PI; chi tiết để trong pitch deck (`DECK_URL` trong `config.ts`, nút "Details/Chi tiết" ở hero; để trống thì nút cuộn tới phần đóng góp). Không còn cảnh ghim/cuộn dính — cuộn bình thường (Lenis).** Thứ tự:
+  1. Hero (ảnh cáp treo, tagline ngắn, nút Details + Liên hệ)
+  2. Một ngày: rê chuột / kéo trên biểu đồ để đổi giờ (06→24), có thanh trượt cho bàn phím; lần đầu tự vẽ tới đỉnh tối
+  3. Vì sao: 3 ý cạnh nhau trên ảnh, một màn hình
+  4. Cách tiếp cận: chuỗi nhân quả, chạy hiệu ứng một lần khi tới
+  5. Năm câu hỏi nghiên cứu: hiện cả 5, rê/chạm câu nào thì câu đó to lên, giải thích hiện ở cột trái
+  6. Bốn đòn bẩy: lưới 2×2 (ảnh demo + tiêu đề + một dòng)
+  7. Câu lớn trên ảnh (giữ theo yêu cầu) + "Ai được hưởng lợi"
+  8. Hòn Tre: 3D toàn màn hình + demo click-to-load
+  9. Tiến độ dự án: timeline 4 giai đoạn, đánh dấu giai đoạn hiện tại
+  10. Chủ nhiệm nghiên cứu (PI): ảnh gốc màu, cùng khung/cùng nền xám studio, thẻ mở hồ sơ VinUni ở tab mới; tên/chức danh lấy nguyên văn từ hồ sơ VinUni (EN/VI)
+  11. Hợp tác (nền ảnh thành phố) + footer
+  Đã bỏ: dải chữ chạy (marquee). Học từ trang tham khảo Tengile MalaMala (Awwwards SOTD 3/10/2026): cuộn thường, chữ ngắn đặt lớn, ảnh thành cụm, timeline, hover nhẹ.
 - Header (`SiteHeader`) cố định, không chiếm chỗ trong bố cục: dải GREEN-X trên cùng (thu lên khi cuộn) + thanh nav nổi nền kính đục. Mọi cảnh bắt đầu từ mép trên cửa sổ; nội dung trong cảnh phải chừa khoảng cho thanh nav (~110px).
-- Cảnh ghim/tua theo cuộn dùng `src/hooks/useScene.ts` (GSAP ScrollTrigger, chỉ chạy trên màn rộng khi không bật giảm chuyển động; mặc định CSS là bố cục tĩnh xếp chồng). `App.tsx` gọi `ScrollTrigger.sort()/refresh()` sau khi mount — mọi pin phải tạo trong layout effect.
+- `src/hooks/useScene.ts` (GSAP ScrollTrigger, chỉ màn rộng, không giảm chuyển động) giờ chỉ còn dùng cho hero (ảnh thu nhỏ khi cuộn, không ghim). Người dùng không muốn cuộn dính: đừng thêm pin mới.
 - Ảnh: registry `PHOTO` trong `config.ts` (tác giả, giấy phép, link Commons). Mỗi ảnh có nhãn credit nhỏ ở góc (`PhotoImg`), danh sách đầy đủ ở trang `#credits` (link ở footer). Người dùng đã loại các ảnh: hồ bơi, bãi cỏ dù lá, lối gỗ, du khách đi dạo, Vũng Ngán — không dùng lại. **Ảnh chỉ dùng làm nền/minh họa cho một cảnh, không làm section riêng để trưng ảnh**; ảnh không dùng thì xoá.
 
 - Định hướng và phân tích trang tham khảo: `design/DESIGN-DIRECTION.md`.
 - Token màu/font nằm trong `src/styles/tokens.css`; mọi màu và font phải đi qua token. Font: Be Vietnam Pro (chữ), JetBrains Mono (chỉ số liệu).
 - Chuỗi Cách tiếp cận thể hiện nhân quả: động từ trên mỗi mắt xích (make/drive/use/shapes), mũi tên vào từng bước, và một câu ghi chú.
 - Nhãn "Một ngày" theo định nghĩa của demo: điện toàn khu (khách sạn, công viên, cáp treo), khách đang xếp hàng (trò chơi, cáp treo, tàu, xe nội khu), khách đang di chuyển; có câu dẫn dưới tiêu đề.
-- Section "Một ngày" vẽ từ dữ liệu của demo (`src/data/day.ts`, kịch bản cơ sở seed 42); cuộn theo từng mốc 3 giờ (06→24), snap mỗi lần cuộn một mốc (snap tắt quán tính). Dữ liệu này là **minh họa** — luôn gắn nhãn, không trích số trong phần chữ.
+- Section "Một ngày" vẽ từ dữ liệu của demo (`src/data/day.ts`, kịch bản cơ sở seed 42); người xem rê chuột/kéo trên biểu đồ để đổi giờ (theo góp ý của Khôi). Dữ liệu này là **minh họa** — luôn gắn nhãn, không trích số trong phần chữ.
 - Song ngữ: **mặc định tiếng Anh**, có tiếng Việt. Từ điển ở `src/i18n/dict.ts`, chọn ngôn ngữ qua `?lang=vi` hoặc nút EN/VI (lưu localStorage). Mọi chuỗi mới phải có đủ hai ngôn ngữ.
 - Hiệu ứng: **không sao chép nguyên hiệu ứng của trang tham khảo** (chỉ học style, cách sắp xếp). Khi cần hiệu ứng, lấy từ **React Bits** (https://reactbits.dev, giấy phép MIT + Commons Clause).
 - GREEN-X: logo trắng (chỉ có bản trắng) đặt trên nền `#134D8B`; trích nguyên văn thông điệp chính thức.

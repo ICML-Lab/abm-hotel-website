@@ -2,7 +2,6 @@ import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useI18n } from '../i18n/I18nProvider';
-import ScrollStack, { ScrollStackItem } from '../components/reactbits/ScrollStack';
 import ScrollReveal from '../components/reactbits/ScrollReveal';
 import DotGrid from '../components/reactbits/DotGrid';
 import Waves from '../components/reactbits/Waves';
@@ -10,21 +9,12 @@ import DotField from '../components/reactbits/DotField';
 import { PhotoImg } from '../components/PhotoImg';
 import { LazyBackground } from '../components/LazyBackground';
 import { HEX, PHOTO, demoShot } from '../config';
-import { useScene, stepSnap, peekSteps } from '../hooks/useScene';
 
-// Why: three statements replace each other over a slow push into the resort photograph.
+// Why: the three reasons side by side over the photograph, on one screen.
 export function Why() {
-  const { t, lang } = useI18n();
-  const root = useRef<HTMLElement>(null);
-  useScene(root, (el) => {
-    const items = gsap.utils.toArray<HTMLElement>('.why-item', el);
-    const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top top', end: `+=${items.length * 65}%`, pin: true, scrub: 0.3, snap: stepSnap(items.length - 1), invalidateOnRefresh: true } });
-    tl.fromTo('.why-photo img', { scale: 1.02 }, { scale: 1.2, ease: 'none', duration: items.length - 1 }, 0);
-    peekSteps(tl, el.querySelector('.why-list') as HTMLElement, items, 'p');
-    items.forEach((_, i) => { if (i) tl.to(`.why-dots i:nth-child(${i + 1})`, { scaleX: 1, duration: 0.3 }, i - 0.35); });
-  }, [lang]);
+  const { t } = useI18n();
   return (
-    <section className="scene why-scene" ref={root} aria-labelledby="why-title">
+    <section className="scene why-scene" aria-labelledby="why-title">
       <PhotoImg photo={PHOTO.cableHughes} className="why-photo" load="eager" />
       <div className="scene-shade" aria-hidden="true" />
       <div className="container why-stage">
@@ -37,7 +27,6 @@ export function Why() {
             </li>
           ))}
         </ol>
-        <div className="why-dots" aria-hidden="true"><i /><i /><i /></div>
       </div>
     </section>
   );
@@ -96,9 +85,9 @@ export function Approach() {
 
 const LEVER_SHOT = ['rooms', 'energy', 'map', 'compare'] as const;
 
-// Levers: four full-height cards stack as the page scrolls (React Bits ScrollStack).
+// Levers: four cards in a two-by-two grid, each with its prototype screen and one line.
 export function Contributions() {
-  const { t, list, lang } = useI18n();
+  const { t, lang } = useI18n();
   return (
     <section className="contrib-scene" id="contributions" aria-labelledby="contrib-title">
       <LazyBackground className="contrib-bg">
@@ -108,22 +97,15 @@ export function Contributions() {
         <h2 className="head-display" id="contrib-title">{t('contrib.title')}</h2>
         <p className="lead">{t('contrib.lead')}</p>
       </div>
-      <ScrollStack useWindowScroll itemDistance={120} itemStackDistance={28} stackPosition="14%" baseScale={0.9} itemScale={0.025} className="levers-stack">
+      <ol className="container levers-grid">
         {[1, 2, 3, 4].map((n) => (
-          <ScrollStackItem key={n} itemClassName={`lever-card${n === 1 ? ' lever-card--key' : ''}`}>
-            <div className="lever-copy">
-              <span className="lever-n mono">0{n}</span>
-              <h3>{t(`lever${n}.t`)}</h3>
-              <p>{t(`lever${n}.p`)}</p>
-              <div className="lever-measure">
-                <span>{t('lever.read')}</span>
-                <ul>{list(`lever${n}.g`).map((g) => <li key={g}>{g}</li>)}</ul>
-              </div>
-            </div>
+          <li key={n} className="lever">
             <div className="lever-shot"><img src={demoShot(LEVER_SHOT[n - 1], lang)} alt={t(`lever${n}.alt`)} loading="lazy" /></div>
-          </ScrollStackItem>
+            <h3>{t(`lever${n}.t`)}</h3>
+            <p>{t(`lever${n}.p`)}</p>
+          </li>
         ))}
-      </ScrollStack>
+      </ol>
     </section>
   );
 }

@@ -1,11 +1,11 @@
-/* Hallmark · shape: The Island Day (one full screen per story beat, pinned and scrubbed) · genre: editorial · theme: brand (GREEN-X blue, transition green, Be Vietnam Pro) · job: join · redesign: full · idea: "One resort day, told screen by screen: the evening peak, why it is hard to test, how agents drive the system, the levers, the pilot island, the questions, the invitation" · vibe: "island light, research lab, green transition"
+/* Hallmark · shape: The Island Day (one screen per story beat, normal scroll; leader's review 28/10: shorter, photo-led, progress and PIs) · genre: editorial · theme: brand (GREEN-X blue, transition green, Be Vietnam Pro) · job: join · redesign: full · idea: "One resort day, told screen by screen: the evening peak, why it is hard to test, how agents drive the system, the levers, the pilot island, the questions, the invitation" · vibe: "island light, research lab, green transition"
  * paper: oklch(97.4% 0.007 125) · accent: oklch(51% 0.14 156) · display: Be Vietnam Pro 500 · body: Be Vietnam Pro · hero: full-bleed cable-car photograph, headline lifts away on scroll as the four themes rise · nav: wordmark, four anchors, language, one green pill · footer: ink, three columns, credits link · imagery: Commons photographs of the pilot site, demo screenshots, the 3D island · signature: the pinned day and the full-screen 3D island with running cable cars
  * axes: light/grotesk-sans/chromatic-green · posture: cinematic · contrast: pass · fold: pass · v2.0.0 */
 /* Hallmark · pre-emit critique: P4 H5 E4 S5 R4 V5 · weakest: E, who-benefits is type only (four operator gains under green rules, science as rows), set under a full-screen photograph statement */
 /* waive 42: the nav is four anchors and one action because the page is one long scroll; its shape is the sticky glass bar over the grid
- * waive 49: the research-question buttons are accordion headers, so the full question is the label by design
- * waive 58: the contributions screen carries four levers plus their measures by the owner's request (contributions are the page's core); Vietnamese copy is monosyllabic and counts about twice the English
- * waive 39b: the play control is the hero picture's one action, sized as a target over a 16:10 poster, not a form button; the research-question buttons are accordion headers that hold the full question as their label (see 49)
+ * waive 49: the research-question buttons hold the full question as their label: hovering one enlarges it and shows what it asks
+ * waive 58: Vietnamese copy is monosyllabic and counts about twice the English
+ * waive 39b: the play control is the hero picture's one action, sized as a target over a 16:10 poster, not a form button; the research-question buttons hold the full question as their label (see 49)
  * waive 79: the hero is a full-bleed photograph; the copy sits low over it by design
  * waive 83: the owner asked for a photo-led showcase; every photograph is a credited view of the pilot site or the product
  * waive 59: each story beat is a full-screen scene, so scenes meet edge to edge without a gap
@@ -117,23 +117,6 @@ body { font-weight: 400; }
 
 /* ---------- contributions ---------- */
 .contrib { background: var(--color-paper-2); }
-.contrib-head { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-2xl); align-items: end; }
-.levers-note { margin-top: var(--space-2xl); font-size: var(--text-sm); color: var(--color-muted); }
-.levers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-md); margin-top: var(--space-sm); }
-.lever { display: flex; flex-direction: column; gap: var(--space-sm); padding: var(--space-lg); border-radius: var(--radius-card); background: var(--color-paper); border: 1px solid var(--color-rule); }
-.lever-key { background: var(--color-accent-deep); color: var(--color-on-dark); border-color: transparent; }
-.lever-n { font-size: var(--text-xs); color: var(--color-muted); }
-.lever h3 { font-size: var(--text-xl); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; }
-.lever p { color: var(--color-ink-2); font-size: var(--text-sm); }
-.lever-measure { margin-top: auto; padding-top: var(--space-md); border-top: 1px solid var(--color-rule); }
-.lever-key .lever-measure { border-top-color: var(--color-rule-dark); }
-.lever-measure > span { font-size: var(--text-xs); color: var(--color-muted); }
-.lever.lever-key .lever-n, .lever.lever-key p, .lever.lever-key .lever-measure > span { color: var(--color-on-dark); opacity: 0.86; }
-.lever-measure ul { list-style: none; padding: 0; margin: var(--space-xs) 0 0; display: flex; flex-wrap: wrap; gap: var(--space-xs); }
-.lever-measure li { font-size: var(--text-xs); padding: var(--space-2xs) var(--space-sm); border-radius: var(--radius-pill); background: var(--color-paper-3); color: var(--color-ink); }
-.lever-key .lever-measure li { background: color-mix(in oklab, var(--color-on-dark) 14%, transparent); color: var(--color-on-dark); }
-@media (max-width: 60rem) { .contrib-head { grid-template-columns: minmax(0, 1fr); } .levers { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 40rem) { .levers { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- the day (signature) ---------- */
 .day { position: relative; background: var(--color-night); color: var(--color-on-dark); }
@@ -235,37 +218,15 @@ body { font-weight: 400; }
 
 /* ---------- research questions ---------- */
 .rq-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--space-2xl); }
-.rq-list { border-top: 1px solid var(--color-rule); }
-.rq { border-bottom: 1px solid var(--color-rule); }
-.rq button { width: 100%; display: grid; grid-template-columns: 4rem minmax(0, 1fr) 24px; gap: var(--space-md); align-items: baseline; text-align: left; background: none; border: 0; padding: var(--space-lg) 0; cursor: pointer; color: var(--color-ink); }
-.rq button:hover .rq-q { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
-.rq button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
-.rq-id { color: var(--color-muted); font-size: var(--text-sm); }
-.rq-q { font-size: var(--text-xl); font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; }
-.rq-icon { width: 16px; height: 16px; position: relative; translate: 0 2px; }
-.rq-icon::before, .rq-icon::after { content: ""; position: absolute; left: 0; right: 0; top: 7px; height: 1.5px; background: var(--color-ink); transition: transform var(--dur-short) var(--ease-out); }
-.rq-icon::after { transform: rotate(90deg); }
-.rq button[aria-expanded="true"] .rq-icon::after { transform: rotate(0deg); }
-.rq-body { display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows var(--dur-long) var(--ease-out), visibility 0s linear var(--dur-long); }
-.rq-body > div { overflow: hidden; min-height: 0; display: grid; grid-template-columns: 4rem minmax(0, 1fr) 24px; column-gap: var(--space-md); }
-.rq-body p { grid-column: 2; padding-bottom: var(--space-lg); color: var(--color-ink-2); max-width: 64ch; }
-.rq.is-open .rq-body { grid-template-rows: 1fr; visibility: visible; transition-delay: 0s; }
-.no-js .rq-body { grid-template-rows: 1fr; visibility: visible; }
 /* without scripts (and in link previews) the split headline shows as plain text */
 .no-js .split-parent { visibility: visible !important; }
-@media (max-width: 60rem) { .rq-grid { grid-template-columns: minmax(0, 1fr); } .rq button { grid-template-columns: 3rem minmax(0, 1fr) 24px; } .rq-body > div { grid-template-columns: 3rem minmax(0, 1fr) 24px; } }
+@media (max-width: 60rem) { .rq-grid { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- collaborate (GREEN-X band) ---------- */
 .collab { background: var(--color-greenx); color: var(--color-on-dark); --color-on-dark-muted: var(--color-on-blue-muted); --color-focus: var(--color-on-dark); }
 .day, .footer { --color-focus: var(--color-on-dark); }
 .collab .head-section { max-width: 18ch; }
 .collab-lead { color: var(--color-on-dark-muted); margin-top: var(--space-md); }
-.path { list-style: none; padding: 0; margin: var(--space-2xl) 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap-columns); counter-reset: step; }
-.path li { border-top: 1px solid var(--color-rule-dark); padding-top: var(--space-md); position: relative; }
-.path li.is-now { border-top-color: var(--color-on-dark); box-shadow: inset 0 2px 0 var(--color-on-dark); }
-.path .when { font-size: var(--text-xs); color: var(--color-on-dark-muted); }
-.path h3 { font-size: var(--text-xl); font-weight: 500; letter-spacing: -0.02em; margin-top: var(--space-xs); }
-.path p { color: var(--color-on-dark-muted); margin-top: var(--space-xs); font-size: var(--text-sm); }
 .collab-foot { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-2xl); margin-top: var(--space-3xl); padding-top: var(--space-xl); border-top: 1px solid var(--color-rule-dark); align-items: end; }
 .greenx-quote img { height: 34px; width: auto; }
 .greenx-quote blockquote { margin: var(--space-lg) 0 0; font-size: var(--text-xl); font-weight: 400; line-height: 1.35; letter-spacing: -0.015em; max-width: 30ch; }
@@ -273,8 +234,7 @@ body { font-weight: 400; }
 .privacy { list-style: none; padding: 0; margin: 0 0 var(--space-xl); display: grid; gap: var(--space-xs); font-size: var(--text-sm); color: var(--color-on-dark-muted); }
 .privacy li { display: flex; gap: var(--space-sm); }
 .privacy li::before { content: ""; width: 8px; height: 8px; margin-top: var(--space-xs); border: 1px solid var(--color-on-dark); flex: none; }
-@media (max-width: 60rem) { .path { grid-template-columns: repeat(2, minmax(0, 1fr)); } .collab-foot { grid-template-columns: minmax(0, 1fr); } }
-@media (max-width: 40rem) { .path { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 60rem) { .collab-foot { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- footer ---------- */
 .footer { background: var(--color-ink); color: var(--color-on-dark-muted); padding-block: var(--space-2xl) var(--space-xl); font-size: var(--text-sm); }
@@ -303,12 +263,8 @@ body { font-weight: 400; }
 .photos .depth-carousel { --dc-bg: transparent; }
 @media (max-width: 60rem) { .photos-head { grid-template-columns: minmax(0, 1fr); gap: var(--space-sm); } }
 
-/* ---------- levers as spotlight cards ---------- */
-.levers .spotlight-card { height: 100%; }
 .footer-credits { margin-top: var(--space-lg); font-size: var(--text-xs); color: var(--color-on-dark-muted); display: grid; gap: var(--space-2xs); }
 .footer-credits a { color: var(--color-on-dark-muted); }
 .model-canvas { position: absolute; inset: 0; }
 .photos-stage { position: relative; }
 .photos .depth-carousel:focus-visible { outline-color: var(--color-focus); }
-.levers .spotlight-card.lever { padding: var(--space-lg); border-radius: var(--radius-card); background: var(--spotlight-card-surface); border: 0; }
-.levers .spotlight-card.lever-key { --spotlight-card-surface: var(--color-accent-deep); }
