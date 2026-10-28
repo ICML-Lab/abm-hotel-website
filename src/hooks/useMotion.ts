@@ -14,10 +14,9 @@ const PARALLAX = '.why-photo img, .section-photo img';
 const REVEAL = [
   '.why-kicker', '.why-item',
   '.approach-head > *', '.chain-note',
-  '.rq-side > h2', '.rq-hint', '.rq-list > li',
-  '.gains-title', '.gains-sub', '.gains-grid > li', '.gains-rows > li',
+  '.gains-head > *', '.gains-tabs', '.gains-status',
   '.pilot-card', '.demo-head > *',
-  '#progress-title', '.timeline > li',
+  '.progress-head > *', '.timeline > li', '.rq-more',
   '#team-title', '.team-grid > li',
 ].join(', ');
 

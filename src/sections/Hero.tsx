@@ -95,6 +95,7 @@ export function Hero() {
               ? <a className="btn btn-primary" href={DECK_URL} target="_blank" rel="noopener">{t('hero.cta1')}</a>
               : <a className="btn btn-primary" href="#contributions">{t('hero.cta1')}</a>}
             <a className="btn btn-glass" href="#collaborate">{t('hero.cta2')}</a>
+            <a className="hero-status" href="#progress">{t('hero.status')}</a>
           </div>
         </div>
         <p className="hero-scroll" aria-hidden="true">{t('hero.scroll')}</p>

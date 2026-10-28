@@ -1,11 +1,12 @@
-/* Hallmark · shape: The Island Day (one screen per story beat, normal scroll; leader's review 28/10: shorter, photo-led, progress and PIs) · genre: editorial · theme: brand (GREEN-X blue, transition green, Be Vietnam Pro) · job: join · redesign: full · idea: "One resort day, told screen by screen: the evening peak, why it is hard to test, how agents drive the system, the levers, the pilot island, the questions, the invitation" · vibe: "island light, research lab, green transition"
+/* Hallmark · shape: The Island Day (one screen per story beat, normal scroll; leader's review 28/10: shorter, photo-led, progress and PIs) · genre: editorial · theme: brand (GREEN-X blue, transition green, Be Vietnam Pro) · job: join (pitch to operators, 28/10) · redesign: full · idea: "One resort day, then what the hotel and its guests gain, each benefit with its problem, what the system does and how far it has got" · vibe: "island light, research lab, green transition"
  * paper: oklch(97.4% 0.007 125) · accent: oklch(51% 0.14 156) · display: Be Vietnam Pro 500 · body: Be Vietnam Pro · hero: full-bleed cable-car photograph, headline lifts away on scroll as the four themes rise · nav: wordmark, four anchors, language, one green pill · footer: ink, three columns, credits link · imagery: Commons photographs of the pilot site, demo screenshots, the 3D island · signature: the pinned day and the full-screen 3D island with running cable cars
  * axes: light/grotesk-sans/chromatic-green · posture: cinematic · contrast: pass · fold: pass · v2.0.0 */
-/* Hallmark · pre-emit critique: P4 H5 E4 S5 R4 V5 · weakest: E, who-benefits is type only (four operator gains under green rules, science as rows), set under a full-screen photograph statement */
+/* Hallmark · pre-emit critique: P4 H5 E4 S5 R4 V5 · weakest: E, who-benefits is a tabbed explorer of type (hotel and guest benefits, detail panel with status), no picture of its own */
 /* waive 42: the nav is four anchors and one action because the page is one long scroll; its shape is the sticky glass bar over the grid
- * waive 49: the research-question buttons hold the full question as their label: hovering one enlarges it and shows what it asks
+ * waive 49: each benefit button holds its full headline as its label: hovering or focusing one opens its detail
  * waive 58: Vietnamese copy is monosyllabic and counts about twice the English
- * waive 39b: the play control is the hero picture's one action, sized as a target over a 16:10 poster, not a form button; the research-question buttons hold the full question as their label (see 49)
+ * waive 39b: the play control is the hero picture's one action, sized as a target over a 16:10 poster, not a form button; the benefit buttons hold their full headline as their label (see 49)
+ * waive 49b: the hero status is a sentence that links to the progress timeline, not a control label, so it wraps like text on a phone
  * waive 79: the hero is a full-bleed photograph; the copy sits low over it by design
  * waive 83: the owner asked for a photo-led showcase; every photograph is a credited view of the pilot site or the product
  * waive 59: each story beat is a full-screen scene, so scenes meet edge to edge without a gap
@@ -13,6 +14,7 @@
 
 /* Hallmark · dropped onChange={(n) => setI(n)} · the photo carousel became the pinned horizontal photo strip */
 /* Hallmark · dropped smart air conditioning on and off, housekeeping coordination, route suggestions in the park, ride dispatch, four levers to test, demo-energy, demo-compare, demo-rooms, honnoi · the owner removed the four-levers section and the photo statement above who-benefits (details move to the pitch deck) */
+/* Hallmark · dropped #research, five research questions as a section, for science · the owner's lead asked for a pitch to businesses: the questions are folded under the progress timeline, science contributions left to the deck */
 /* Hallmark · dropped 53119835087, collab-title · the owner folded the collaboration section into the footer (GREEN-X band); its city photograph is no longer used and was removed */
 /* Hallmark · dropped File:Vinpearl_Cable_Car, File:Arriving_in_Nha_Trang, File:Satellite_pictures_of_Nha_Trang_Bay, dashboard.html?s=baseline · the owner removed those photographs and the demo screenshot tabs; remaining photos keep their credits */
 /* Hallmark · reworded "What the research delivers" to "Four levers to test before anything changes on site", "Hon Tre and Nha Trang Bay" to "The pilot site in photographs" · story beats, owner's request
@@ -215,8 +217,6 @@ body { font-weight: 400; }
 @media (max-width: 60rem) { .island-grid { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- research questions ---------- */
-.rq-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--space-2xl); }
-@media (max-width: 60rem) { .rq-grid { grid-template-columns: minmax(0, 1fr); } }
 
 .day, .footer { --color-focus: var(--color-on-dark); }
 .greenx-quote img { height: 34px; width: auto; }

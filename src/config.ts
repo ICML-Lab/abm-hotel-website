@@ -11,6 +11,12 @@ export const DECK_URL = '';
 export const GREENX_URL = { en: 'https://greenx.vinuni.edu.vn/', vi: 'https://greenx.vinuni.edu.vn/vi/trang-chu/' } as const;
 export const GREENX_KHANHHOA_URL = 'https://greenx.vinuni.edu.vn/innovation/khanh-hoa/';
 
+// Published sources behind the one outside figure on the page (occupancy-based AC in hotel rooms).
+export const SOURCES = {
+  spareCard: { label: 'Schneider Electric', url: 'https://download.schneider-electric.com/doc/998-2095-04-24-14AR1_A4_EN/998-2095-04-24-14AR1_A4_EN.pdf' },
+  obcc: { label: 'Kim & Oldham, ASHRAE 2019', url: 'https://researchwith.njit.edu/en/publications/energy-performance-of-an-occupancy-based-climate-control-obcc-tec/' },
+} as const;
+
 // WebGL components (React Bits, three.js) need hex colours: these mirror src/styles/tokens.css.
 export const HEX = {
   ink: '#0f1f19', // --color-ink

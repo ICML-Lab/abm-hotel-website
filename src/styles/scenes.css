@@ -30,6 +30,9 @@
 .hero-char { display: inline-block; will-change: transform; }
 /* wide screens: line one starts at the left edge, line two at the right; scrolling brings them to the centre */
 @media (min-width: 60.01rem) { .hero-line-2 { text-align: right; } .hero-line-inner { white-space: nowrap; } }
+.hero-status { flex-basis: 100%; margin-top: var(--space-2xs); font-size: var(--text-sm); color: var(--color-on-dark-muted); text-decoration: none; }
+.hero-status:hover { color: var(--color-on-dark); text-decoration: underline; }
+.hero-status:focus-visible { outline: 2px solid var(--color-on-dark); outline-offset: 2px; }
 .hero-scroll { margin: var(--space-lg) 0 0; font-size: var(--text-xs); color: var(--color-on-dark-muted); }
 .hero-scene .photo-credit { bottom: var(--space-md); }
 
@@ -80,25 +83,53 @@
 
 
 
-/* ---------- gains ---------- */
+/* ---------- gains: one audience at a time; headlines on the left, the open one's detail on the right ---------- */
 .gains-scene { background: var(--color-paper); }
-/* who benefits: the four operator gains across the width under green rules, then the science contributions as hairline rows */
-.gains-scene .gains { padding-block: var(--section-gap); display: grid; gap: var(--space-3xl); }
-.gains-title { max-width: 20ch; }
-.gains-sub { font-size: var(--text-title); font-weight: 500; letter-spacing: -0.01em; color: var(--color-ink-2); }
-.gains-grid { list-style: none; padding: 0; margin: var(--space-lg) 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap-columns); }
-.gains-grid li { display: grid; align-content: start; gap: var(--space-sm); padding-top: var(--space-lg); border-top: 3px solid var(--color-accent); }
-.gains-grid h4 { margin: 0; font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 500; letter-spacing: -0.035em; line-height: 1.04; text-wrap: balance; overflow-wrap: break-word; min-width: 0; }
-.gains-grid p { color: var(--color-ink-2); }
-.gains-sci { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--gap-columns); align-items: start; }
-.gains-rows { list-style: none; padding: 0; margin: 0; counter-reset: sci; border-bottom: 1px solid var(--color-rule); }
-.gains-rows li { counter-increment: sci; display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: var(--space-sm); align-items: baseline; padding-block: var(--space-lg); border-top: 1px solid var(--color-rule); font-size: var(--text-xl); font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; }
-.gains-rows li::before { content: counter(sci); font-size: var(--text-sm); font-weight: 400; letter-spacing: 0; color: var(--color-muted); }
+.gains-scene .gains { padding-block: var(--section-gap); display: grid; gap: var(--space-xl); }
+.gains-head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--gap-columns); align-items: end; }
+.gains-title { max-width: 18ch; overflow-wrap: break-word; min-width: 0; }
+.gains-tabs { display: inline-flex; justify-self: start; gap: var(--space-2xs); padding: var(--space-2xs); border-radius: var(--radius-pill); background: color-mix(in oklab, var(--color-paper-2) 88%, transparent); border: 1px solid var(--color-rule); }
+.gains-tab { white-space: nowrap; padding: var(--space-xs) var(--space-lg); border: 0; border-radius: var(--radius-pill); background: none; color: var(--color-ink-2); font: inherit; font-weight: 500; cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease; }
+.gains-tab:hover { color: var(--color-ink); background: var(--color-paper-3); }
+.gains-tab[aria-selected="true"] { background: var(--color-accent); color: var(--color-accent-ink); }
+.gains-tab:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; transition: none; }
+:root:not(.no-js) .benefit-panel.is-off { display: none; }
+.benefit-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-rows: repeat(var(--rows), auto) 1fr; column-gap: var(--gap-columns); align-items: start; }
+.benefit { display: contents; }
+.benefit-head { grid-column: 1; width: 100%; display: grid; grid-template-columns: 2.75rem minmax(0, 1fr); gap: var(--space-sm); align-items: baseline; padding: var(--space-md) 0; border: 0; border-top: 1px solid var(--color-rule); background: none; color: var(--color-ink); text-align: left; font: inherit; cursor: pointer; transition: color 0.2s ease, opacity 0.2s ease; }
+.benefit:last-child .benefit-head { border-bottom: 1px solid var(--color-rule); }
+.benefit-head:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; transition: none; }
+.benefit-n { font-size: var(--text-sm); color: var(--color-muted); }
+.benefit-t { font-size: var(--text-xl); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; text-wrap: balance; }
+.benefit:not(.is-open) .benefit-head { color: var(--color-ink-2); }
+.benefit:not(.is-open) .benefit-head:hover { color: var(--color-ink); }
+.benefit.is-open .benefit-n { color: var(--color-accent); }
+.benefit.is-open .benefit-head { box-shadow: inset 3px 0 0 var(--color-accent); padding-left: var(--space-md); }
+.benefit-body { grid-column: 2; grid-row: 1 / -1; display: grid; gap: var(--space-lg); align-content: start; padding: var(--space-xl); border-radius: calc(var(--radius-card) * 1.5); background: color-mix(in oklab, var(--color-paper-2) 92%, transparent); border: 1px solid var(--color-rule); }
+:root:not(.no-js) .benefit:not(.is-open) .benefit-body { display: none; }
+.benefit-stage { justify-self: start; font-size: var(--text-sm); font-weight: 500; padding: var(--space-3xs) var(--space-sm); border-radius: var(--radius-pill); border: 1px solid currentColor; }
+.stage-1 { color: var(--color-accent); }
+.stage-2 { color: var(--color-greenx); }
+.stage-3 { color: var(--color-muted); }
+.benefit-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xl); }
+.benefit-cols h3 { font-size: var(--text-md); font-weight: 500; color: var(--color-accent); margin-bottom: var(--space-xs); }
+.benefit-cols p { font-size: var(--text-md); line-height: 1.6; color: var(--color-ink-2); }
+.benefit-src { font-size: var(--text-sm); color: var(--color-muted); }
+.benefit-src a { color: inherit; }
+.benefit-note { margin-top: var(--space-lg); font-size: var(--text-sm); color: var(--color-muted); max-width: 60ch; }
+.gains-status { max-width: 70ch; padding-left: var(--space-md); border-left: 3px solid var(--color-accent); color: var(--color-ink-2); }
+.gains-status strong { color: var(--color-ink); font-weight: 600; }
+.gains-status a { color: var(--color-accent); font-weight: 500; }
 @media (max-width: 60rem) {
-  .gains-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--space-2xl); }
-  .gains-sci { grid-template-columns: minmax(0, 1fr); gap: var(--space-md); }
+  .gains-head { grid-template-columns: minmax(0, 1fr); gap: var(--space-md); }
+  .benefit-list { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+  .benefit { display: block; }
+  .benefit-body { padding: var(--space-lg); margin-bottom: var(--space-md); }
+  .benefit-cols { grid-template-columns: minmax(0, 1fr); gap: var(--space-lg); }
 }
-@media (max-width: 40rem) { .gains-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 24rem) { .gains-tab { padding-inline: var(--space-md); } }
+.no-js .benefit-list { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+.no-js .benefit { display: block; }
 
 /* ---------- pilot: 3D ---------- */
 .pilot-scene { background: radial-gradient(120% 90% at 60% 30%, var(--color-paper-2), var(--color-paper-3)); }
@@ -114,11 +145,6 @@
   .model-stage { position: relative; height: 70svh; }
   .pilot-overlay { min-height: 0; padding-block: var(--space-xl); }
 }
-
-/* ---------- research ---------- */
-.rq-scene { background: var(--color-paper-2); display: grid; align-items: center; padding-block: var(--section-gap-s); }
-.rq-side { display: grid; gap: var(--space-md); align-content: start; }
-
 
 /* ---------- credits page ---------- */
 .credits { padding-block: var(--section-gap-s); display: grid; gap: var(--space-lg); }
@@ -186,20 +212,6 @@
 @media (max-width: 60rem) { .team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--space-2xl); } }
 @media (max-width: 40rem) { .team-grid { grid-template-columns: minmax(0, 1fr); } }
 
-/* ---------- research: all five questions; the hovered one grows, the rest step back ---------- */
-.rq-grid { align-items: center; min-height: calc(100svh - 2 * var(--section-gap-s)); }
-.rq-detail { min-height: 7.5em; transition: opacity 0.25s ease; }
-.rq-hint { font-size: var(--text-sm); color: var(--color-muted); }
-.rq-list { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--color-rule); }
-.rq-list li { border-bottom: 1px solid var(--color-rule); }
-.rq-item { width: 100%; display: grid; grid-template-columns: 3.5rem minmax(0, 1fr); gap: var(--space-md); align-items: baseline; padding: var(--space-md) 0; background: none; border: 0; text-align: left; color: var(--color-ink); cursor: pointer; transition: opacity 0.3s ease; }
-.rq-item:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; transition: none; }
-.rq-id { font-size: var(--text-sm); color: var(--color-accent); font-weight: 500; }
-.rq-q { font-size: var(--text-xl); font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; transform-origin: left center; transition: transform 0.35s ease; }
-.rq-list.has-active .rq-item:not(.is-active) { opacity: 0.38; }
-.rq-item.is-active .rq-q { transform: scale(1.14); }
-@media (max-width: 60rem) { .rq-grid { min-height: 0; } .rq-item.is-active .rq-q { transform: none; } }
-
 /* ---------- progress: four stages on one line, the current one marked ---------- */
 .progress-scene { background: var(--color-paper); padding-block: var(--section-gap); }
 .timeline { list-style: none; padding: 0; margin: var(--space-2xl) 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap-columns); position: relative; }
@@ -211,6 +223,14 @@
 .timeline li.is-now .when { color: var(--color-accent); font-weight: 500; }
 .timeline h3 { font-size: var(--text-2xl); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; }
 .timeline p { color: var(--color-ink-2); max-width: 26ch; }
+.timeline li.is-done .timeline-dot { border-color: var(--color-ink-2); }
+.progress-head { display: grid; gap: var(--space-md); max-width: 46rem; }
+/* the research questions, folded: there for academic readers, out of the way of the pitch */
+.rq-more { margin-top: var(--space-2xl); border-top: 1px solid var(--color-rule); max-width: 46rem; }
+.rq-more summary { padding-block: var(--space-md); cursor: pointer; color: var(--color-ink-2); font-weight: 500; }
+.rq-more summary:hover { color: var(--color-ink); }
+.rq-more summary:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.rq-more ol { margin: 0 0 var(--space-md); padding-left: var(--space-lg); display: grid; gap: var(--space-xs); color: var(--color-ink-2); }
 @media (max-width: 60rem) {
   .timeline { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); padding-left: var(--space-xl); }
   .timeline::before { left: 9px; right: auto; top: 0; bottom: 0; border-top: 0; border-left: 2px dashed var(--color-rule); }
@@ -223,7 +243,6 @@
 
 /* ---------- interactive React Bits backgrounds on paper sections (mounted only while on screen) ---------- */
 .section-bg { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
-.approach-bg { opacity: 0.32; }
 .gains-bg { opacity: 0.4; }
 .demo-bg { opacity: 0.5; }
 .gains-body, .demo-scene { position: relative; isolation: isolate; }
@@ -237,8 +256,9 @@
 /* the shade is built from --color-night, which this class does not redefine (--color-ink is light here) */
 .on-photo .scene-shade { z-index: 0; background: linear-gradient(180deg, color-mix(in oklab, var(--color-night) 62%, transparent), color-mix(in oklab, var(--color-night) 84%, transparent)); }
 /* the brand green is too dark to read as small text on a photograph: lift it toward white */
-.on-photo .rq-id, .on-photo .timeline li.is-now .when { color: color-mix(in oklab, var(--color-accent) 40%, var(--color-on-dark)); }
+.on-photo .timeline li.is-now .when, .on-photo .chain-verb { color: color-mix(in oklab, var(--color-accent) 40%, var(--color-on-dark)); }
 .on-photo .timeline-dot { background: var(--color-night); }
+.on-photo .chain-verb { background: var(--color-night); }
 .on-photo .chain-node + .chain-node .chain-dot::before { border-left-color: color-mix(in oklab, var(--color-accent) 40%, var(--color-on-dark)); }
 
 /* ---------- loading panel (index.html, outside the app) ---------- */

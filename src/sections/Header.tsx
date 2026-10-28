@@ -38,7 +38,7 @@ export function SiteHeader() {
           <nav className="nav-links" aria-label={t('nav.main')}>
             <a href="#contributions">{t('nav.contrib')}</a>
             <a href="#pilot">{t('nav.pilot')}</a>
-            <a href="#research">{t('nav.research')}</a>
+            <a href="#progress">{t('nav.status')}</a>
             <a href="#team">{t('nav.team')}</a>
             <a href="#collaborate">{t('nav.collab')}</a>
           </nav>

@@ -5,15 +5,15 @@ import { Hero } from './sections/Hero';
 import { Why, Approach, Gains } from './sections/Contributions';
 import { Day } from './sections/Day';
 import { Pilot } from './sections/Pilot';
-import { Research, Progress, Footer } from './sections/Closing';
+import { Progress, Footer } from './sections/Closing';
 import { Credits } from './sections/Credits';
 import { Team } from './sections/Team';
 import { ScrollProgress } from './components/ScrollProgress';
 import { useSmoothScroll } from './hooks/useSmoothScroll';
 import { useMotion } from './hooks/useMotion';
 
-// The story, one screen per beat: the problem (a resort day), why it is hard, how the model works,
-// the questions it asks, the levers to test, who gains, where it is tried first, and the invitation.
+// A pitch to operators: the problem (a resort day), why it is hard, what the hotel and its guests gain,
+// how it works, where it is tried first, where the project stands, who runs it, and the invitation.
 export default function App() {
   const [route, setRoute] = useState(() => (typeof window !== 'undefined' ? window.location.hash : ''));
   useSmoothScroll();
@@ -45,10 +45,8 @@ export default function App() {
         <Hero />
         <Day />
         <Why />
-        <Approach />
-        <Research />
-        
         <Gains />
+        <Approach />
         <Pilot />
         <Progress />
         <Team />

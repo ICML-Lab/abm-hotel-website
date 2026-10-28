@@ -1,11 +1,10 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useI18n } from '../i18n/I18nProvider';
 import { PhotoImg } from '../components/PhotoImg';
-import { HEX, PHOTO } from '../config';
+import { HEX, PHOTO, SOURCES } from '../config';
 import { LazyBackground } from '../components/LazyBackground';
-import DotGrid from '../components/reactbits/DotGrid';
 import DotField from '../components/reactbits/DotField';
 
 // Why: the three reasons side by side over the photograph, on one screen.
@@ -53,10 +52,9 @@ export function Approach() {
     return () => mm.revert();
   }, [lang]);
   return (
-    <section className="scene approach-scene" ref={root} aria-labelledby="approach-title">
-      <LazyBackground className="approach-bg">
-        <DotGrid dpr={1} dotSize={4} gap={26} baseColor={HEX.leaf} activeColor={HEX.accent} proximity={160} clickShock={false} fade={0.35} />
-      </LazyBackground>
+    <section className="scene approach-scene on-photo" ref={root} aria-labelledby="approach-title">
+      <PhotoImg photo={PHOTO.night} className="section-photo" />
+      <div className="scene-shade" aria-hidden="true" />
       <div className="container approach-stage">
         <div className="approach-head">
           <h2 className="head-display" id="approach-title">{t('approach.title')}</h2>
@@ -81,9 +79,33 @@ export function Approach() {
   );
 }
 
-// Gains (anchor #contributions): what operators and science each get from the project.
+// Each benefit names the problem, what the system does about it, and how far it has got:
+// 1 runs in the prototype on assumed data, 2 is a model still in training, 3 waits for a pilot site.
+type Benefit = { key: string; stage: 1 | 2 | 3; sources?: (keyof typeof SOURCES)[] };
+const AUDIENCES = {
+  hotel: [
+    { key: 'h1', stage: 2, sources: ['spareCard', 'obcc'] },
+    { key: 'h2', stage: 1 },
+    { key: 'h3', stage: 1 },
+    { key: 'h4', stage: 1 },
+    { key: 'h5', stage: 2 },
+  ],
+  guest: [
+    { key: 'g1', stage: 3 },
+    { key: 'g2', stage: 3 },
+    { key: 'g3', stage: 3 },
+    { key: 'g4', stage: 3 },
+  ],
+} satisfies Record<string, Benefit[]>;
+type Audience = keyof typeof AUDIENCES;
+
+// Gains (anchor #contributions): the hotel's and the guests' benefits, one audience at a time.
+// The headlines stay in a column on the left; the open one shows its detail on the right
+// (below it on narrow screens). Without scripts both lists and every detail are simply there.
 export function Gains() {
   const { t } = useI18n();
+  const [who, setWho] = useState<Audience>('hotel');
+  const [open, setOpen] = useState<Record<Audience, string>>({ hotel: 'h1', guest: 'g1' });
   return (
     <section className="gains-scene" id="contributions" aria-labelledby="gains-title">
       <div className="gains-body">
@@ -91,19 +113,58 @@ export function Gains() {
         <DotField maxDevicePixelRatio={1} dotRadius={1.7} dotSpacing={22} gradientFrom={HEX.accent} gradientTo={HEX.leaf} glowColor={HEX.accent} holdToZoom={false} lightMode />
       </LazyBackground>
       <div className="container gains">
-        <h2 className="head-section gains-title" id="gains-title">{t('gains.aria')}</h2>
-        <section className="gains-ops" aria-labelledby="gains-ops-head">
-          <h3 className="gains-sub" id="gains-ops-head">{t('out.title')}</h3>
-          <ol className="gains-grid">
-            {[1, 2, 3, 4].map((n) => (
-              <li key={n}><h4>{t(`out${n}.t`)}</h4><p>{t(`out${n}.p`)}</p></li>
-            ))}
-          </ol>
-        </section>
-        <section className="gains-sci" aria-labelledby="gains-sci-head">
-          <h3 className="gains-sub" id="gains-sci-head">{t('sci.title')}</h3>
-          <ol className="gains-rows">{[1, 2, 3, 4].map((n) => <li key={n}>{t(`sci${n}`)}</li>)}</ol>
-        </section>
+        <div className="gains-head">
+          <h2 className="head-section gains-title" id="gains-title">{t('gains.title')}</h2>
+          <p className="lead">{t('gains.lead')}</p>
+        </div>
+        <div className="gains-tabs" role="tablist" aria-label={t('gains.title')}>
+          {(Object.keys(AUDIENCES) as Audience[]).map((a) => (
+            <button key={a} type="button" role="tab" id={`tab-${a}`} aria-controls={`panel-${a}`} aria-selected={who === a}
+              className="gains-tab" onClick={() => setWho(a)}>{t(`gains.for.${a}`)}</button>
+          ))}
+        </div>
+        {(Object.keys(AUDIENCES) as Audience[]).map((a) => {
+          const items: Benefit[] = AUDIENCES[a];
+          return (
+            <div key={a} id={`panel-${a}`} role="tabpanel" aria-labelledby={`tab-${a}`}
+              className={`benefit-panel${who === a ? '' : ' is-off'}`}>
+              <ol className="benefit-list" style={{ '--rows': items.length } as CSSProperties}>
+                {items.map((b, i) => {
+                  const on = open[a] === b.key;
+                  const pick = () => setOpen((o) => ({ ...o, [a]: b.key }));
+                  return (
+                    <li key={b.key} className={`benefit${on ? ' is-open' : ''}`}>
+                      <button type="button" className="benefit-head" aria-expanded={on} aria-controls={`b-${b.key}`}
+                        onMouseEnter={pick} onFocus={pick} onClick={pick}>
+                        <span className="benefit-n mono">{String(i + 1).padStart(2, '0')}</span>
+                        <span className="benefit-t">{t(`${b.key}.t`)}</span>
+                      </button>
+                      <div className="benefit-body" id={`b-${b.key}`}>
+                        <p className={`benefit-stage stage-${b.stage}`}>{t(`stage${b.stage}`)}</p>
+                        <div className="benefit-cols">
+                          <div><h3>{t('gains.why')}</h3><p>{t(`${b.key}.why`)}</p></div>
+                          <div><h3>{t('gains.how')}</h3><p>{t(`${b.key}.how`)}</p></div>
+                        </div>
+                        {b.sources && (
+                          <p className="benefit-src">
+                            {t('gains.sources')}{' '}
+                            {b.sources.map((s, j) => (
+                              <span key={s}>{j > 0 && ', '}<a href={SOURCES[s].url} target="_blank" rel="noopener">{SOURCES[s].label}</a></span>
+                            ))}
+                          </p>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+              {a === 'guest' && <p className="benefit-note">{t('gains.optin')}</p>}
+            </div>
+          );
+        })}
+        <p className="gains-status">
+          <strong>{t('status.t')}</strong> {t('status.p')} <a href="#progress">{t('status.link')}</a>
+        </p>
       </div>
       </div>
     </section>

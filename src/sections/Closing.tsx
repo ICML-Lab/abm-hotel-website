@@ -1,40 +1,11 @@
-import { useState } from 'react';
 import { PhotoImg } from '../components/PhotoImg';
 import { useI18n } from '../i18n/I18nProvider';
 import { ASSETS, PHOTO, CONTACT_EMAIL, GREENX_KHANHHOA_URL, GREENX_URL, demoHome, demoPage } from '../config';
 
-// Research: all five questions at once. Hovering (or focusing, or tapping) one sets it large and
-// shows what it asks in the left column; the others step back.
-export function Research() {
-  const { t } = useI18n();
-  const [active, setActive] = useState<number | null>(null);
-  return (
-    <section className="scene rq-scene on-photo" id="research" aria-labelledby="rq-title">
-      <PhotoImg photo={PHOTO.night} className="section-photo" />
-      <div className="scene-shade" aria-hidden="true" />
-      <div className="container rq-grid">
-        <div className="rq-side">
-          <h2 className="head-section" id="rq-title">{t('rq.title')}</h2>
-          <p className="lead rq-detail" aria-live="polite">{active ? t(`rq${active}.a`) : t('rq.lead')}</p>
-          <p className="rq-hint">{t('rq.hint')}</p>
-        </div>
-        <ol className={`rq-list${active ? ' has-active' : ''}`} onMouseLeave={() => setActive(null)}>
-          {[1, 2, 3, 4, 5].map((n) => (
-            <li key={n}>
-              <button type="button" className={`rq-item${active === n ? ' is-active' : ''}`} aria-pressed={active === n}
-                onMouseEnter={() => setActive(n)} onFocus={() => setActive(n)} onClick={() => setActive(n)}>
-                <span className="rq-id">RQ{n}</span>
-                <span className="rq-q">{t(`rq${n}.q`)}</span>
-              </button>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-  );
-}
+// Progress: the four stages of the project on one line, with the current one marked, and a plain
+// statement that it is not ready for wide use yet. The research questions sit folded underneath.
+const NOW = 2; // collecting data and training the models
 
-// Progress: the four stages of the project on one line, with the current one marked.
 export function Progress() {
   const { t } = useI18n();
   return (
@@ -42,10 +13,13 @@ export function Progress() {
       <PhotoImg photo={PHOTO.hondo} className="section-photo" />
       <div className="scene-shade" aria-hidden="true" />
       <div className="container">
-        <h2 className="head-section" id="progress-title">{t('progress.title')}</h2>
+        <div className="progress-head">
+          <h2 className="head-section" id="progress-title">{t('progress.title')}</h2>
+          <p className="lead">{t('progress.lead')}</p>
+        </div>
         <ol className="timeline">
           {[1, 2, 3, 4].map((n) => (
-            <li key={n} className={n === 1 ? 'is-now' : undefined} aria-current={n === 1 ? 'step' : undefined}>
+            <li key={n} className={n === NOW ? 'is-now' : n < NOW ? 'is-done' : undefined} aria-current={n === NOW ? 'step' : undefined}>
               <span className="timeline-dot" aria-hidden="true" />
               <span className="when">{t(`path${n}.w`)}</span>
               <h3>{t(`path${n}.t`)}</h3>
@@ -53,6 +27,10 @@ export function Progress() {
             </li>
           ))}
         </ol>
+        <details className="rq-more">
+          <summary>{t('rq.more')}</summary>
+          <ol>{[1, 2, 3, 4, 5].map((n) => <li key={n}>{t(`rq${n}.q`)}</li>)}</ol>
+        </details>
       </div>
     </section>
   );
@@ -85,7 +63,7 @@ export function Footer() {
             <h4>{t('f.project')}</h4>
             <ul>
               <li><a href="#contributions">{t('nav.contrib')}</a></li>
-              <li><a href="#research">{t('nav.research')}</a></li>
+              <li><a href="#progress">{t('nav.status')}</a></li>
               <li><a href="#team">{t('nav.team')}</a></li>
               <li><a href="#collaborate">{t('nav.collab')}</a></li>
             </ul>
