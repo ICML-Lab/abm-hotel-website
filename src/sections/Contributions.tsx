@@ -3,8 +3,11 @@ import gsap from 'gsap';
 import { useI18n } from '../i18n/I18nProvider';
 import ScrollStack, { ScrollStackItem } from '../components/reactbits/ScrollStack';
 import ScrollReveal from '../components/reactbits/ScrollReveal';
-import Topography from '../components/reactbits/Topography';
+import DotGrid from '../components/reactbits/DotGrid';
+import Waves from '../components/reactbits/Waves';
+import DotField from '../components/reactbits/DotField';
 import { PhotoImg } from '../components/PhotoImg';
+import { LazyBackground } from '../components/LazyBackground';
 import { HEX, PHOTO, demoShot } from '../config';
 import { useScene, stepSnap } from '../hooks/useScene';
 
@@ -61,9 +64,9 @@ export function Approach() {
   }, [lang]);
   return (
     <section className="scene approach-scene" ref={root} aria-labelledby="approach-title">
-      <div className="approach-topo" aria-hidden="true">
-        <Topography color={HEX.accent} lineCount={30} lineWidth={1} elevation={1.2} speed={0.1} opacity={0.6} />
-      </div>
+      <LazyBackground className="approach-bg">
+        <DotGrid dotSize={4} gap={26} baseColor={HEX.leaf} activeColor={HEX.accent} proximity={160} clickShock={false} fade={0.35} />
+      </LazyBackground>
       <div className="container approach-stage">
         <div className="approach-head">
           <h2 className="head-display" id="approach-title">{t('approach.title')}</h2>
@@ -93,6 +96,9 @@ export function Contributions() {
   const { t, list, lang } = useI18n();
   return (
     <section className="contrib-scene" id="contributions" aria-labelledby="contrib-title">
+      <LazyBackground className="contrib-bg">
+        <Waves lineColor={HEX.leaf} accentColor={HEX.accent} spacing={14} amplitude={28} speed={0.5} clickRipple={false} fade={0.3} lightMode />
+      </LazyBackground>
       <div className="container contrib-intro">
         <h2 className="head-display" id="contrib-title">{t('contrib.title')}</h2>
         <p className="lead">{t('contrib.lead')}</p>
@@ -113,7 +119,6 @@ export function Contributions() {
           </ScrollStackItem>
         ))}
       </ScrollStack>
-      <p className="container contrib-foot">{t('contrib.foot')}</p>
     </section>
   );
 }
@@ -132,6 +137,10 @@ export function Gains() {
           </ScrollReveal>
         </div>
       </div>
+      <div className="gains-body">
+      <LazyBackground className="gains-bg">
+        <DotField dotRadius={1.7} dotSpacing={22} gradientFrom={HEX.accent} gradientTo={HEX.leaf} glowColor={HEX.accent} holdToZoom={false} lightMode />
+      </LazyBackground>
       <div className="container gains">
         <div>
           <h3 className="gains-head">{t('out.title')}</h3>
@@ -144,8 +153,8 @@ export function Gains() {
         <div>
           <h3 className="gains-head">{t('sci.title')}</h3>
           <ol className="science">{[1, 2, 3, 4].map((n) => <li key={n}>{t(`sci${n}`)}</li>)}</ol>
-          <p className="science-out">{t('sci.out')}</p>
         </div>
+      </div>
       </div>
     </section>
   );

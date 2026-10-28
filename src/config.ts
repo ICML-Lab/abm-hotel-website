@@ -15,6 +15,8 @@ export const HEX = {
   greenx: '#134d8b', // --color-greenx
   paper: '#f4f6f0', // --color-paper
   sea: '#3f86b0', // --color-sea
+  leaf: '#4fa37a', // lighter accent, for background effects on paper
+  mist: '#a9d3bb', // pale accent, for background effects on paper
 } as const;
 
 const asset = (p: string) => `${import.meta.env.BASE_URL}${p}`;

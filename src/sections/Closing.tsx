@@ -2,8 +2,10 @@ import { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { useScene, stepSnap } from '../hooks/useScene';
 import { PhotoImg } from '../components/PhotoImg';
+import { LazyBackground } from '../components/LazyBackground';
+import Threads from '../components/reactbits/Threads';
 import { useI18n } from '../i18n/I18nProvider';
-import { ASSETS, CONTACT_EMAIL, GREENX_KHANHHOA_URL, GREENX_URL, PHOTO, demoHome, demoPage } from '../config';
+import { ASSETS, HEX, CONTACT_EMAIL, GREENX_KHANHHOA_URL, GREENX_URL, PHOTO, demoHome, demoPage } from '../config';
 
 export function Research() {
   const { t, lang } = useI18n();
@@ -23,6 +25,9 @@ export function Research() {
   }, [lang]);
   return (
     <section className="scene rq-scene" id="research" ref={root} aria-labelledby="rq-title">
+      <LazyBackground className="rq-bg">
+        <Threads color={HEX.leaf} accentColor={HEX.accent} lineCount={60} amplitude={1.2} speed={0.35} brightness={1} enableMouseInteraction />
+      </LazyBackground>
       <div className="container rq-grid">
         <div className="rq-side">
           <h2 className="head-section" id="rq-title">{t('rq.title')}</h2>

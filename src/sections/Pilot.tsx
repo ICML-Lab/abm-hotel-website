@@ -1,6 +1,8 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useI18n } from '../i18n/I18nProvider';
-import { demoHome, demoShot } from '../config';
+import { HEX, demoHome, demoShot } from '../config';
+import { LazyBackground } from '../components/LazyBackground';
+import LineWaves from '../components/reactbits/LineWaves';
 
 const IslandModel = lazy(() => import('../components/IslandModel'));
 
@@ -73,6 +75,9 @@ export function Pilot() {
 
 
       <section className="section demo-scene" id="simulation" aria-labelledby="demo-title">
+        <LazyBackground className="demo-bg">
+          <LineWaves color1={HEX.leaf} color2={HEX.accent} color3={HEX.leaf} speed={0.2} lineCount={48} lineWidth={1.2} brightness={1.4} highlight={0.35} clickRipple={false} edgeFade={0.2} lightMode />
+        </LazyBackground>
         <div className="container">
           <div className="demo-head">
             <h2 className="head-section" id="demo-title">{t('demo.title')}</h2>
