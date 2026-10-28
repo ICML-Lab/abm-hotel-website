@@ -39,7 +39,6 @@ const photo = (id: string, file: string, alt: string, author: string, license: s
 export const PHOTO = {
   cable2: photo('cable2', 'cable-christophe95-2.webp', 'photoAlt.cable2', 'Christophe95', 'CC BY-SA 4.0', commons('Vinpearl_Cable_Car_2.jpg')),
   cableHughes: photo('cableHughes', 'cablecar-hughes.webp', 'photo2', 'P. Hughes', 'CC BY 4.0', commons('Nha_Trang_-_Vinpearl_Cable_Car.jpg')),
-  night: photo('night', 'night-cloudshepherd.webp', 'photoAlt.night', 'cloud.shepherd', 'CC BY 2.0', commons('Nha_Trang,_Vietnam_at_night_(24267026625).jpg')),
   hondo: photo('hondo', 'hondo-dominicnelson.webp', 'photoAlt.hondo', 'Dominic Nelson', 'CC BY-SA 4.0', commons('Nha_Trang_-_fishing_boats_and_Hòn_Đỏ_island_Mar_2024.jpg')),
 } satisfies Record<string, Photo>;
 

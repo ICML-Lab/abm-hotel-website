@@ -13,8 +13,8 @@ gsap.registerPlugin(ScrollTrigger);
 const PARALLAX = '.why-photo img, .section-photo img';
 const REVEAL = [
   '.why-kicker', '.why-item',
-  '.approach-head > *', '.chain-note',
-  '.gains-head > *', '.gains-tabs', '.gains-status',
+  '.overview-head > *', '.parts > li',
+  '.gains-title', '.gains-tabs', '.gains-status',
   '.pilot-card', '.demo-head > *',
   '.progress-head > *', '.timeline > li', '.rq-more',
   '#team-title', '.team-grid > li',

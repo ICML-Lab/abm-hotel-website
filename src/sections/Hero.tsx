@@ -40,7 +40,7 @@ export function Hero() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const el = root.current!;
     const chars = el.querySelectorAll('.hero-char');
-    const after = el.querySelectorAll('.hero-actions, .hero-scroll');
+    const after = el.querySelectorAll('.hero-lead, .hero-actions, .hero-scroll');
     if (!reduced) gsap.set(chars, { yPercent: 115 });
     if (!reduced) gsap.set(after, { autoAlpha: 0, y: 24 });
     const img = el.querySelector<HTMLImageElement>('.hero-photo img');
@@ -64,7 +64,7 @@ export function Hero() {
     return () => clearTimeout(cap);
   }, []);
 
-  // Scroll: the lines glide inward, the photo trails, the actions fade.
+  // Scroll: the lines glide inward, the photo trails, the sentence and actions fade.
   useScene(root, (el) => {
     const shift = (sel: string, dir: 1 | -1) => () => {
       const line = el.querySelector<HTMLElement>(sel);
@@ -76,7 +76,7 @@ export function Hero() {
       .to('.hero-shade', { opacity: 0.92, ease: 'none' }, 0)
       .fromTo('.hero-line-1 .hero-line-inner', { x: 0 }, { x: shift('.hero-line-1', 1), ease: 'none', duration: 0.4 }, 0)
       .fromTo('.hero-line-2 .hero-line-inner', { x: 0 }, { x: shift('.hero-line-2', -1), ease: 'none', duration: 0.4 }, 0)
-      .fromTo('.hero-actions', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -20, ease: 'power2.in', duration: 0.3, immediateRender: false }, 0)
+      .fromTo('.hero-lead, .hero-actions', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -20, ease: 'power2.in', duration: 0.3, immediateRender: false }, 0)
       .fromTo('.hero-scroll', { opacity: 1 }, { opacity: 0, duration: 0.2, immediateRender: false }, 0);
   }, [lang]);
 
@@ -90,6 +90,7 @@ export function Hero() {
             <Line text={t('hero.l1')} n={1} />{' '}
             <Line text={t('hero.l2')} n={2} />
           </h1>
+          <p className="hero-lead">{t('hero.lead')}</p>
           <div className="hero-actions">
             {DECK_URL
               ? <a className="btn btn-primary" href={DECK_URL} target="_blank" rel="noopener">{t('hero.cta1')}</a>

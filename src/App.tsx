@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SiteHeader } from './sections/Header';
 import { Hero } from './sections/Hero';
-import { Why, Approach, Gains } from './sections/Contributions';
+import { Why, Overview, Gains } from './sections/Contributions';
 import { Day } from './sections/Day';
 import { Pilot } from './sections/Pilot';
 import { Progress, Footer } from './sections/Closing';
@@ -12,8 +12,9 @@ import { ScrollProgress } from './components/ScrollProgress';
 import { useSmoothScroll } from './hooks/useSmoothScroll';
 import { useMotion } from './hooks/useMotion';
 
-// A pitch to operators: the problem (a resort day), why it is hard, what the hotel and its guests gain,
-// how it works, where it is tried first, where the project stands, who runs it, and the invitation.
+// A pitch to operators: what is being built (in plain words), why hotels need it, one simulated day,
+// what the hotel and its guests gain, where it is tried first, where the project stands, who runs it,
+// and the invitation.
 export default function App() {
   const [route, setRoute] = useState(() => (typeof window !== 'undefined' ? window.location.hash : ''));
   useSmoothScroll();
@@ -43,10 +44,10 @@ export default function App() {
       <SiteHeader />
       <main id="top">
         <Hero />
-        <Day />
+        <Overview />
         <Why />
+        <Day />
         <Gains />
-        <Approach />
         <Pilot />
         <Progress />
         <Team />
