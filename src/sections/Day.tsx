@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useI18n } from '../i18n/I18nProvider';
@@ -17,13 +17,17 @@ const CHAPTERS: [number, number][] = [[360, 1], [540, 2], [750, 3], [1080, 4], [
 // The day advances in 3-hour stops: 06, 09, 12, 15, 18, 21, 24. One stop per short scroll, snapped.
 const START = 360, END = 1440, STEP = 180, STATIC_AT = 1305;
 const STOPS = (END - START) / STEP;
-const PX_PER_STOP = 260;
+const PX_PER_STOP = 200;
 
+// The scroll drives the time of day. React renders the section once per chapter; within a chapter
+// the clock, readouts, sky and chart are written straight to the DOM on each frame (no re-render).
 export function Day() {
   const { t, nf } = useI18n();
   const pinRef = useRef<HTMLDivElement>(null);
-  const [min, setMin] = useState(START);
+  const [chapter, setChapter] = useState(1);
   const [reduced] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const nfRef = useRef(nf);
+  nfRef.current = nf;
 
   const { d, pts, peakI, q15, qmax } = useMemo(() => {
     const pts = DAY.power15.map((kw, i) => [xOf(i * 15 + 7.5), yOf(kw)] as const);
@@ -33,57 +37,95 @@ export function Day() {
     return { d, pts, peakI, q15, qmax: Math.max(...q15, 1) };
   }, []);
 
+  const els = useRef<Record<string, Element | null>>({});
+  const reg = (k: string) => (el: Element | null) => { els.current[k] = el; };
+  const last = useRef({ clock: '', kw: -1, q: -1, tr: -1, idx: -1, peak: -1 });
+  const cur = useRef(START);
+
+  const apply = useCallback((min: number) => {
+    cur.current = min;
+    const e = els.current, L = last.current, fmt = nfRef.current;
+    const h = min / 60;
+    const frame = DAY.frames[Math.min(DAY.frames.length - 1, Math.round(min / 5))];
+    const kwNow = DAY.power15[Math.min(95, Math.floor(min / 15))];
+    const x = xOf(min);
+    const idx = Math.floor(min / 15);
+    let ch = 1;
+    for (const [tm, n] of CHAPTERS) if (min >= tm) ch = n;
+    setChapter(ch);
+    const clock = hhmm(Math.round(min));
+    if (clock !== L.clock && e.clock) { e.clock.textContent = clock; L.clock = clock; }
+    const kw = Math.floor(kwNow);
+    if (kw !== L.kw && e.kw) { e.kw.textContent = fmt(kw); L.kw = kw; }
+    if (frame[2] !== L.q && e.q) { e.q.textContent = fmt(frame[2]); L.q = frame[2]; }
+    if (frame[3] !== L.tr && e.tr) { e.tr.textContent = fmt(frame[3]); L.tr = frame[3]; }
+    (e.dawn as HTMLElement | null)?.style.setProperty('opacity', String(tri(h, 4.5, 6.5, 9.5)));
+    (e.noon as HTMLElement | null)?.style.setProperty('opacity', String(tri(h, 8, 12.5, 17.5) * 0.85));
+    (e.dusk as HTMLElement | null)?.style.setProperty('opacity', String(tri(h, 16.5, 18.5, 21)));
+    e.clip?.setAttribute('width', String(Math.max(0, x - X0)));
+    e.nowLine?.setAttribute('x1', String(x)); e.nowLine?.setAttribute('x2', String(x));
+    e.nowDot?.setAttribute('cx', String(x)); e.nowDot?.setAttribute('cy', String(yOf(kwNow)));
+    const peak = min >= peakI * 15 ? 1 : 0;
+    if (peak !== L.peak && e.peak) { (e.peak as HTMLElement).style.opacity = String(peak); L.peak = peak; }
+    if (idx !== L.idx && e.strip) {
+      const bars = e.strip.children;
+      for (let i = 0; i < bars.length; i++) bars[i].classList.toggle('past', i <= idx);
+      L.idx = idx;
+    }
+  }, [peakI]);
+
   useLayoutEffect(() => {
-    if (reduced) { setMin(STATIC_AT); return; }
+    if (reduced) { apply(STATIC_AT); return; }
     const state = { min: START };
+    apply(START);
     const mm = gsap.matchMedia();
-    const make = (vars: ScrollTrigger.Vars) => gsap.to(state, { min: END, ease: 'none', scrollTrigger: vars, onUpdate: () => setMin(state.min) });
+    const make = (vars: ScrollTrigger.Vars) => gsap.to(state, { min: END, ease: 'none', scrollTrigger: vars, onUpdate: () => apply(state.min) });
     mm.add('(min-width: 60.01rem)', () => {
       make({
-        trigger: pinRef.current, start: 'top top', end: `+=${STOPS * PX_PER_STOP}`, pin: true, scrub: 0.5, anticipatePin: 1,
-        snap: { snapTo: 1 / STOPS, directional: true, inertia: false, duration: { min: 0.25, max: 0.6 }, delay: 0.08, ease: 'power2.inOut' },
+        trigger: pinRef.current, start: 'top top', end: `+=${STOPS * PX_PER_STOP}`, pin: true, scrub: 0.3, anticipatePin: 1,
+        snap: { snapTo: 1 / STOPS, directional: true, inertia: false, duration: { min: 0.2, max: 0.45 }, delay: 0.05, ease: 'power2.inOut' },
       });
     });
     mm.add('(max-width: 60rem)', () => { make({ trigger: pinRef.current, start: 'top 70%', end: 'bottom 30%', scrub: 0.6 }); });
     return () => mm.revert();
-  }, [reduced]);
+  }, [reduced, apply]);
 
-  const h = min / 60;
-  const frame = DAY.frames[Math.min(DAY.frames.length - 1, Math.round(min / 5))];
-  const kwNow = DAY.power15[Math.min(95, Math.floor(min / 15))];
-  const x = xOf(min);
-  const idx = Math.floor(min / 15);
-  let chapter = 1;
-  for (const [tm, n] of CHAPTERS) if (min >= tm) chapter = n;
+  // A language switch re-renders the numbers with the new format: redraw the current values.
+  useLayoutEffect(() => { last.current = { clock: '', kw: -1, q: -1, tr: -1, idx: -1, peak: -1 }; apply(cur.current); }, [nf, apply]);
+
+  const init = reduced ? STATIC_AT : START;
+  const kw0 = DAY.power15[Math.floor(init / 15)];
+  const f0 = DAY.frames[Math.round(init / 5)];
+  const x0 = xOf(init);
 
   return (
     <section className="day" id="one-day" aria-labelledby="day-title">
       <div className="day-pin" ref={pinRef}>
         <div className="sky" aria-hidden="true">
-          <i className="s-dawn" style={{ opacity: tri(h, 4.5, 6.5, 9.5) }} />
-          <i className="s-noon" style={{ opacity: tri(h, 8, 12.5, 17.5) * 0.85 }} />
-          <i className="s-dusk" style={{ opacity: tri(h, 16.5, 18.5, 21) }} />
+          <i className="s-dawn" ref={reg('dawn')} style={{ opacity: tri(init / 60, 4.5, 6.5, 9.5) }} />
+          <i className="s-noon" ref={reg('noon')} style={{ opacity: tri(init / 60, 8, 12.5, 17.5) * 0.85 }} />
+          <i className="s-dusk" ref={reg('dusk')} style={{ opacity: tri(init / 60, 16.5, 18.5, 21) }} />
         </div>
         <div className="container day-inner">
           <div>
             <h2 className="day-head" id="day-title">{t('day.title')}</h2>
             <p className="day-tag">{t('day.sub')}</p>
             <p className="day-lead">{t('day.lead')}</p>
-            <p className="clock mono">{hhmm(Math.round(min))}</p>
+            <p className="clock mono" ref={reg('clock')}>{hhmm(init)}</p>
             <div className="chapter" aria-live="polite">
               <h3>{t(`day.ch${chapter}.t`)}</h3>
               <p>{t(`day.ch${chapter}.p`)}</p>
             </div>
             <dl className="readouts">
-              <div><dt>{t('day.kw')}<span>{t('day.kwN')}</span></dt><dd className="mono">{nf(Math.floor(kwNow))}<small>kW</small></dd></div>
-              <div><dt>{t('day.queue')}<span>{t('day.queueN')}</span></dt><dd className="mono">{nf(frame[2])}<small>{t('day.people')}</small></dd></div>
-              <div><dt>{t('day.trav')}<span>{t('day.travN')}</span></dt><dd className="mono">{nf(frame[3])}<small>{t('day.people')}</small></dd></div>
+              <div><dt>{t('day.kw')}<span>{t('day.kwN')}</span></dt><dd className="mono"><span ref={reg('kw')}>{nf(Math.floor(kw0))}</span><small>kW</small></dd></div>
+              <div><dt>{t('day.queue')}<span>{t('day.queueN')}</span></dt><dd className="mono"><span ref={reg('q')}>{nf(f0[2])}</span><small>{t('day.people')}</small></dd></div>
+              <div><dt>{t('day.trav')}<span>{t('day.travN')}</span></dt><dd className="mono"><span ref={reg('tr')}>{nf(f0[3])}</span><small>{t('day.people')}</small></dd></div>
             </dl>
           </div>
           <figure>
             <svg className="chart" viewBox="0 0 720 300" role="img" aria-labelledby="chart-desc">
               <desc id="chart-desc">{t('chart.desc')}</desc>
-              <defs><clipPath id="day-clip"><rect x={X0} y={0} width={Math.max(0, x - X0)} height={300} /></clipPath></defs>
+              <defs><clipPath id="day-clip"><rect ref={reg('clip')} x={X0} y={0} width={Math.max(0, x0 - X0)} height={300} /></clipPath></defs>
               <g className="axis">
                 {[0, 400, 800, 1200].map((kw) => (
                   <g key={kw}><line x1={X0} x2={X1} y1={yOf(kw)} y2={yOf(kw)} /><text x={0} y={yOf(kw) + 4}>{nf(kw)}</text></g>
@@ -95,14 +137,14 @@ export function Day() {
                 <path className="area" d={`${d} L${pts[pts.length - 1][0]} ${Y1} L${pts[0][0]} ${Y1} Z`} />
                 <path className="line" d={d} />
               </g>
-              <g className="peak" style={{ opacity: min >= peakI * 15 ? 1 : 0 }}>
+              <g className="peak" ref={reg('peak')} style={{ opacity: init >= peakI * 15 ? 1 : 0 }}>
                 <circle cx={pts[peakI][0]} cy={pts[peakI][1]} r={6} />
                 <text x={pts[peakI][0] - 12} y={pts[peakI][1] - 2} textAnchor="end">{t('chart.peak')}</text>
               </g>
-              <g className="now"><line x1={x} x2={x} y1={Y0 - 6} y2={Y1} /><circle cx={x} cy={yOf(kwNow)} r={4} /></g>
+              <g className="now"><line ref={reg('nowLine')} x1={x0} x2={x0} y1={Y0 - 6} y2={Y1} /><circle ref={reg('nowDot')} cx={x0} cy={yOf(kw0)} r={4} /></g>
             </svg>
-            <div className="queue-strip" aria-hidden="true">
-              {q15.map((q, i) => <i key={i} className={i <= idx ? 'past' : undefined} style={{ height: `${Math.max(2, (q / qmax) * 100)}%` }} />)}
+            <div className="queue-strip" aria-hidden="true" ref={reg('strip')}>
+              {q15.map((q, i) => <i key={i} className={i <= Math.floor(init / 15) ? 'past' : undefined} style={{ height: `${Math.max(2, (q / qmax) * 100)}%` }} />)}
             </div>
             <figcaption className="chart-caption">{t('chart.caption')}</figcaption>
           </figure>

@@ -25,7 +25,7 @@ export function useScene(root: RefObject<HTMLElement | null>, build: (el: HTMLEl
 }
 
 // Snap helper for a scene with `steps` equal stops.
-export const stepSnap = (steps: number) => ({ snapTo: 1 / steps, directional: true, inertia: false, duration: { min: 0.2, max: 0.55 }, delay: 0.06, ease: 'power2.inOut' });
+export const stepSnap = (steps: number) => ({ snapTo: 1 / steps, directional: true, inertia: false, duration: { min: 0.2, max: 0.45 }, delay: 0.05, ease: 'power2.inOut' });
 
 // One-at-a-time list with a peek: the current item sits in the list box and the next item waits
 // below it as a small faded heading, so the reader sees what comes next. Passed items lift away.

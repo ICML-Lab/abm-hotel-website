@@ -15,14 +15,14 @@ export function Research() {
   // On wide screens each question takes the whole stage in turn.
   useScene(root, (el) => {
     const qs = gsap.utils.toArray<HTMLElement>('.rq', el);
-    const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top top', end: `+=${qs.length * 70}%`, pin: true, scrub: 0.5, snap: stepSnap(qs.length - 1), invalidateOnRefresh: true } });
+    const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top top', end: `+=${qs.length * 55}%`, pin: true, scrub: 0.3, snap: stepSnap(qs.length - 1), invalidateOnRefresh: true } });
     peekSteps(tl, el.querySelector('.rq-list') as HTMLElement, qs, '.rq-body');
     qs.forEach((_, i) => { if (i) tl.to('.rq-progress i', { scaleY: (i + 1) / qs.length, duration: 0.45 }, i - 0.35); });
   }, [lang]);
   return (
     <section className="scene rq-scene" id="research" ref={root} aria-labelledby="rq-title">
       <LazyBackground className="rq-bg">
-        <Threads color={HEX.leaf} accentColor={HEX.accent} lineCount={60} amplitude={1.2} speed={0.35} brightness={1} enableMouseInteraction />
+        <Threads maxDpr={1} color={HEX.leaf} accentColor={HEX.accent} lineCount={60} amplitude={1.2} speed={0.35} brightness={1} enableMouseInteraction />
       </LazyBackground>
       <div className="container rq-grid">
         <div className="rq-side">

@@ -9,11 +9,13 @@ import { Research, Collaborate, Footer } from './sections/Closing';
 import { Credits } from './sections/Credits';
 import { Marquee } from './sections/Marquee';
 import { ScrollProgress } from './components/ScrollProgress';
+import { useSmoothScroll } from './hooks/useSmoothScroll';
 
 // The story, one screen per beat: the problem (a resort day), why it is hard, how the model works,
 // the questions it asks, the levers to test, who gains, where it is tried first, and the invitation.
 export default function App() {
   const [route, setRoute] = useState(() => (typeof window !== 'undefined' ? window.location.hash : ''));
+  useSmoothScroll();
   useEffect(() => {
     const on = () => { setRoute(window.location.hash); if (window.location.hash === '#credits') window.scrollTo(0, 0); };
     window.addEventListener('hashchange', on);

@@ -76,7 +76,7 @@ export function Pilot() {
 
       <section className="section demo-scene" id="simulation" aria-labelledby="demo-title">
         <LazyBackground className="demo-bg">
-          <LineWaves color1={HEX.leaf} color2={HEX.accent} color3={HEX.leaf} speed={0.2} lineCount={48} lineWidth={1.2} brightness={1.4} highlight={0.35} clickRipple={false} edgeFade={0.2} lightMode />
+          <LineWaves maxDevicePixelRatio={1} color1={HEX.leaf} color2={HEX.accent} color3={HEX.leaf} speed={0.2} lineCount={48} lineWidth={1.2} brightness={1.4} highlight={0.35} clickRipple={false} edgeFade={0.2} lightMode />
         </LazyBackground>
         <div className="container">
           <div className="demo-head">

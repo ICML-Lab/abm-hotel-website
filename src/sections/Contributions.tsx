@@ -1,5 +1,6 @@
-import { useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useI18n } from '../i18n/I18nProvider';
 import ScrollStack, { ScrollStackItem } from '../components/reactbits/ScrollStack';
 import ScrollReveal from '../components/reactbits/ScrollReveal';
@@ -17,7 +18,7 @@ export function Why() {
   const root = useRef<HTMLElement>(null);
   useScene(root, (el) => {
     const items = gsap.utils.toArray<HTMLElement>('.why-item', el);
-    const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top top', end: `+=${items.length * 90}%`, pin: true, scrub: 0.5, snap: stepSnap(items.length - 1), invalidateOnRefresh: true } });
+    const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top top', end: `+=${items.length * 65}%`, pin: true, scrub: 0.3, snap: stepSnap(items.length - 1), invalidateOnRefresh: true } });
     tl.fromTo('.why-photo img', { scale: 1.02 }, { scale: 1.2, ease: 'none', duration: items.length - 1 }, 0);
     peekSteps(tl, el.querySelector('.why-list') as HTMLElement, items, 'p');
     items.forEach((_, i) => { if (i) tl.to(`.why-dots i:nth-child(${i + 1})`, { scaleX: 1, duration: 0.3 }, i - 0.35); });
@@ -42,13 +43,32 @@ export function Why() {
   );
 }
 
-// Approach: the whole agent chain at once, cause to effect, left to right.
+// Approach: no pin. When the section comes into view the chain plays once, cause to effect:
+// the line runs from the first step to the last and each step lights as the line reaches it.
+// Without motion (or without scripts) the whole chain is simply there.
 export function Approach() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const root = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const nodes = gsap.utils.toArray<HTMLElement>('.chain-node', el);
+      const step = 0.45;
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo('.chain-line i', { scaleX: 0 }, { scaleX: 1, duration: step * (nodes.length - 1), ease: 'none' }, 0.15);
+      nodes.forEach((n, i) => tl.fromTo(n, { autoAlpha: 0.15, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out' }, i * step));
+      tl.fromTo('.chain-note', { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '>-0.2');
+      const st = ScrollTrigger.create({ trigger: el.querySelector('.chain'), start: 'top 75%', once: true, onEnter: () => tl.play() });
+      return () => { st.kill(); tl.kill(); };
+    }, el);
+    return () => mm.revert();
+  }, [lang]);
   return (
-    <section className="scene approach-scene" aria-labelledby="approach-title">
+    <section className="scene approach-scene" ref={root} aria-labelledby="approach-title">
       <LazyBackground className="approach-bg">
-        <DotGrid dotSize={4} gap={26} baseColor={HEX.leaf} activeColor={HEX.accent} proximity={160} clickShock={false} fade={0.35} />
+        <DotGrid dpr={1} dotSize={4} gap={26} baseColor={HEX.leaf} activeColor={HEX.accent} proximity={160} clickShock={false} fade={0.35} />
       </LazyBackground>
       <div className="container approach-stage">
         <div className="approach-head">
@@ -82,13 +102,13 @@ export function Contributions() {
   return (
     <section className="contrib-scene" id="contributions" aria-labelledby="contrib-title">
       <LazyBackground className="contrib-bg">
-        <Waves lineColor={HEX.leaf} accentColor={HEX.accent} spacing={14} amplitude={28} speed={0.5} clickRipple={false} fade={0.3} lightMode />
+        <Waves dpr={1} lineColor={HEX.leaf} accentColor={HEX.accent} spacing={14} amplitude={28} speed={0.5} clickRipple={false} fade={0.3} lightMode />
       </LazyBackground>
       <div className="container contrib-intro">
         <h2 className="head-display" id="contrib-title">{t('contrib.title')}</h2>
         <p className="lead">{t('contrib.lead')}</p>
       </div>
-      <ScrollStack useWindowScroll itemDistance={120} itemStackDistance={28} stackPosition="14%" baseScale={0.9} itemScale={0.025} blurAmount={1.5} className="levers-stack">
+      <ScrollStack useWindowScroll itemDistance={120} itemStackDistance={28} stackPosition="14%" baseScale={0.9} itemScale={0.025} className="levers-stack">
         {[1, 2, 3, 4].map((n) => (
           <ScrollStackItem key={n} itemClassName={`lever-card${n === 1 ? ' lever-card--key' : ''}`}>
             <div className="lever-copy">
@@ -124,7 +144,7 @@ export function Gains() {
       </div>
       <div className="gains-body">
       <LazyBackground className="gains-bg">
-        <DotField dotRadius={1.7} dotSpacing={22} gradientFrom={HEX.accent} gradientTo={HEX.leaf} glowColor={HEX.accent} holdToZoom={false} lightMode />
+        <DotField maxDevicePixelRatio={1} dotRadius={1.7} dotSpacing={22} gradientFrom={HEX.accent} gradientTo={HEX.leaf} glowColor={HEX.accent} holdToZoom={false} lightMode />
       </LazyBackground>
       <div className="container gains">
         <h2 className="head-section gains-title" id="gains-title">{t('gains.aria')}</h2>

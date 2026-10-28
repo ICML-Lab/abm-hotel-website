@@ -25,6 +25,8 @@ export interface ThreadsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'colo
   fade?: number;
   opacity?: number;
   paused?: boolean;
+  /** Highest device pixel ratio to render at (added locally; upstream is fixed at 2). */
+  maxDpr?: number;
 }
 
 type Settings = {
@@ -238,8 +240,11 @@ const Threads = ({
   fade = 0,
   opacity = 1,
   paused = false,
+  maxDpr = 2,
   ...rest
 }: ThreadsProps) => {
+  const maxDprRef = useRef(maxDpr);
+  maxDprRef.current = maxDpr;
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wakeRef = useRef<(() => void) | null>(null);
@@ -394,7 +399,7 @@ const Threads = ({
     const resize = () => {
       const width = Math.max(1, container.clientWidth);
       const height = Math.max(1, container.clientHeight);
-      const baseDpr = Math.min(window.devicePixelRatio || 1, 2);
+      const baseDpr = Math.min(window.devicePixelRatio || 1, maxDprRef.current);
       const longest = Math.max(width, height) * baseDpr;
       const dpr = longest > MAX_RENDER_DIM ? (baseDpr * MAX_RENDER_DIM) / longest : baseDpr;
       canvas.width = Math.max(1, Math.round(width * dpr));
