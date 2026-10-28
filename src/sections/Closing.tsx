@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { PhotoImg } from '../components/PhotoImg';
-import { LazyBackground } from '../components/LazyBackground';
-import Threads from '../components/reactbits/Threads';
 import { useI18n } from '../i18n/I18nProvider';
-import { ASSETS, HEX, CONTACT_EMAIL, GREENX_KHANHHOA_URL, GREENX_URL, PHOTO, demoHome, demoPage } from '../config';
+import { ASSETS, PHOTO, CONTACT_EMAIL, GREENX_KHANHHOA_URL, GREENX_URL, demoHome, demoPage } from '../config';
 
 // Research: all five questions at once. Hovering (or focusing, or tapping) one sets it large and
 // shows what it asks in the left column; the others step back.
@@ -11,10 +9,9 @@ export function Research() {
   const { t } = useI18n();
   const [active, setActive] = useState<number | null>(null);
   return (
-    <section className="scene rq-scene" id="research" aria-labelledby="rq-title">
-      <LazyBackground className="rq-bg">
-        <Threads maxDpr={1} color={HEX.leaf} accentColor={HEX.accent} lineCount={60} amplitude={1.2} speed={0.35} brightness={1} enableMouseInteraction />
-      </LazyBackground>
+    <section className="scene rq-scene on-photo" id="research" aria-labelledby="rq-title">
+      <PhotoImg photo={PHOTO.night} className="section-photo" />
+      <div className="scene-shade" aria-hidden="true" />
       <div className="container rq-grid">
         <div className="rq-side">
           <h2 className="head-section" id="rq-title">{t('rq.title')}</h2>
@@ -41,7 +38,9 @@ export function Research() {
 export function Progress() {
   const { t } = useI18n();
   return (
-    <section className="progress-scene" id="progress" aria-labelledby="progress-title">
+    <section className="progress-scene on-photo" id="progress" aria-labelledby="progress-title">
+      <PhotoImg photo={PHOTO.hondo} className="section-photo" />
+      <div className="scene-shade" aria-hidden="true" />
       <div className="container">
         <h2 className="head-section" id="progress-title">{t('progress.title')}</h2>
         <ol className="timeline">
@@ -59,35 +58,26 @@ export function Progress() {
   );
 }
 
-export function Collaborate() {
-  const { t } = useI18n();
+// Footer: the GREEN-X band (its own message and the contact action), then the site's links.
+// It carries the #collaborate anchor that the nav and the hero's contact button point to.
+export function Footer() {
+  const { t, lang } = useI18n();
   const mail = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(t('mail.subject'))}`;
   return (
-    <section className="scene collab" id="collaborate" aria-labelledby="collab-title">
-      <PhotoImg photo={PHOTO.city} className="collab-photo" load="eager" />
-      <div className="collab-shade" aria-hidden="true" />
-      <div className="container collab-stage">
-        <h2 className="head-section" id="collab-title">{t('collab.title')}</h2>
-        <p className="lead collab-lead">{t('collab.lead')}</p>
-        <div className="collab-foot">
+    <footer className="footer" id="collaborate">
+      <div className="footer-band">
+        <div className="container footer-band-grid">
           <figure className="greenx-quote">
             <img src={ASSETS.logo} alt={t('strip.logoAlt')} width={900} height={135} loading="lazy" />
             <blockquote>{t('quote')}</blockquote>
             <figcaption>{t('quote.cap')}</figcaption>
           </figure>
-          <div className="collab-cta">
+          <div className="footer-cta">
+            <p>{t('collab.lead')}</p>
             <a className="btn btn-light" href={mail}>{t('collab.cta')}</a>
           </div>
         </div>
       </div>
-    </section>
-  );
-}
-
-export function Footer() {
-  const { t, lang } = useI18n();
-  return (
-    <footer className="footer">
       <div className="container">
         <div className="footer-grid">
           <div><a className="wordmark" href="#top"><i aria-hidden="true" />Virtual Hotel Monitoring</a></div>
@@ -96,6 +86,7 @@ export function Footer() {
             <ul>
               <li><a href="#contributions">{t('nav.contrib')}</a></li>
               <li><a href="#research">{t('nav.research')}</a></li>
+              <li><a href="#team">{t('nav.team')}</a></li>
               <li><a href="#collaborate">{t('nav.collab')}</a></li>
             </ul>
           </div>

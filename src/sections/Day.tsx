@@ -15,7 +15,7 @@ const CHAPTERS: [number, number][] = [[360, 1], [540, 2], [750, 3], [1080, 4], [
 // draws itself from morning to the evening peak, so the whole day is seen before anyone touches it.
 const START = 360, END = 1440, STATIC_AT = 1305, INTRO_TO = 1290;
 
-// Pointer, touch or the slider drives the time of day. React renders the section once per chapter;
+// Pointer, touch or the arrow keys drive the time of day. React renders the section once per chapter;
 // within a chapter the clock, readouts, sky and chart are written straight to the DOM (no re-render).
 export function Day() {
   const { t, nf } = useI18n();
@@ -63,7 +63,6 @@ export function Day() {
     e.nowDot?.setAttribute('cx', String(x)); e.nowDot?.setAttribute('cy', String(yOf(kwNow)));
     const peak = min >= peakI * 15 ? 1 : 0;
     if (peak !== L.peak && e.peak) { (e.peak as HTMLElement).style.opacity = String(peak); L.peak = peak; }
-    if (e.range && (e.range as HTMLInputElement).valueAsNumber !== Math.round(min)) (e.range as HTMLInputElement).value = String(Math.round(min));
     if (idx !== L.idx && e.strip) {
       const bars = e.strip.children;
       for (let i = 0; i < bars.length; i++) bars[i].classList.toggle('past', i <= idx);
@@ -92,6 +91,13 @@ export function Day() {
   }, [reduced, apply]);
 
   const take = () => { touched.current = true; intro.current?.kill(); };
+  // Keyboard: the chart takes focus and the arrow keys move the time by 15 minutes (an hour with Shift).
+  const fromKeys = (ev: React.KeyboardEvent<HTMLDivElement>) => {
+    const d = ev.key === 'ArrowRight' ? 1 : ev.key === 'ArrowLeft' ? -1 : 0;
+    if (!d) return;
+    ev.preventDefault(); take();
+    apply(Math.min(END, Math.max(START, cur.current + d * (ev.shiftKey ? 60 : 15))));
+  };
   const fromPointer = (ev: React.PointerEvent<HTMLDivElement>) => {
     const svg = els.current.svg as SVGSVGElement | null;
     if (!svg || (ev.pointerType !== 'mouse' && ev.buttons === 0 && ev.type === 'pointermove')) return;
@@ -134,7 +140,8 @@ export function Day() {
             </dl>
           </div>
           <figure>
-            <div className="day-scrub" onPointerMove={fromPointer} onPointerDown={fromPointer}>
+            <div className="day-scrub" onPointerMove={fromPointer} onPointerDown={fromPointer} onKeyDown={fromKeys}
+              tabIndex={0} role="group" aria-label={t('day.slider')}>
             <svg className="chart" ref={reg('svg')} viewBox="0 0 720 300" role="img" aria-labelledby="chart-desc">
               <desc id="chart-desc">{t('chart.desc')}</desc>
               <defs><clipPath id="day-clip"><rect ref={reg('clip')} x={X0} y={0} width={Math.max(0, x0 - X0)} height={300} /></clipPath></defs>
@@ -159,12 +166,6 @@ export function Day() {
               {q15.map((q, i) => <i key={i} className={i <= Math.floor(init / 15) ? 'past' : undefined} style={{ height: `${Math.max(2, (q / qmax) * 100)}%` }} />)}
             </div>
             </div>
-            <label className="day-slider">
-              <span className="day-hint">{t('day.hint')}</span>
-              <input type="range" ref={reg('range')} min={START} max={END} step={5} defaultValue={init} aria-label={t('day.slider')}
-                onInput={(e) => { take(); apply((e.target as HTMLInputElement).valueAsNumber); }} />
-            </label>
-            <figcaption className="chart-caption">{t('chart.caption')}</figcaption>
           </figure>
         </div>
       </div>

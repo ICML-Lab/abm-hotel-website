@@ -2,20 +2,22 @@ import { useEffect, useState } from 'react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SiteHeader } from './sections/Header';
 import { Hero } from './sections/Hero';
-import { Why, Approach, Contributions, Gains } from './sections/Contributions';
+import { Why, Approach, Gains } from './sections/Contributions';
 import { Day } from './sections/Day';
 import { Pilot } from './sections/Pilot';
-import { Research, Progress, Collaborate, Footer } from './sections/Closing';
+import { Research, Progress, Footer } from './sections/Closing';
 import { Credits } from './sections/Credits';
 import { Team } from './sections/Team';
 import { ScrollProgress } from './components/ScrollProgress';
 import { useSmoothScroll } from './hooks/useSmoothScroll';
+import { useMotion } from './hooks/useMotion';
 
 // The story, one screen per beat: the problem (a resort day), why it is hard, how the model works,
 // the questions it asks, the levers to test, who gains, where it is tried first, and the invitation.
 export default function App() {
   const [route, setRoute] = useState(() => (typeof window !== 'undefined' ? window.location.hash : ''));
   useSmoothScroll();
+  useMotion([route]);
   useEffect(() => {
     const on = () => { setRoute(window.location.hash); if (window.location.hash === '#credits') window.scrollTo(0, 0); };
     window.addEventListener('hashchange', on);
@@ -46,12 +48,10 @@ export default function App() {
         <Approach />
         <Research />
         
-        <Contributions />
         <Gains />
         <Pilot />
         <Progress />
         <Team />
-        <Collaborate />
       </main>
       <Footer />
     </>

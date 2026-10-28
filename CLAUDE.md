@@ -110,18 +110,20 @@ Lưu ý: tham số trong mô phỏng (giờ cáp treo 09:00–22:00, công suấ
 ## Thiết kế
 
 - **Bố cục sau review của leader (28/10/2026): trang ngắn, ít cuộn, chủ yếu ảnh + tiến độ + đội ngũ PI; chi tiết để trong pitch deck (`DECK_URL` trong `config.ts`, nút "Details/Chi tiết" ở hero; để trống thì nút cuộn tới phần đóng góp). Không còn cảnh ghim/cuộn dính — cuộn bình thường (Lenis).** Thứ tự:
-  1. Hero (ảnh cáp treo, tagline ngắn, nút Details + Liên hệ)
+  1. Hero (ảnh cáp treo, tiêu đề 2 dòng, nút Details + Liên hệ; đã bỏ câu dẫn). Màn loading (khối `.loader` trong `index.html`, ngoài #root, ẩn khi không có JS) nâng lên khi font + ảnh hero sẵn sàng (tối thiểu 1,1 giây, tối đa 3,5 giây), rồi chữ tiêu đề nhảy lên từng chữ qua mặt nạ dòng; khi cuộn, dòng 1 (lề trái) và dòng 2 (lề phải) trượt vào giữa (chỉ màn rộng). Học từ Tengile.
   2. Một ngày: rê chuột / kéo trên biểu đồ để đổi giờ (06→24), có thanh trượt cho bàn phím; lần đầu tự vẽ tới đỉnh tối
   3. Vì sao: 3 ý cạnh nhau trên ảnh, một màn hình
   4. Cách tiếp cận: chuỗi nhân quả, chạy hiệu ứng một lần khi tới
   5. Năm câu hỏi nghiên cứu: hiện cả 5, rê/chạm câu nào thì câu đó to lên, giải thích hiện ở cột trái
-  6. Bốn đòn bẩy: lưới 2×2 (ảnh demo + tiêu đề + một dòng)
-  7. Câu lớn trên ảnh (giữ theo yêu cầu) + "Ai được hưởng lợi"
+  6. (Đã bỏ theo yêu cầu: Bốn đòn bẩy và phần xem ảnh phóng to đi kèm.)
+  7. "Ai được hưởng lợi" (anchor `#contributions`; câu lớn trên ảnh đã bỏ theo yêu cầu, ảnh Hòn Nội cũng bỏ)
   8. Hòn Tre: 3D toàn màn hình + demo click-to-load
   9. Tiến độ dự án: timeline 4 giai đoạn, đánh dấu giai đoạn hiện tại
-  10. Chủ nhiệm nghiên cứu (PI): ảnh gốc màu, cùng khung/cùng nền xám studio, thẻ mở hồ sơ VinUni ở tab mới; tên/chức danh lấy nguyên văn từ hồ sơ VinUni (EN/VI)
-  11. Hợp tác (nền ảnh thành phố) + footer
-  Đã bỏ: dải chữ chạy (marquee). Học từ trang tham khảo Tengile MalaMala (Awwwards SOTD 3/10/2026): cuộn thường, chữ ngắn đặt lớn, ảnh thành cụm, timeline, hover nhẹ.
+  10. Chủ nhiệm nghiên cứu (PI), mục "About us / Về chúng tôi" trên thanh nav (`#team`); email lấy từ hồ sơ VinUni (Qin, Yin). Hồ sơ PGS.TS. Phan Thị Thục Anh không công bố email — chờ người dùng cung cấp, không tự đoán. ảnh gốc màu, cùng khung/cùng nền xám studio, thẻ mở hồ sơ VinUni ở tab mới; tên/chức danh lấy nguyên văn từ hồ sơ VinUni (EN/VI)
+  11. Footer: dải GREEN-X (logo trắng trên nền #134D8B, thông điệp chính thức, nút Liên hệ hợp tác; giữ anchor `#collaborate` cho nav/hero) + các cột link. Section "Từ nguyên mẫu tới vận hành xanh hơn" đã bỏ theo yêu cầu, ảnh thành phố (Leonid) cũng bỏ.
+  Nền xen kẽ ảnh và hiệu ứng tương tác (người dùng muốn mix, hợp lý, không trùng lặp liền kề): Hero ảnh cáp treo → Một ngày nền tối → Vì sao ảnh → Cách tiếp cận DotGrid → Câu hỏi nghiên cứu ảnh Nha Trang về đêm (cloud.shepherd, CC BY 2.0) → Ai được hưởng lợi DotField → Hòn Tre 3D → Demo LineWaves → Tiến độ ảnh thuyền & hòn Đỏ (Dominic Nelson, CC BY-SA 4.0) → Đội ngũ nền trơn → Footer xanh GREEN-X. Section có ảnh dùng class `on-photo` (đổi token màu sang sáng, lớp phủ dựng từ `--color-night`). Thanh cuộn gốc đã ẩn (đã có thanh tiến độ trên cùng). Biểu đồ "Một ngày" không còn dòng hướng dẫn/thanh trượt/chú thích dưới biểu đồ; bàn phím: focus biểu đồ + phím mũi tên.
+  Chuyển động khi cuộn (`src/hooks/useMotion.ts`, học từ Tengile): parallax — ảnh nền (hero, Vì sao, `.section-photo`) trôi chậm hơn trang (~85%); reveal — tiêu đề, mục danh sách, thẻ, mốc timeline trượt lên + hiện dần một lần khi vào màn hình (`ScrollTrigger.batch`). Danh sách phần tử reveal nằm trong hằng `REVEAL`; thêm section mới thì thêm selector vào đó. Tắt khi giảm chuyển động; không có JS vẫn hiện đủ.
+  Đã bỏ: dải chữ chạy (marquee), Bốn đòn bẩy, câu lớn trên ảnh. Đòn bẩy cụ thể (điều hòa thông minh, buồng phòng, lộ trình, điều phối trò chơi) giờ chỉ còn nhắc trong câu hỏi nghiên cứu RQ3 và pitch deck. Học từ trang tham khảo Tengile MalaMala (Awwwards SOTD 3/10/2026): cuộn thường, chữ ngắn đặt lớn, ảnh thành cụm, timeline, hover nhẹ.
 - Header (`SiteHeader`) cố định, không chiếm chỗ trong bố cục: dải GREEN-X trên cùng (thu lên khi cuộn) + thanh nav nổi nền kính đục. Mọi cảnh bắt đầu từ mép trên cửa sổ; nội dung trong cảnh phải chừa khoảng cho thanh nav (~110px).
 - `src/hooks/useScene.ts` (GSAP ScrollTrigger, chỉ màn rộng, không giảm chuyển động) giờ chỉ còn dùng cho hero (ảnh thu nhỏ khi cuộn, không ghim). Người dùng không muốn cuộn dính: đừng thêm pin mới.
 - Ảnh: registry `PHOTO` trong `config.ts` (tác giả, giấy phép, link Commons). Mỗi ảnh có nhãn credit nhỏ ở góc (`PhotoImg`), danh sách đầy đủ ở trang `#credits` (link ở footer). Người dùng đã loại các ảnh: hồ bơi, bãi cỏ dù lá, lối gỗ, du khách đi dạo, Vũng Ngán — không dùng lại. **Ảnh chỉ dùng làm nền/minh họa cho một cảnh, không làm section riêng để trưng ảnh**; ảnh không dùng thì xoá.

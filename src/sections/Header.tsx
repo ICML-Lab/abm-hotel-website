@@ -39,6 +39,7 @@ export function SiteHeader() {
             <a href="#contributions">{t('nav.contrib')}</a>
             <a href="#pilot">{t('nav.pilot')}</a>
             <a href="#research">{t('nav.research')}</a>
+            <a href="#team">{t('nav.team')}</a>
             <a href="#collaborate">{t('nav.collab')}</a>
           </nav>
           <div className="lang" role="group" aria-label={t('nav.lang')}>

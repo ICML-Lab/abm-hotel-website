@@ -21,10 +21,15 @@
 .hero-photo { position: absolute; inset: 0; z-index: -2; }
 .hero-shade { position: absolute; inset: 0; z-index: -1; opacity: 0.6; background: linear-gradient(180deg, color-mix(in oklab, var(--color-ink) 30%, transparent) 0%, color-mix(in oklab, var(--color-ink) 20%, transparent) 40%, var(--color-ink) 100%); }
 .hero-stage { display: grid; grid-template-rows: 1fr auto auto; min-height: 100svh; padding-block: calc(var(--space-3xl) + var(--space-xl)) var(--space-xl); align-items: end; }
-.hero-intro { display: grid; gap: var(--space-lg); max-width: 60rem; }
-.hero-intro h1 { font-size: clamp(3rem, 6.2vw, 6.8rem); font-weight: 500; letter-spacing: -0.045em; line-height: 0.96; }
-.hero-intro h1 .split-parent { display: block !important; }
-.hero-intro .lead { color: var(--color-on-dark); max-width: 36ch; }
+.hero-intro { display: grid; gap: var(--space-xl); }
+.hero-intro h1 { font-size: clamp(2.6rem, 5.6vw, 6.4rem); font-weight: 500; letter-spacing: -0.045em; line-height: 1.08; }
+/* each line is a mask the letters rise through; padding leaves room for Vietnamese diacritics */
+.hero-line { display: block; overflow: hidden; padding-block: 0.1em 0.06em; }
+.hero-line-inner { display: inline-block; will-change: transform; }
+.hero-word { display: inline-block; white-space: pre; }
+.hero-char { display: inline-block; will-change: transform; }
+/* wide screens: line one starts at the left edge, line two at the right; scrolling brings them to the centre */
+@media (min-width: 60.01rem) { .hero-line-2 { text-align: right; } .hero-line-inner { white-space: nowrap; } }
 .hero-scroll { margin: var(--space-lg) 0 0; font-size: var(--text-xs); color: var(--color-on-dark-muted); }
 .hero-scene .photo-credit { bottom: var(--space-md); }
 
@@ -46,14 +51,6 @@
 
 /* ---------- approach ---------- */
 .approach-scene { background: var(--color-paper); display: grid; align-items: center; }
-/* Animated React Bits backgrounds on the paper sections (mounted only near the viewport). */
-.section-bg { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
-.approach-bg { opacity: 0.32; }
-.rq-bg { opacity: 0.4; }
-.contrib-bg { opacity: 0.3; }
-.gains-bg { opacity: 0.4; }
-.demo-bg { opacity: 0.5; }
-.contrib-scene, .gains-body, .demo-scene { position: relative; isolation: isolate; }
 .approach-stage { padding-block: var(--space-3xl); }
 .approach-head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-2xl); align-items: end; }
 .chain { position: relative; margin-top: var(--space-3xl); }
@@ -82,17 +79,9 @@
 
 
 
-.contrib-intro { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-2xl); align-items: end; margin-bottom: var(--space-2xl); }
-@media (max-width: 60rem) {
-  .contrib-intro { grid-template-columns: minmax(0, 1fr); gap: var(--space-md); }
-}
 
 /* ---------- gains ---------- */
 .gains-scene { background: var(--color-paper); }
-.gains-hero { position: relative; min-height: 100svh; display: grid; align-items: center; color: var(--color-on-dark); isolation: isolate; overflow: clip; }
-.gains-photo { position: absolute; inset: 0; z-index: -1; }
-.gains-statement { position: relative; z-index: 1; }
-.gains-reveal, .gains-statement .scroll-reveal-text { font-family: var(--font-display); font-size: clamp(2.4rem, 5.6vw, 6rem) !important; font-weight: 500; letter-spacing: -0.04em; line-height: 1.02; color: var(--color-on-dark); max-width: 18ch; }
 /* who benefits: the four operator gains across the width under green rules, then the science contributions as hairline rows */
 .gains-scene .gains { padding-block: var(--section-gap); display: grid; gap: var(--space-3xl); }
 .gains-title { max-width: 20ch; }
@@ -130,12 +119,6 @@
 .rq-scene { background: var(--color-paper-2); display: grid; align-items: center; padding-block: var(--section-gap-s); }
 .rq-side { display: grid; gap: var(--space-md); align-content: start; }
 
-/* ---------- collaborate ---------- */
-.collab.scene { padding: 0; }
-.collab-photo { position: absolute; inset: 0; z-index: -2; }
-.collab-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, color-mix(in oklab, var(--color-greenx) 58%, transparent) 0%, color-mix(in oklab, var(--color-greenx) 70%, transparent) 45%, color-mix(in oklab, var(--color-greenx-deep) 88%, transparent) 100%); }
-.collab-stage { padding-block: var(--section-gap); min-height: 100svh; display: grid; align-content: center; }
-.collab .head-display, .collab .head-section { color: var(--color-on-dark); }
 
 /* ---------- credits page ---------- */
 .credits { padding-block: var(--section-gap-s); display: grid; gap: var(--space-lg); }
@@ -147,15 +130,13 @@
 .footer-links { display: inline-flex; gap: var(--space-lg); }
 
 /* full-bleed photographs: the image sits under the shade, its credit stays on top and clickable */
-.hero-photo, .why-photo, .gains-photo, .collab-photo { position: absolute; inset: 0; z-index: auto; overflow: visible; }
-.hero-photo img, .why-photo img, .gains-photo img, .collab-photo img { position: absolute; inset: 0; z-index: -3; }
-.hero-photo .photo-credit, .why-photo .photo-credit, .gains-photo .photo-credit, .collab-photo .photo-credit { z-index: 5; }
-.hero-photo, .why-photo, .gains-photo, .collab-photo { pointer-events: none; }
-.hero-photo .photo-credit, .why-photo .photo-credit, .gains-photo .photo-credit, .collab-photo .photo-credit { pointer-events: auto; }
-.hero-stage, .why-stage, .gains-statement, .collab-stage { position: relative; z-index: 1; }
+.hero-photo, .why-photo, .section-photo { position: absolute; inset: 0; z-index: auto; overflow: visible; }
+.hero-photo img, .why-photo img, .section-photo img { position: absolute; inset: 0; z-index: -3; }
+.hero-photo .photo-credit, .why-photo .photo-credit, .section-photo .photo-credit { z-index: 5; }
+.hero-photo, .why-photo, .section-photo { pointer-events: none; }
+.hero-photo .photo-credit, .why-photo .photo-credit, .section-photo .photo-credit { pointer-events: auto; }
+.hero-stage, .why-stage { position: relative; z-index: 1; }
 /* Vietnamese diacritics need room above and below the line */
-.hero-intro h1 { line-height: 1.08 !important; }
-.hero-intro h1 .split-parent { overflow: visible !important; padding-block: 0.04em 0.1em; }
 @media (max-width: 60rem) { .hero-shade { opacity: 0.85; background: linear-gradient(180deg, color-mix(in oklab, var(--color-ink) 35%, transparent), color-mix(in oklab, var(--color-ink) 70%, transparent) 45%, var(--color-ink)); } }
 
 /* wide screens: the copy card keeps the left column, the island renders in the space to its right */
@@ -165,7 +146,6 @@
 
 .demo-scene .demo-meta { justify-content: flex-end; }
 
-.collab-cta { display: flex; justify-content: flex-end; align-items: end; }
 
 /* ---------- floating header (fixed, takes no room: every scene starts at the top of the window) ---------- */
 .site-head { position: fixed; inset: 0 0 auto 0; z-index: var(--z-sticky-nav); pointer-events: none; transition: transform var(--dur-long) var(--ease-out); }
@@ -199,20 +179,12 @@
 .team-card:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 4px; transition: none; }
 .team-role { display: grid; gap: var(--space-3xs); font-size: var(--text-sm); color: var(--color-ink-2); }
 .team-uni { font-weight: 500; color: var(--color-ink); }
+.team-grid > li { display: grid; align-content: start; gap: var(--space-xs); }
+.team-email { justify-self: start; font-size: var(--text-sm); color: var(--color-accent); text-underline-offset: 0.2em; }
+.team-email:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .credits-note { margin-block: var(--space-xl); color: var(--color-ink-2); max-width: 62ch; }
 @media (max-width: 60rem) { .team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--space-2xl); } }
 @media (max-width: 40rem) { .team-grid { grid-template-columns: minmax(0, 1fr); } }
-
-/* ---------- levers: a two-by-two grid ---------- */
-.contrib-scene { background: var(--color-paper-2); padding-block: var(--section-gap-s) var(--section-gap); }
-.levers-grid { list-style: none; margin-top: var(--space-2xl); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2xl) var(--gap-columns); }
-.lever { display: grid; align-content: start; gap: var(--space-sm); }
-.lever-shot { aspect-ratio: 16 / 10; overflow: hidden; border-radius: var(--radius-card); border: 1px solid var(--color-rule); background: var(--color-paper); }
-.lever-shot img { width: 100%; height: 100%; object-fit: cover; object-position: top left; transition: transform 0.6s var(--ease-out, ease-out); }
-.lever:hover .lever-shot img { transform: scale(1.04); }
-.lever h3 { margin-top: var(--space-xs); font-size: var(--text-2xl); font-weight: 500; letter-spacing: -0.03em; line-height: 1.1; }
-.lever p { color: var(--color-ink-2); max-width: 46ch; }
-@media (max-width: 40rem) { .levers-grid { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- research: all five questions; the hovered one grows, the rest step back ---------- */
 .rq-grid { align-items: center; min-height: calc(100svh - 2 * var(--section-gap-s)); }
@@ -246,8 +218,34 @@
 }
 
 /* ---------- the day: scrub by pointer, touch or slider ---------- */
-.day-scrub { cursor: ew-resize; touch-action: pan-y; }
-.day-slider { display: grid; gap: var(--space-xs); margin-top: var(--space-md); }
-.day-hint { font-size: var(--text-sm); color: var(--color-on-dark-muted); }
-.day-slider input { width: 100%; accent-color: var(--color-accent); }
-.day-slider input:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 4px; }
+.day-scrub { cursor: ew-resize; touch-action: pan-y; border-radius: var(--radius-card); }
+.day-scrub:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 6px; }
+
+/* ---------- interactive React Bits backgrounds on paper sections (mounted only while on screen) ---------- */
+.section-bg { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.approach-bg { opacity: 0.32; }
+.gains-bg { opacity: 0.4; }
+.demo-bg { opacity: 0.5; }
+.gains-body, .demo-scene { position: relative; isolation: isolate; }
+
+/* ---------- sections over a Nha Trang photograph ----------
+   The photo fills the section under the shared shade; the section's own colour tokens switch to
+   their on-dark values, so text, rules and markers read as light on dark without per-rule overrides. */
+.on-photo { position: relative; isolation: isolate; overflow: clip; background: var(--color-night); color: var(--color-on-dark);
+  --color-ink: var(--color-on-dark); --color-ink-2: var(--color-on-dark-muted); --color-muted: var(--color-on-dark-muted); --color-rule: var(--color-rule-dark); --color-focus: var(--color-on-dark); }
+.on-photo > :not(.section-photo):not(.scene-shade) { position: relative; z-index: 1; }
+/* the shade is built from --color-night, which this class does not redefine (--color-ink is light here) */
+.on-photo .scene-shade { z-index: 0; background: linear-gradient(180deg, color-mix(in oklab, var(--color-night) 62%, transparent), color-mix(in oklab, var(--color-night) 84%, transparent)); }
+/* the brand green is too dark to read as small text on a photograph: lift it toward white */
+.on-photo .rq-id, .on-photo .timeline li.is-now .when { color: color-mix(in oklab, var(--color-accent) 40%, var(--color-on-dark)); }
+.on-photo .timeline-dot { background: var(--color-night); }
+.on-photo .chain-node + .chain-node .chain-dot::before { border-left-color: color-mix(in oklab, var(--color-accent) 40%, var(--color-on-dark)); }
+
+/* ---------- loading panel (index.html, outside the app) ---------- */
+.loader { position: fixed; inset: 0; z-index: var(--z-modal); display: grid; place-items: center; background: var(--color-accent-deep); color: var(--color-on-dark); }
+.loader-mark { display: flex; align-items: center; gap: var(--space-sm); font-family: var(--font-display); font-size: var(--text-lg); font-weight: 500; letter-spacing: -0.01em; }
+.loader-mark i { width: 18px; height: 18px; background: var(--color-on-dark); animation: loader-pulse 1.2s var(--ease-in-out) infinite; }
+.loader-mark span { animation: loader-rise 0.8s var(--ease-out) both; }
+@keyframes loader-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(0.55) rotate(45deg); } }
+@keyframes loader-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.no-js .loader { display: none; }

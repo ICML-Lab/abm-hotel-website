@@ -16,6 +16,7 @@ export function Team() {
                 <h3>{t(`team.${p.id}.name`)}</h3>
                 <span className="team-role">{list(`team.${p.id}.role`).map((r) => <span key={r}>{r}</span>)}<span className="team-uni">{t('team.uni')}</span></span>
               </a>
+              {p.email && <a className="team-email" href={`mailto:${p.email}`}>{p.email}</a>}
             </li>
           ))}
         </ul>

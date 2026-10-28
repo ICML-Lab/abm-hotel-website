@@ -2,13 +2,11 @@ import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useI18n } from '../i18n/I18nProvider';
-import ScrollReveal from '../components/reactbits/ScrollReveal';
-import DotGrid from '../components/reactbits/DotGrid';
-import Waves from '../components/reactbits/Waves';
-import DotField from '../components/reactbits/DotField';
 import { PhotoImg } from '../components/PhotoImg';
+import { HEX, PHOTO } from '../config';
 import { LazyBackground } from '../components/LazyBackground';
-import { HEX, PHOTO, demoShot } from '../config';
+import DotGrid from '../components/reactbits/DotGrid';
+import DotField from '../components/reactbits/DotField';
 
 // Why: the three reasons side by side over the photograph, on one screen.
 export function Why() {
@@ -83,47 +81,11 @@ export function Approach() {
   );
 }
 
-const LEVER_SHOT = ['rooms', 'energy', 'map', 'compare'] as const;
-
-// Levers: four cards in a two-by-two grid, each with its prototype screen and one line.
-export function Contributions() {
-  const { t, lang } = useI18n();
-  return (
-    <section className="contrib-scene" id="contributions" aria-labelledby="contrib-title">
-      <LazyBackground className="contrib-bg">
-        <Waves dpr={1} lineColor={HEX.leaf} accentColor={HEX.accent} spacing={14} amplitude={28} speed={0.5} clickRipple={false} fade={0.3} lightMode />
-      </LazyBackground>
-      <div className="container contrib-intro">
-        <h2 className="head-display" id="contrib-title">{t('contrib.title')}</h2>
-        <p className="lead">{t('contrib.lead')}</p>
-      </div>
-      <ol className="container levers-grid">
-        {[1, 2, 3, 4].map((n) => (
-          <li key={n} className="lever">
-            <div className="lever-shot"><img src={demoShot(LEVER_SHOT[n - 1], lang)} alt={t(`lever${n}.alt`)} loading="lazy" /></div>
-            <h3>{t(`lever${n}.t`)}</h3>
-            <p>{t(`lever${n}.p`)}</p>
-          </li>
-        ))}
-      </ol>
-    </section>
-  );
-}
-
-// Gains: one statement brightens word by word over a resort photograph, then what each audience gets.
+// Gains (anchor #contributions): what operators and science each get from the project.
 export function Gains() {
   const { t } = useI18n();
   return (
-    <section className="gains-scene" aria-labelledby="gains-title">
-      <div className="gains-hero">
-        <PhotoImg photo={PHOTO.honnoi} className="gains-photo" load="eager" />
-        <div className="scene-shade" aria-hidden="true" />
-        <div className="container gains-statement">
-          <ScrollReveal baseOpacity={0.12} enableBlur baseRotation={2} blurStrength={6} textClassName="gains-reveal">
-            {t('gains.statement')}
-          </ScrollReveal>
-        </div>
-      </div>
+    <section className="gains-scene" id="contributions" aria-labelledby="gains-title">
       <div className="gains-body">
       <LazyBackground className="gains-bg">
         <DotField maxDevicePixelRatio={1} dotRadius={1.7} dotSpacing={22} gradientFrom={HEX.accent} gradientTo={HEX.leaf} glowColor={HEX.accent} holdToZoom={false} lightMode />

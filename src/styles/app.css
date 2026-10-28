@@ -12,6 +12,8 @@
  * waive 44b-words: Vietnamese is monosyllabic, so the hero head runs 9 tokens at 36 characters; the 50-character cap holds */
 
 /* Hallmark · dropped onChange={(n) => setI(n)} · the photo carousel became the pinned horizontal photo strip */
+/* Hallmark · dropped smart air conditioning on and off, housekeeping coordination, route suggestions in the park, ride dispatch, four levers to test, demo-energy, demo-compare, demo-rooms, honnoi · the owner removed the four-levers section and the photo statement above who-benefits (details move to the pitch deck) */
+/* Hallmark · dropped 53119835087, collab-title · the owner folded the collaboration section into the footer (GREEN-X band); its city photograph is no longer used and was removed */
 /* Hallmark · dropped File:Vinpearl_Cable_Car, File:Arriving_in_Nha_Trang, File:Satellite_pictures_of_Nha_Trang_Bay, dashboard.html?s=baseline · the owner removed those photographs and the demo screenshot tabs; remaining photos keep their credits */
 /* Hallmark · reworded "What the research delivers" to "Four levers to test before anything changes on site", "Hon Tre and Nha Trang Bay" to "The pilot site in photographs" · story beats, owner's request
  * Hallmark · moved "A virtual test bed for hotel and tourism operations" into the approach scene ("Every guest group is an agent.") · dropped the satellite caption date (photo now a background, date kept on the credits page) */
@@ -75,7 +77,6 @@ body { font-weight: 400; }
 
 .hero-copy { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: var(--gap-columns); align-items: end; }
 .hero h1 { font-size: var(--text-display); font-weight: 500; letter-spacing: var(--tracking-display); line-height: 1.02; }
-.hero h1 .split-parent { display: block !important; }
 .hero-side { display: grid; gap: var(--space-lg); padding-bottom: var(--space-xs); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
 @media (max-width: 60rem) { .hero-copy { grid-template-columns: minmax(0, 1fr); } }
@@ -115,8 +116,6 @@ body { font-weight: 400; }
 
 /* ---------- hero keys ---------- */
 
-/* ---------- contributions ---------- */
-.contrib { background: var(--color-paper-2); }
 
 /* ---------- the day (signature) ---------- */
 .day { position: relative; background: var(--color-night); color: var(--color-on-dark); }
@@ -149,7 +148,6 @@ body { font-weight: 400; }
 .chart .now circle { fill: var(--color-on-dark); }
 .chart .peak text { fill: var(--color-on-dark); font-family: var(--font-outlier); font-size: 12px; }
 .chart .peak circle { fill: none; stroke: var(--color-on-dark); }
-.chart-caption { margin-top: var(--space-sm); font-size: var(--text-xs); color: var(--color-on-dark-muted); }
 .queue-strip { display: grid; grid-template-columns: repeat(96, minmax(0, 1fr)); align-items: end; gap: var(--space-3xs); height: 56px; margin-top: var(--space-lg); }
 .queue-strip i { display: block; background: var(--color-on-dark-muted); opacity: 0.22; border-radius: 1px; }
 .queue-strip i.past { background: var(--color-sky-noon); opacity: 0.9; }
@@ -218,26 +216,27 @@ body { font-weight: 400; }
 
 /* ---------- research questions ---------- */
 .rq-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--space-2xl); }
-/* without scripts (and in link previews) the split headline shows as plain text */
-.no-js .split-parent { visibility: visible !important; }
 @media (max-width: 60rem) { .rq-grid { grid-template-columns: minmax(0, 1fr); } }
 
-/* ---------- collaborate (GREEN-X band) ---------- */
-.collab { background: var(--color-greenx); color: var(--color-on-dark); --color-on-dark-muted: var(--color-on-blue-muted); --color-focus: var(--color-on-dark); }
 .day, .footer { --color-focus: var(--color-on-dark); }
-.collab .head-section { max-width: 18ch; }
-.collab-lead { color: var(--color-on-dark-muted); margin-top: var(--space-md); }
-.collab-foot { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-2xl); margin-top: var(--space-3xl); padding-top: var(--space-xl); border-top: 1px solid var(--color-rule-dark); align-items: end; }
 .greenx-quote img { height: 34px; width: auto; }
 .greenx-quote blockquote { margin: var(--space-lg) 0 0; font-size: var(--text-xl); font-weight: 400; line-height: 1.35; letter-spacing: -0.015em; max-width: 30ch; }
 .greenx-quote figcaption { margin-top: var(--space-sm); font-size: var(--text-sm); color: var(--color-on-dark-muted); }
 .privacy { list-style: none; padding: 0; margin: 0 0 var(--space-xl); display: grid; gap: var(--space-xs); font-size: var(--text-sm); color: var(--color-on-dark-muted); }
 .privacy li { display: flex; gap: var(--space-sm); }
 .privacy li::before { content: ""; width: 8px; height: 8px; margin-top: var(--space-xs); border: 1px solid var(--color-on-dark); flex: none; }
-@media (max-width: 60rem) { .collab-foot { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- footer ---------- */
-.footer { background: var(--color-ink); color: var(--color-on-dark-muted); padding-block: var(--space-2xl) var(--space-xl); font-size: var(--text-sm); }
+.footer { background: var(--color-ink); color: var(--color-on-dark-muted); padding-bottom: var(--space-xl); font-size: var(--text-sm); }
+.footer > .container { padding-top: var(--space-2xl); }
+/* the GREEN-X band: the logo is white-only, so it always sits on GREEN-X blue */
+.footer-band { background: var(--color-greenx); color: var(--color-on-dark); --color-on-dark-muted: var(--color-on-blue-muted); padding-block: var(--space-3xl); }
+.footer-band-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-2xl); align-items: end; }
+.footer-cta { display: grid; gap: var(--space-lg); justify-items: start; font-size: var(--text-md); color: var(--color-on-dark-muted); }
+.footer-cta p { max-width: 36ch; }
+.footer .footer-cta .btn { color: var(--color-ink); white-space: nowrap; }
+.footer .footer-cta .btn:hover { color: var(--color-ink); text-decoration: none; }
+@media (max-width: 60rem) { .footer-band-grid { grid-template-columns: minmax(0, 1fr); } }
 .footer-grid { display: grid; grid-template-columns: minmax(0, 5fr) repeat(3, minmax(0, 2fr)); gap: var(--gap-columns); }
 .footer .wordmark { color: var(--color-on-dark); }
 .footer h4 { margin: 0 0 var(--space-sm); font-size: var(--text-sm); font-weight: 500; color: var(--color-on-dark); }
@@ -246,7 +245,7 @@ body { font-weight: 400; }
 .footer a:hover { color: var(--color-on-dark); text-decoration: underline; }
 .footer-base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--color-rule-dark); font-size: var(--text-xs); }
 .footer-base img { height: 24px; width: auto; }
-@media (max-width: 60rem) { .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 60rem) { .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--space-xl); } .footer-grid > div:first-child { grid-column: 1 / -1; } }
 
 /* ---------- pilot: 3D model ---------- */
 .model-frame { position: relative; aspect-ratio: 4 / 3; border-radius: var(--radius-card); overflow: hidden; background: radial-gradient(120% 90% at 50% 20%, var(--color-paper-2), var(--color-paper-3)); border: 1px solid var(--color-rule); }

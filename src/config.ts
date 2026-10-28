@@ -33,8 +33,8 @@ const photo = (id: string, file: string, alt: string, author: string, license: s
 export const PHOTO = {
   cable2: photo('cable2', 'cable-christophe95-2.webp', 'photoAlt.cable2', 'Christophe95', 'CC BY-SA 4.0', commons('Vinpearl_Cable_Car_2.jpg')),
   cableHughes: photo('cableHughes', 'cablecar-hughes.webp', 'photo2', 'P. Hughes', 'CC BY 4.0', commons('Nha_Trang_-_Vinpearl_Cable_Car.jpg')),
-  honnoi: photo('honnoi', 'honnoi-minhducly.webp', 'photoAlt.honnoi', 'Minh Duc Ly', 'Public domain', commons('Hòn_Nội,_Nha_Trang_Bay,_Vietnam.jpg')),
-  city: photo('city', 'city-leonid.webp', 'photoAlt.city', 'Leonid', 'CC BY-SA 2.0', commons('Nha_Trang,_Vietnam_-_53119835087.jpg')),
+  night: photo('night', 'night-cloudshepherd.webp', 'photoAlt.night', 'cloud.shepherd', 'CC BY 2.0', commons('Nha_Trang,_Vietnam_at_night_(24267026625).jpg')),
+  hondo: photo('hondo', 'hondo-dominicnelson.webp', 'photoAlt.hondo', 'Dominic Nelson', 'CC BY-SA 4.0', commons('Nha_Trang_-_fishing_boats_and_Hòn_Đỏ_island_Mar_2024.jpg')),
 } satisfies Record<string, Photo>;
 
 export const ALL_PHOTOS: Photo[] = Object.values(PHOTO);
@@ -43,14 +43,14 @@ export const ASSETS = {
   logo: asset('assets/greenx-logo-white.png'),
 };
 // Demo screenshots exist per language (captured with ?lang=en and ?lang=vi).
-export const demoShot = (name: 'map' | 'energy' | 'compare' | 'rooms', lang: string) => asset(`assets/demo-${name}-${lang === 'vi' ? 'vi' : 'en'}.webp`);
+export const demoShot = (name: 'map', lang: string) => asset(`assets/demo-${name}-${lang === 'vi' ? 'vi' : 'en'}.webp`);
 
 // Principal investigators: names and positions as on their VinUni profile pages (28/10/2026).
 // Portraits come from those pages in their original colour, set on one template (square, same face
 // size and eye line, one studio-grey backdrop) so the three read as a set; credited on #credits.
-export type Person = { id: string; img: string; profile: { en: string; vi: string } };
+export type Person = { id: string; img: string; email?: string; profile: { en: string; vi: string } };
 export const TEAM: Person[] = [
   { id: 'p1', img: asset('assets/team/thuc-anh.webp'), profile: { en: 'https://vinuni.edu.vn/people/phan-thi-thuc-anh/', vi: 'https://vinuni.edu.vn/vi/people/ts-phan-thi-thuc-anh/' } },
-  { id: 'p2', img: asset('assets/team/qin.webp'), profile: { en: 'https://vinuni.edu.vn/people/zengchang-qin/', vi: 'https://vinuni.edu.vn/vi/people/zengchang-qin-2/' } },
-  { id: 'p3', img: asset('assets/team/yin.webp'), profile: { en: 'https://vinuni.edu.vn/people/chun-yang-yin/', vi: 'https://vinuni.edu.vn/vi/people/chun-yang-yin-2/' } },
+  { id: 'p2', img: asset('assets/team/qin.webp'), email: 'zengchang.q@vinuni.edu.vn', profile: { en: 'https://vinuni.edu.vn/people/zengchang-qin/', vi: 'https://vinuni.edu.vn/vi/people/zengchang-qin-2/' } },
+  { id: 'p3', img: asset('assets/team/yin.webp'), email: 'chunyang.y@vinuni.edu.vn', profile: { en: 'https://vinuni.edu.vn/people/chun-yang-yin/', vi: 'https://vinuni.edu.vn/vi/people/chun-yang-yin-2/' } },
 ];
