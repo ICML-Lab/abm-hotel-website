@@ -27,7 +27,7 @@ export function Why() {
   }, [lang]);
   return (
     <section className="scene why-scene" ref={root} aria-labelledby="why-title">
-      <PhotoImg photo={PHOTO.cableHughes} className="why-photo" />
+      <PhotoImg photo={PHOTO.cableHughes} className="why-photo" load="eager" />
       <div className="scene-shade" aria-hidden="true" />
       <div className="container why-stage">
         <h2 className="why-kicker" id="why-title">{t('why.title')}</h2>
@@ -124,7 +124,7 @@ export function Gains() {
   return (
     <section className="gains-scene" aria-label={t('gains.aria')}>
       <div className="gains-hero">
-        <PhotoImg photo={PHOTO.honnoi} className="gains-photo" />
+        <PhotoImg photo={PHOTO.honnoi} className="gains-photo" load="eager" />
         <div className="scene-shade" aria-hidden="true" />
         <div className="container gains-statement">
           <ScrollReveal baseOpacity={0.12} enableBlur baseRotation={2} blurStrength={6} textClassName="gains-reveal">

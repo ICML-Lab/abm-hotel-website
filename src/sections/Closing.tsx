@@ -54,7 +54,7 @@ export function Collaborate() {
   const mail = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(t('mail.subject'))}`;
   return (
     <section className="scene collab" id="collaborate" aria-labelledby="collab-title">
-      <PhotoImg photo={PHOTO.satellite} className="collab-photo" />
+      <PhotoImg photo={PHOTO.city} className="collab-photo" load="eager" />
       <div className="collab-shade" aria-hidden="true" />
       <div className="container collab-stage">
         <h2 className="head-section" id="collab-title">{t('collab.title')}</h2>
@@ -74,10 +74,7 @@ export function Collaborate() {
             <blockquote>{t('quote')}</blockquote>
             <figcaption>{t('quote.cap')}</figcaption>
           </figure>
-          <div>
-            <ul className="privacy" aria-label={t('privacy')}>
-              {['priv1', 'priv2', 'priv3'].map((k) => <li key={k}>{t(k)}</li>)}
-            </ul>
+          <div className="collab-cta">
             <a className="btn btn-light" href={mail}>{t('collab.cta')}</a>
           </div>
         </div>

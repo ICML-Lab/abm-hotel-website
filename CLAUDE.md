@@ -21,10 +21,10 @@ Nên đưa lên:
 - Đóng góp thực tế (đòn bẩy vận hành và những gì mô hình đo) và đóng góp khoa học.
 - Hòn Tre như **địa điểm thử nghiệm đầu tiên** (xem mục dưới), kèm ý chuyển sang khách sạn khác (RQ5).
 - Vấn đề (dữ liệu phân mảnh, chính sách xanh khó đánh giá trước, thử nghiệm trực tiếp rủi ro) và giá trị (thử kịch bản trong môi trường ảo trước khi áp dụng thật: đánh giá chi phí, rủi ro, tiết kiệm thời gian).
-- Tính năng hiện có: bản đồ 3D phát lại một ngày, dashboard, so sánh chính sách, tái lập bằng seed, giao diện VI/EN/RU.
+- Tính năng hiện có: bản đồ 3D phát lại một ngày, dashboard, so sánh chính sách, tái lập bằng seed. (Không giới thiệu chuyện demo có nhiều ngôn ngữ — người dùng yêu cầu bỏ.)
 - Hướng phát triển ở mức chung chung, không đưa lộ trình 5 mức hay kế hoạch pha. Khung kể chuyện: **Ý tưởng & nguyên mẫu → Kêu gọi hợp tác (call for collaboration) → Xây dựng hệ thống với dữ liệu thật → Hỗ trợ vận hành xanh.** Trang nên có lời mời hợp tác rõ ràng (CTA liên hệ).
 - Câu hỏi nghiên cứu ở dạng rút gọn (RQ1–RQ5, mỗi câu một dòng).
-- Cam kết quyền riêng tư (opt-in, ẩn danh, không camera, tuân thủ Nghị định 13/2023/NĐ-CP).
+- (Đã bỏ theo yêu cầu 28/10) Danh sách cam kết quyền riêng tư không hiển thị trên trang.
 - Demo nhúng trực tiếp bằng iframe + link mở tab mới.
 - Hòn Tre minh họa bằng **mô hình 3D** (lấy từ demo, không nhãn) + **slider ảnh thật** có credit.
 
@@ -112,14 +112,15 @@ Lưu ý: tham số trong mô phỏng (giờ cáp treo 09:00–22:00, công suấ
   2. Một ngày (mốc 3 giờ)
   3. Vì sao (3 câu thay nhau)
   4. Cách tiếp cận (chuỗi tác tử → điện → phát thải)
+  4b. Năm câu hỏi nghiên cứu (mỗi câu một nhịp) — đặt sớm, ngay sau Cách tiếp cận
   5. Marquee
   6. Đòn bẩy (ScrollStack)
   7. Lợi ích (ScrollReveal trên ảnh)
-  8. Hòn Tre: 3D toàn màn hình, dải ảnh ngang, demo
-  9. Câu hỏi (mỗi câu một nhịp)
-  10. Hợp tác (nền ảnh vệ tinh)
+  8. Hòn Tre: 3D toàn màn hình (thẻ chữ cột trái, đảo bên phải), rồi demo click-to-load (không còn dải ảnh, không còn tab ảnh màn hình)
+  10. Hợp tác (nền ảnh thành phố và vịnh Nha Trang của Leonid; ảnh vệ tinh đã bỏ vì độ phân giải thấp)
+- Header (`SiteHeader`) cố định, không chiếm chỗ trong bố cục: dải GREEN-X trên cùng (thu lên khi cuộn) + thanh nav nổi nền kính đục. Mọi cảnh bắt đầu từ mép trên cửa sổ; nội dung trong cảnh phải chừa khoảng cho thanh nav (~110px).
 - Cảnh ghim/tua theo cuộn dùng `src/hooks/useScene.ts` (GSAP ScrollTrigger, chỉ chạy trên màn rộng khi không bật giảm chuyển động; mặc định CSS là bố cục tĩnh xếp chồng). `App.tsx` gọi `ScrollTrigger.sort()/refresh()` sau khi mount — mọi pin phải tạo trong layout effect.
-- Ảnh: registry `PHOTO` trong `config.ts` (tác giả, giấy phép, link Commons). Mỗi ảnh có nhãn credit nhỏ ở góc (`PhotoImg`), danh sách đầy đủ ở trang `#credits` (link ở footer). Người dùng đã loại các ảnh: hồ bơi, bãi cỏ dù lá, lối gỗ, du khách đi dạo, Vũng Ngán — không dùng lại.
+- Ảnh: registry `PHOTO` trong `config.ts` (tác giả, giấy phép, link Commons). Mỗi ảnh có nhãn credit nhỏ ở góc (`PhotoImg`), danh sách đầy đủ ở trang `#credits` (link ở footer). Người dùng đã loại các ảnh: hồ bơi, bãi cỏ dù lá, lối gỗ, du khách đi dạo, Vũng Ngán — không dùng lại. **Ảnh chỉ dùng làm nền/minh họa cho một cảnh, không làm section riêng để trưng ảnh**; ảnh không dùng thì xoá.
 
 - Định hướng và phân tích trang tham khảo: `design/DESIGN-DIRECTION.md`.
 - Token màu/font nằm trong `src/styles/tokens.css`; mọi màu và font phải đi qua token. Font: Be Vietnam Pro (chữ), JetBrains Mono (chỉ số liệu).

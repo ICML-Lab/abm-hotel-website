@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Strip, Header } from './sections/Header';
+import { SiteHeader } from './sections/Header';
 import { Hero } from './sections/Hero';
 import { Why, Approach, Contributions, Gains } from './sections/Contributions';
 import { Day } from './sections/Day';
@@ -8,9 +8,10 @@ import { Pilot } from './sections/Pilot';
 import { Research, Collaborate, Footer } from './sections/Closing';
 import { Credits } from './sections/Credits';
 import { Marquee } from './sections/Marquee';
+import { ScrollProgress } from './components/ScrollProgress';
 
 // The story, one screen per beat: the problem (a resort day), why it is hard, how the model works,
-// the levers to test, who gains, where it is tried first, what we will learn, and the invitation.
+// the questions it asks, the levers to test, who gains, where it is tried first, and the invitation.
 export default function App() {
   const [route, setRoute] = useState(() => window.location.hash);
   useEffect(() => {
@@ -30,22 +31,22 @@ export default function App() {
   }, [route]);
 
   if (route === '#credits') {
-    return (<><Strip /><Header /><Credits /><Footer /></>);
+    return (<><SiteHeader /><Credits /><Footer /></>);
   }
   return (
     <>
-      <Strip />
-      <Header />
+      <ScrollProgress />
+      <SiteHeader />
       <main id="top">
         <Hero />
         <Day />
         <Why />
         <Approach />
+        <Research />
         <Marquee />
         <Contributions />
         <Gains />
         <Pilot />
-        <Research />
         <Collaborate />
       </main>
       <Footer />

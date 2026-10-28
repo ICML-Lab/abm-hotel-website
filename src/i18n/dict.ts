@@ -27,7 +27,7 @@ export const DICT: Record<Lang, Dict> = {
     "hero.k4": "Guest comfort and queues",
     "why.title": "Why hotels need a model first",
     "why.p1t": "Data lives in silos",
-    "why.p1p": "Power, rooms, queues and laundry live in separate systems.",
+    "why.p1p": "Power, room occupancy, queues and guest movement live in separate systems.",
     "why.p2t": "Green policies are hard to judge in advance",
     "why.p2p": "Switching off AC saves power but can cost comfort.",
     "why.p3t": "Live trials are costly and risky",
@@ -114,7 +114,7 @@ export const DICT: Record<Lang, Dict> = {
     "pilot.p2": "That closed boundary makes flows, queues and power measurable.",
     "pilot.next": "Next sites: recalibrate rooms, facilities and climate (RQ5).",
     "demo.title": "Explore the pilot simulation",
-    "demo.lead": "An online prototype: 3D map, dashboard and scenario comparison, in Vietnamese, English and Russian, with fixed seeds for reproducible runs.",
+    "demo.lead": "An online prototype: 3D map, dashboard and scenario comparison, with fixed seeds for reproducible runs.",
     "demo.posterAlt": "The 3D map of the pilot simulation: Hon Tre island, hotels, cable car and theme park at 08:25",
     "demo.playAria": "Load the interactive 3D map",
     "demo.play": "Run the 3D map",
@@ -226,7 +226,12 @@ export const DICT: Record<Lang, Dict> = {
     "photoAlt.walk": "Guests walking through the resort",
     "photoAlt.honnoi": "Islands of Nha Trang Bay",
     "photoAlt.city": "Nha Trang city and the bay",
-    "photoAlt.vungngan": "Vung Ngan cove on Hon Tre"
+    "photoAlt.vungngan": "Vung Ngan cove on Hon Tre",
+    "hero.keysTitle": "Every simulated minute, the model weighs four things.",
+    "hero.k1d": "When empty rooms keep cooling, and when they can wait.",
+    "hero.k2d": "Power by end use, and the evening peak it builds to.",
+    "hero.k3d": "Emissions from the electricity the resort buys.",
+    "hero.k4d": "Room heat, waiting time and queues guests give up on."
   },
   "vi": {
     "meta.title": "Virtual Hotel Monitoring: mô hình tác tử cho khách sạn xanh hơn",
@@ -252,7 +257,7 @@ export const DICT: Record<Lang, Dict> = {
     "hero.k4": "Tiện nghi và hàng chờ",
     "why.title": "Vì sao khách sạn cần mô hình trước",
     "why.p1t": "Dữ liệu nằm rời rạc",
-    "why.p1p": "Điện, phòng, hàng chờ, giặt là nằm ở các hệ thống riêng.",
+    "why.p1p": "Điện, công suất phòng, hàng chờ và di chuyển của khách nằm ở các hệ thống riêng.",
     "why.p2t": "Chính sách xanh khó đo trước",
     "why.p2p": "Tắt điều hòa tiết kiệm điện nhưng có thể mất tiện nghi.",
     "why.p3t": "Thử thật thì tốn và rủi ro",
@@ -339,7 +344,7 @@ export const DICT: Record<Lang, Dict> = {
     "pilot.p2": "Ranh giới khép kín đó khiến dòng khách, hàng chờ và điện năng đo được.",
     "pilot.next": "Địa điểm tiếp theo: hiệu chỉnh lại số phòng, tiện ích, khí hậu (RQ5).",
     "demo.title": "Khám phá mô phỏng thử nghiệm",
-    "demo.lead": "Nguyên mẫu trực tuyến: bản đồ 3D, dashboard và so sánh kịch bản, giao diện Việt, Anh, Nga, seed cố định để tái lập kết quả.",
+    "demo.lead": "Nguyên mẫu trực tuyến: bản đồ 3D, dashboard và so sánh kịch bản, seed cố định để tái lập kết quả.",
     "demo.posterAlt": "Bản đồ 3D của mô phỏng thử nghiệm: đảo Hòn Tre, khách sạn, cáp treo và công viên lúc 08:25",
     "demo.playAria": "Tải bản đồ 3D tương tác",
     "demo.play": "Chạy bản đồ 3D",
@@ -451,6 +456,11 @@ export const DICT: Record<Lang, Dict> = {
     "photoAlt.walk": "Du khách dạo trong khu nghỉ",
     "photoAlt.honnoi": "Các đảo trong vịnh Nha Trang",
     "photoAlt.city": "Thành phố Nha Trang và vịnh",
-    "photoAlt.vungngan": "Vịnh Vũng Ngán trên Hòn Tre"
+    "photoAlt.vungngan": "Vịnh Vũng Ngán trên Hòn Tre",
+    "hero.keysTitle": "Mỗi phút mô phỏng, mô hình cân bốn điều.",
+    "hero.k1d": "Khi nào phòng vắng vẫn cần làm mát, khi nào có thể chờ.",
+    "hero.k2d": "Điện theo mục đích sử dụng, và đỉnh tải dồn về buổi tối.",
+    "hero.k3d": "Phát thải từ phần điện khu nghỉ mua vào.",
+    "hero.k4d": "Nhiệt độ phòng, thời gian chờ và những hàng chờ khách bỏ đi."
   }
 };

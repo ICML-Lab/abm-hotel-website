@@ -16,13 +16,15 @@ export function Hero() {
     gsap.timeline({ scrollTrigger: { trigger: root.current, start: 'top top', end: '+=110%', pin: true, scrub: 0.6 } })
       .fromTo('.hero-photo img', { scale: 1.16 }, { scale: 1, ease: 'none' }, 0)
       .to('.hero-shade', { opacity: 0.92, ease: 'none' }, 0)
-      .to('.hero-intro', { yPercent: -40, opacity: 0, ease: 'power2.in' }, 0)
-      .fromTo('.hero-keys li', { y: 80, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.07, ease: 'power3.out' }, 0.3);
+      .to('.hero-intro', { yPercent: -30, opacity: 0, ease: 'power2.in', duration: 0.35 }, 0)
+      .fromTo('.hero-keys-title', { y: 60, opacity: 0 }, { y: 0, opacity: 1, ease: 'power3.out', duration: 0.3 }, 0.42)
+      .fromTo('.hero-keys li', { y: 80, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.06, ease: 'power3.out', duration: 0.3 }, 0.5)
+      .fromTo('.hero-scroll', { opacity: 1 }, { opacity: 0, duration: 0.2 }, 0);
   }, [lang]);
 
   return (
     <section className="scene hero-scene" ref={root} aria-labelledby="hero-title">
-      <PhotoImg photo={PHOTO.cable2} className="hero-photo" eager />
+      <PhotoImg photo={PHOTO.cable2} className="hero-photo" load="high" />
       <div className="hero-shade" aria-hidden="true" />
       <div className="container hero-stage">
         <div className="hero-intro">
@@ -36,11 +38,18 @@ export function Hero() {
             <a className="btn btn-glass" href="#collaborate">{t('hero.cta2')}</a>
           </div>
         </div>
-        <ul className="hero-keys">
-          {['hero.k1', 'hero.k2', 'hero.k3', 'hero.k4'].map((k, i) => (
-            <li key={k}><span className="mono">0{i + 1}</span><span>{t(k)}</span></li>
-          ))}
-        </ul>
+        <div className="hero-keys-block">
+          <p className="hero-keys-title">{t('hero.keysTitle')}</p>
+          <ul className="hero-keys">
+            {[1, 2, 3, 4].map((n) => (
+              <li key={n}>
+                <span className="mono">0{n}</span>
+                <strong>{t(`hero.k${n}`)}</strong>
+                <span className="hero-key-desc">{t(`hero.k${n}d`)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
         <p className="hero-scroll" aria-hidden="true">{t('hero.scroll')}</p>
       </div>
     </section>
