@@ -50,7 +50,7 @@ export const demoShot = (name: 'map', lang: string) => asset(`assets/demo-${name
 // size and eye line, one studio-grey backdrop) so the three read as a set; credited on #credits.
 export type Person = { id: string; img: string; email?: string; profile: { en: string; vi: string } };
 export const TEAM: Person[] = [
-  { id: 'p1', img: asset('assets/team/thuc-anh.webp'), profile: { en: 'https://vinuni.edu.vn/people/phan-thi-thuc-anh/', vi: 'https://vinuni.edu.vn/vi/people/ts-phan-thi-thuc-anh/' } },
+  { id: 'p1', img: asset('assets/team/thuc-anh.webp'), email: 'anh.ptt@vinuni.edu.vn', profile: { en: 'https://vinuni.edu.vn/people/phan-thi-thuc-anh/', vi: 'https://vinuni.edu.vn/vi/people/ts-phan-thi-thuc-anh/' } },
   { id: 'p2', img: asset('assets/team/qin.webp'), email: 'zengchang.q@vinuni.edu.vn', profile: { en: 'https://vinuni.edu.vn/people/zengchang-qin/', vi: 'https://vinuni.edu.vn/vi/people/zengchang-qin-2/' } },
   { id: 'p3', img: asset('assets/team/yin.webp'), email: 'chunyang.y@vinuni.edu.vn', profile: { en: 'https://vinuni.edu.vn/people/chun-yang-yin/', vi: 'https://vinuni.edu.vn/vi/people/chun-yang-yin-2/' } },
 ];
