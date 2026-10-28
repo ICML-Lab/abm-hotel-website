@@ -23,7 +23,7 @@ export function Day() {
   const { t, nf } = useI18n();
   const pinRef = useRef<HTMLDivElement>(null);
   const [min, setMin] = useState(START);
-  const [reduced] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const [reduced] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   const { d, pts, peakI, q15, qmax } = useMemo(() => {
     const pts = DAY.power15.map((kw, i) => [xOf(i * 15 + 7.5), yOf(kw)] as const);

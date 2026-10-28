@@ -251,6 +251,8 @@ body { font-weight: 400; }
 .rq-body p { grid-column: 2; padding-bottom: var(--space-lg); color: var(--color-ink-2); max-width: 64ch; }
 .rq.is-open .rq-body { grid-template-rows: 1fr; visibility: visible; transition-delay: 0s; }
 .no-js .rq-body { grid-template-rows: 1fr; visibility: visible; }
+/* without scripts (and in link previews) the split headline shows as plain text */
+.no-js .split-parent { visibility: visible !important; }
 @media (max-width: 60rem) { .rq-grid { grid-template-columns: minmax(0, 1fr); } .rq button { grid-template-columns: 3rem minmax(0, 1fr) 24px; } .rq-body > div { grid-template-columns: 3rem minmax(0, 1fr) 24px; } }
 
 /* ---------- collaborate (GREEN-X band) ---------- */

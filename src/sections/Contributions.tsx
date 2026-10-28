@@ -42,22 +42,11 @@ export function Why() {
   );
 }
 
-// Approach: the agent chain lights up link by link.
+// Approach: the whole agent chain at once, cause to effect, left to right.
 export function Approach() {
-  const { t, lang } = useI18n();
-  const root = useRef<HTMLElement>(null);
-  useScene(root, (el) => {
-    const nodes = gsap.utils.toArray<HTMLElement>('.chain-node', el);
-    gsap.set(nodes, { autoAlpha: 0.18, y: 30 });
-    gsap.set('.chain-line i', { scaleX: 0 });
-    const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top top', end: `+=${nodes.length * 55}%`, pin: true, scrub: 0.5, snap: stepSnap(nodes.length - 1) } });
-    nodes.forEach((n, i) => {
-      tl.to(n, { autoAlpha: 1, y: 0, duration: 0.5 }, i === 0 ? 0 : i - 0.5);
-      if (i > 0) tl.to('.chain-line i', { scaleX: i / (nodes.length - 1), duration: 0.5, ease: 'none' }, i - 0.5);
-    });
-  }, [lang]);
+  const { t } = useI18n();
   return (
-    <section className="scene approach-scene" ref={root} aria-labelledby="approach-title">
+    <section className="scene approach-scene" aria-labelledby="approach-title">
       <LazyBackground className="approach-bg">
         <DotGrid dotSize={4} gap={26} baseColor={HEX.leaf} activeColor={HEX.accent} proximity={160} clickShock={false} fade={0.35} />
       </LazyBackground>
@@ -111,7 +100,7 @@ export function Contributions() {
                 <ul>{list(`lever${n}.g`).map((g) => <li key={g}>{g}</li>)}</ul>
               </div>
             </div>
-            <div className="lever-shot"><img src={demoShot(LEVER_SHOT[n - 1], lang)} alt="" loading="lazy" /></div>
+            <div className="lever-shot"><img src={demoShot(LEVER_SHOT[n - 1], lang)} alt={t(`lever${n}.alt`)} loading="lazy" /></div>
           </ScrollStackItem>
         ))}
       </ScrollStack>

@@ -26,7 +26,7 @@ export function Hero() {
       <div className="container hero-stage">
         <div className="hero-intro">
           <h1 id="hero-title" key={lang}>
-            <SplitText tag="span" text={t('hero.l1')} splitType="words, chars" trigger="load" delay={18} duration={0.9} from={{ opacity: 0, y: 60 }} to={{ opacity: 1, y: 0 }} textAlign="left" />
+            <SplitText tag="span" text={t('hero.l1')} splitType="words, chars" trigger="load" delay={18} duration={0.9} from={{ opacity: 0, y: 60 }} to={{ opacity: 1, y: 0 }} textAlign="left" />{' '}
             <SplitText tag="span" text={t('hero.l2')} splitType="words, chars" trigger="load" delay={18} duration={0.9} from={{ opacity: 0, y: 60 }} to={{ opacity: 1, y: 0 }} textAlign="left" />
           </h1>
           <p className="lead">{t('hero.lead')}</p>

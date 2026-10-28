@@ -103,6 +103,7 @@ Lưu ý: tham số trong mô phỏng (giờ cáp treo 09:00–22:00, công suấ
 - `public/models/hontre.glb`: mô hình Hòn Tre xuất từ scene three.js của demo, **giữ đủ chi tiết** (texture mặt tiền, nền, thành nước, dây cáp, ánh sáng, bóng đổ); chỉ bỏ nội dung động (khách/tác tử, vòng trạng thái khu). `userData` của node `HonTrePilot` chứa đèn, đường cáp (điểm mẫu), shader mặt nước; node `gondola` là mẫu cabin — `IslandModel.tsx` cho 24 cabin chạy dọc 2 dây cáp. Màu trong demo đã là linear (ColorManagement bật) — không chuyển đổi lại khi xuất. Đèn r147 → r170 nhân π. (~1,7 MB, meshopt + instancing + webp)
 - Ảnh chụp demo có bản theo ngôn ngữ: `public/assets/demo-<map|energy|compare|rooms>-<en|vi>.webp` (chụp bằng `?lang=en|vi`); link sang demo luôn kèm `?lang=` theo ngôn ngữ trang (`demoHome`, `demoPage`, `demoShot` trong `config.ts`).
 - `public/assets/photos/*`: ảnh Wikimedia Commons đã nén WebP; credit bắt buộc (nhãn trên ảnh + trang `#credits`).
+- **SEO (28/10/2026):** domain của chính trang web nằm ở **một chỗ duy nhất `src/site.ts` (`SITE_URL`, tạm `https://abm-hotel-website.vercel.app`)** — đổi domain chỉ sửa ở đây rồi build lại. `npm run build` = build client + build SSR (`src/entry-server.tsx`) + `scripts/prerender.mjs`: render sẵn HTML thật cho `/` (EN) và `/vi/` (VI) kèm title/description, canonical, hreflang, Open Graph/Twitter, JSON-LD (`ResearchProject` thuộc GREEN-X, VinUni), rồi sinh `robots.txt` và `sitemap.xml`. Ảnh xem trước link: `public/og/og-<en|vi>.jpg` (1200×630, dựng từ ảnh chụp bản đồ 3D của demo). Ngôn ngữ theo đường dẫn: `/vi/` là tiếng Việt; `?lang=` cũ vẫn chạy và tự chuyển sang đường dẫn. Code chạy lúc render phải an toàn khi không có `window` (prerender chạy trong Node). `<html class="no-js">` + script inline gỡ class: CSS `.no-js` cho trường hợp tắt script. Ảnh mới phải có `alt`.
 - Lệnh: `npm run dev`, `npm run build`, `npm run preview`.
 
 ## Thiết kế
@@ -111,7 +112,7 @@ Lưu ý: tham số trong mô phỏng (giờ cáp treo 09:00–22:00, công suấ
   1. Hero (ảnh cáp treo toàn khổ; không ghim, không còn khối bốn chủ đề — người dùng bỏ vì trùng lặp và gây lỗi chồng lớp khi cuộn ngược)
   2. Một ngày (mốc 3 giờ)
   3. Vì sao (3 câu thay nhau; chỉ hiện xem trước mục kế tiếp bên dưới, không hiện mục trước — `peekSteps` trong `useScene.ts`)
-  4. Cách tiếp cận (chuỗi tác tử → điện → phát thải)
+  4. Cách tiếp cận (chuỗi tác tử → điện → phát thải; hiện đủ 5 bước ngay, không ghim cuộn — người dùng yêu cầu)
   4b. Năm câu hỏi nghiên cứu (mỗi câu một nhịp, xem trước câu kế tiếp như phần Vì sao) — đặt sớm, ngay sau Cách tiếp cận
   5. Marquee
   6. Đòn bẩy (ScrollStack)

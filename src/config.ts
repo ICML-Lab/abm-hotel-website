@@ -1,4 +1,4 @@
-// Single place for values that change: the demo domain will move.
+// Single place for values that change: the demo domain will move (the site's own domain is in site.ts).
 export const DEMO_URL = 'https://abm.icclab.site/';
 // The demo reads ?lang=vi|en|ru, so every link follows the site's language.
 export const demoHome = (lang: string) => `${DEMO_URL}?lang=${lang}`;

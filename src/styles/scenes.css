@@ -64,7 +64,8 @@
 .approach-head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-2xl); align-items: end; }
 .chain { position: relative; margin-top: var(--space-3xl); }
 .chain ol { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--gap-columns); }
-.chain-line { position: absolute; left: 22px; right: 22px; top: 21px; height: 2px; background: var(--color-rule); }
+/* the line runs from the first dot to the last: the last column's width minus half a dot short of the edge */
+.chain-line { position: absolute; left: 22px; right: calc((100% - 4 * var(--gap-columns)) / 5 - 22px); top: 21px; height: 2px; background: var(--color-rule); }
 .chain-line i { display: block; height: 100%; background: var(--color-accent); transform-origin: left; }
 .chain-node { position: relative; display: grid; gap: var(--space-sm); align-content: start; }
 .chain-dot { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--color-accent); color: var(--color-accent-ink); font-size: var(--text-sm); position: relative; z-index: 1; }
