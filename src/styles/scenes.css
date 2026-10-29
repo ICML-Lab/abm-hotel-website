@@ -109,6 +109,9 @@
 .gains-tab[aria-selected="true"] { background: var(--color-accent); color: var(--color-accent-ink); }
 .gains-tab:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; transition: none; }
 :root:not(.no-js) .benefit-panel.is-off { display: none; }
+.benefit-panel { animation: panel-in 0.45s var(--ease-out) both; }
+@keyframes panel-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .benefit-panel { animation: none; } }
 .benefit-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-rows: repeat(var(--rows), auto) 1fr; column-gap: var(--gap-columns); align-items: start; }
 .benefit { display: contents; }
 .benefit-head { grid-column: 1; width: 100%; display: grid; grid-template-columns: 2.75rem minmax(0, 1fr); gap: var(--space-sm); align-items: baseline; padding: var(--space-md) 0; border: 0; border-top: 1px solid var(--color-rule); background: none; color: var(--color-ink); text-align: left; font: inherit; cursor: pointer; transition: color 0.2s ease, opacity 0.2s ease; }

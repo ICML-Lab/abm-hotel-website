@@ -14,7 +14,7 @@ const PARALLAX = '.why-photo img, .section-photo img';
 const REVEAL = [
   '.why-kicker', '.why-item',
   '.overview-head > *', '.parts > li',
-  '.gains-title', '.gains-tabs', '.gains-status',
+  '.gains-title', '.gains-status',
   '.pilot-card', '.demo-head > *',
   '.progress-head > *', '.timeline > li', '.rq-more',
   '#team-title', '.team-grid > li',

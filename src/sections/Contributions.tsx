@@ -116,12 +116,38 @@ type Audience = keyof typeof AUDIENCES;
 // Gains (anchor #contributions): the hotel's and the guests' benefits, one audience at a time.
 // The headlines stay in a column on the left; the open one shows its detail on the right
 // (below it on narrow screens). Without scripts both lists and every detail are simply there.
+// On wide screens the section holds still for a short stretch once it reaches the top, and
+// scrolling on turns it from the hotel to the guests before the page moves on (the owner asked for
+// this one pin); scrolling back turns it back. A tab clicked by hand stays until the next crossing.
 export function Gains() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [who, setWho] = useState<Audience>('hotel');
   const [open, setOpen] = useState<Record<Audience, string>>({ hotel: 'h1', guest: 'g1' });
+  const root = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 60.01rem) and (prefers-reduced-motion: no-preference)', () => {
+      let guests = false;
+      const st = ScrollTrigger.create({
+        trigger: el,
+        start: 'top top',
+        end: () => `+=${Math.round(window.innerHeight * 0.9)}`,
+        pin: el,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const next = self.progress > 0.45;
+          if (next !== guests) { guests = next; setWho(next ? 'guest' : 'hotel'); }
+        },
+      });
+      return () => st.kill();
+    }, el);
+    return () => mm.revert();
+  }, [lang]);
   return (
-    <section className="gains-scene" id="contributions" aria-labelledby="gains-title">
+    <section className="gains-scene" id="contributions" ref={root} aria-labelledby="gains-title">
       <div className="gains-body">
       <LazyBackground className="gains-bg">
         <DotField maxDevicePixelRatio={1} dotRadius={1.7} dotSpacing={22} gradientFrom={HEX.accent} gradientTo={HEX.leaf} glowColor={HEX.accent} holdToZoom={false} lightMode />
