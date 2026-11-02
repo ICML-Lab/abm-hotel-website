@@ -120,6 +120,7 @@ export function Gains() {
               className="gains-tab" onClick={() => setWho(a)}>{t(`gains.for.${a}`)}</button>
           ))}
         </div>
+        <div className="benefit-panels">
         {(Object.keys(AUDIENCES) as Audience[]).map((a) => {
           const items: Benefit[] = AUDIENCES[a];
           return (
@@ -165,6 +166,7 @@ export function Gains() {
             </div>
           );
         })}
+        </div>
         <p className="gains-status">
           <strong>{t('status.t')}</strong> {t('status.p')} <a href="#progress">{t('status.link')}</a>
         </p>
