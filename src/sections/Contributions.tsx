@@ -2,42 +2,13 @@ import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useI18n } from '../i18n/I18nProvider';
-import { PhotoImg } from '../components/PhotoImg';
-import { HEX, PHOTO, SOURCES } from '../config';
+import { HEX, SOURCES } from '../config';
 import { LazyBackground } from '../components/LazyBackground';
 import DotField from '../components/reactbits/DotField';
 
-// Why: the three reasons side by side over the photograph, on one screen.
-export function Why() {
-  const { t } = useI18n();
-  return (
-    <section className="scene why-scene" aria-labelledby="why-title">
-      <PhotoImg photo={PHOTO.cableHughes} className="why-photo" load="eager" />
-      <div className="scene-shade" aria-hidden="true" />
-      <div className="container why-stage">
-        <h2 className="why-kicker" id="why-title">{t('why.title')}</h2>
-        <ol className="why-list">
-          {[1, 2, 3].map((n) => (
-            <li key={n} className="why-item">
-              <h3>{t(`why.p${n}t`)}</h3>
-              <p>{t(`why.p${n}p`)}</p>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-  );
-}
-
 // Overview (anchor #overview): what the project is building, for readers who have never heard of an
-// agent-based model. One plain definition, the model's causal chain (it plays once when it comes into
-// view; without motion or scripts it is simply there), then the three parts of the system and how far
-// each has got.
-const PARTS = [
-  { key: 'part1', stage: 1 },
-  { key: 'part2', stage: 4 },
-  { key: 'part3', stage: 2 },
-] as const;
+// agent-based model. One plain definition and the model's causal chain (it plays once when it comes
+// into view; without motion or scripts it is simply there).
 
 export function Overview() {
   const { t, lang } = useI18n();
@@ -76,26 +47,15 @@ export function Overview() {
             ))}
           </ol>
         </div>
-        <ol className="parts">
-          {PARTS.map((p, i) => (
-            <li key={p.key}>
-              <span className="parts-n mono">{String(i + 1).padStart(2, '0')}</span>
-              <h3>{t(`${p.key}.t`)}</h3>
-              <p>{t(`${p.key}.p`)}</p>
-              <p className={`benefit-stage stage-${p.stage}`}>{t(`stage${p.stage}`)}</p>
-            </li>
-          ))}
-        </ol>
       </div>
     </section>
   );
 }
 
 // Each benefit names the problem, what the system does about it, and how far it has got:
-// 1 runs in the prototype on assumed data, 2 is a model still in training, 3 waits for a pilot site,
-// 4 is being collected now.
+// 1 runs in the prototype on assumed data, 2 is a model still in training, 3 waits for a pilot site.
 // A benefit backed by a published figure shows it as a highlight line with its sources.
-type Benefit = { key: string; stage: 1 | 2 | 3 | 4; fact?: (keyof typeof SOURCES)[] };
+type Benefit = { key: string; stage: 1 | 2 | 3; fact?: (keyof typeof SOURCES)[] };
 const AUDIENCES = {
   hotel: [
     { key: 'h1', stage: 2, fact: ['spareCard', 'obcc'] },

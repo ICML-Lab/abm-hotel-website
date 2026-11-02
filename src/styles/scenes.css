@@ -40,36 +40,16 @@
 /* ---------- day ---------- */
 .day-pin { min-height: 100svh; }
 
-/* ---------- why ---------- */
-.why-scene { color: var(--color-on-dark); background: var(--color-night); display: grid; align-items: center; }
-.why-photo { position: absolute; inset: 0; z-index: -1; }
-.why-stage { position: relative; z-index: 1; padding-block: var(--space-3xl); }
-.why-kicker { font-size: var(--text-title); font-weight: 500; color: var(--color-on-dark-muted); }
-.why-list { list-style: none; padding: 0; margin: var(--space-2xl) 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap-columns); }
-.why-item { padding-top: var(--space-md); border-top: 2px solid var(--color-on-dark); }
-.why-scene { min-height: 100svh; }
-.why-stage { min-height: 100svh; display: grid; align-content: center; }
-@media (max-width: 60rem) { .why-list { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); } }
-.why-item h3 { font-size: clamp(1.8rem, 2.6vw, 2.75rem); font-weight: 500; letter-spacing: -0.045em; line-height: 0.98; max-width: 16ch; text-wrap: balance; }
-.why-item p { margin-top: var(--space-md); font-size: var(--text-lead); color: var(--color-on-dark-muted); max-width: 44ch; }
-
-/* ---------- overview: what is being built; a plain definition, the causal chain, the three parts ---------- */
+/* ---------- overview: what is being built; a plain definition and the causal chain ---------- */
 .overview-scene { background: var(--color-paper-2); }
 .overview { padding-block: var(--section-gap); display: grid; gap: var(--space-2xl); }
 .overview-head { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--gap-columns); align-items: start; }
 .overview-head .lead { max-width: 52ch; }
-.parts { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap-columns); }
-.parts li { display: grid; align-content: start; gap: var(--space-sm); padding-top: var(--space-lg); border-top: 3px solid var(--color-accent); }
-.parts-n { font-size: var(--text-sm); color: var(--color-muted); }
-.parts h3 { font-size: var(--text-2xl); font-weight: 500; letter-spacing: -0.03em; line-height: 1.1; overflow-wrap: break-word; min-width: 0; }
-.parts p:not(.benefit-stage) { color: var(--color-ink-2); }
-.parts .benefit-stage { margin-top: var(--space-2xs); }
 /* the chain, compact: titles only */
 .chain.is-compact { margin-top: 0; }
 .chain-t { font-size: var(--text-lg); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; margin-top: var(--space-2xs); }
 @media (max-width: 60rem) {
   .overview-head { grid-template-columns: minmax(0, 1fr); gap: var(--space-md); }
-  .parts { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); }
   .chain.is-compact ol { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); }
 }
 
@@ -129,7 +109,6 @@
 .stage-1 { color: var(--color-accent); }
 .stage-2 { color: var(--color-greenx); }
 .stage-3 { color: var(--color-muted); }
-.stage-4 { color: color-mix(in oklab, var(--color-load) 72%, var(--color-ink)); }
 .benefit-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xl); }
 .benefit-cols h3 { font-size: var(--text-md); font-weight: 500; color: var(--color-accent); margin-bottom: var(--space-xs); }
 .benefit-cols p { font-size: var(--text-lg); line-height: 1.45; }
@@ -178,12 +157,12 @@
 .footer-links { display: inline-flex; gap: var(--space-lg); }
 
 /* full-bleed photographs: the image sits under the shade, its credit stays on top and clickable */
-.hero-photo, .why-photo, .section-photo { position: absolute; inset: 0; z-index: auto; overflow: visible; }
-.hero-photo img, .why-photo img, .section-photo img { position: absolute; inset: 0; z-index: -3; }
-.hero-photo .photo-credit, .why-photo .photo-credit, .section-photo .photo-credit { z-index: 5; }
-.hero-photo, .why-photo, .section-photo { pointer-events: none; }
-.hero-photo .photo-credit, .why-photo .photo-credit, .section-photo .photo-credit { pointer-events: auto; }
-.hero-stage, .why-stage { position: relative; z-index: 1; }
+.hero-photo, .section-photo { position: absolute; inset: 0; z-index: auto; overflow: visible; }
+.hero-photo img, .section-photo img { position: absolute; inset: 0; z-index: -3; }
+.hero-photo .photo-credit, .section-photo .photo-credit { z-index: 5; }
+.hero-photo, .section-photo { pointer-events: none; }
+.hero-photo .photo-credit, .section-photo .photo-credit { pointer-events: auto; }
+.hero-stage { position: relative; z-index: 1; }
 /* Vietnamese diacritics need room above and below the line */
 @media (max-width: 60rem) { .hero-shade { opacity: 0.85; background: linear-gradient(180deg, color-mix(in oklab, var(--color-ink) 35%, transparent), color-mix(in oklab, var(--color-ink) 70%, transparent) 45%, var(--color-ink)); } }
 

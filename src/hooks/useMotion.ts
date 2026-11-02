@@ -10,10 +10,9 @@ gsap.registerPlugin(ScrollTrigger);
 // 2. Reveal: headings, list items, cards and stages rise into place once, a few at a time, as they
 //    reach the lower part of the screen.
 // Both run only when motion is allowed; without scripts (or with reduced motion) everything simply shows.
-const PARALLAX = '.why-photo img, .section-photo img';
+const PARALLAX = '.section-photo img';
 const REVEAL = [
-  '.why-kicker', '.why-item',
-  '.overview-head > *', '.parts > li',
+  '.overview-head > *',
   '.gains-title', '.gains-status',
   '.pilot-card', '.demo-head > *',
   '.progress-head > *', '.timeline > li', '.rq-more',
